@@ -1,0 +1,60 @@
+\documentclass{article}
+\title{Minutes from 10 August}
+
+\usepackage{hyperref}
+
+\begin{document}
+\section{Papers referred to}
+\begin{enumerate}
+	\item Benjamin Fuller, Mayank Varia, Arkady Yerukhimovich, Emily Shen, Ariel Hamlin, Vijay Gadepally, Richard Shay, John Darby Mitchell, Robert K. Cunningham. \textbf{SoK: Cryptographically Protected Database Search}
+	
+	\item David Cash, Paul Grubbs, Jason Perry, Thomas Ristenpart. \textbf{Leakage-Abuse Attacks Against Searchable Encryption
+} 
+
+	\item Kellaris G, Kollios G, Nissim K, O'Neill A. \textbf{Generic Attacks on Secure Outsourced Databases}
+	
+	\item Xiao Shaun Wang, Kartik Nayak, Chang Liu, T-H. Hubert Chan, Elaine Shi, Emil Stefanov, Yan Huang. \textbf{Oblivious Data Structures}
+	
+	\item Emil Stefanov, Marten van Dijk, Elaine Shi, T-H. Hubert Chan, Christopher Fletcher, Ling Ren, Xiangyao Yu, Srinivas Devadas.
+\textbf{Path ORAM: An Extremely Simple Oblivious RAM Protocol}
+	
+	\item Marie-Sarah Lacharite, Brice Minaud. \textbf{Improved Reconstruction Attacks on Encrypted Data Using Range Query Leakage} (have not read the paper yet but have a rough idea what it is about)
+	
+	\item A few more papers cited in 1, 2 and 4
+	
+	\item Related lectures from \url{https://www.youtube.com/playlist?list=PLXF_IJaFk-9ADeshgHXrSfuwPyEMa5qS7}
+	
+\end{enumerate}
+
+
+\section{Overview of literature in encrypted searchable databases}
+\begin{itemize}
+	\item See 1.1. There are three broad types of encrypted searchable databases: legacy, custom inverted index, and custom tree traversal. All of which leaks access pattern.
+	
+	\item Oblivious approaches does not leak access pattern but the bandwidth blowup is lower-bounded by $\mathcal{O}(\log(n))$.
+	
+	\item Although documents are encrypted using randomized encryption schemes most of the times, the view of the server is a deterministic copy. So file retrieval reveals the query itself. That also means randomized padding based schemes will not work on OPE, due to 6.
+\end{itemize}
+
+
+\section{ORAM}
+\begin{itemize}
+	\item ORAM is a potential solution to the encrypted searchable databases problem, but its time complexity is not desirable.
+	
+	\item Remain to revisit the paper that proves the lower-bound on bandwidth blowup.
+\end{itemize}
+
+
+\section{Attack against OPE}
+\begin{itemize}
+	\item Counting attack in 2 is already sufficient to recover the entire database given prior distribution.
+	
+	\item 6 provides a more time-efficient solution and can work without prior information.
+	
+	\item Have to read the paper before next meeting.
+\end{itemize}
+
+
+
+
+\end{document}

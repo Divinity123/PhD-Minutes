@@ -1,0 +1,71 @@
+\documentclass{article}
+\title{Minutes from 17 August}
+
+\usepackage{amsmath}
+
+\begin{document}
+\section{Papers referred to}
+\begin{enumerate}
+	\item Marie-Sarah Lacharite, Brice Minaud. \textbf{Improved Reconstruction Attacks on Encrypted Data Using Range Query Leakage}
+
+	\item \textbf{K-Nearest-Neighbour Search on Encrypted Data} (Not published yet)
+	
+	\item Rafail Ostrovsky. \textbf{Software Protection and Simulation on Oblivious RAMs}
+	
+	\item Data structure and algorithms I have learnt during undergraduate.
+\end{enumerate}
+
+
+\section{A new OPE scheme}
+\begin{itemize}
+	\item The idea is to use `searchable' data structures to pre-process the queries so that the queries do not leak the sets used in 1.
+	
+	\item TBD: include the images describing the scheme.
+	
+	\item To think: what does the scheme leak?
+\end{itemize}
+
+
+\section{ORAM}
+\begin{itemize}
+	\item Confirms that the lower-bound of overhead is indeed $\mathcal{O}(\log{n})$.
+	
+	\item Question to be answered: is ORAM any similar to OPE in the sense that, in order to hide access pattern, how much overhead does it cost?
+\end{itemize}
+
+
+\section{Syntax of encrypted database}
+\begin{itemize}
+	\item We can think of database in three levels: a string of zeros and ones in the most abstract form, a database as a set of strings, and a database with all the details.
+	
+	\item We will formalize syntax on the most abstract form first.
+	
+	\item Notation (need better names):
+	\begin{itemize}
+		\item \textbf{Initialise}: $1^\lambda \rightarrow \text{params}^{*}$
+		
+		\item \textbf{KeyGen}: $1^\lambda \rightarrow \textbf{sk}$
+		
+		\item \textbf{Enc}: $1^\lambda \times \textbf{sk} \times \textbf{DB} \rightarrow \textbf{EDB}$
+		
+		\item \textbf{Dec}: $1^\lambda \times \textbf{sk} \times \textbf{EDB} \rightarrow \textbf{DB}$
+		
+		
+		\item \textbf{Q}: $\textbf{DB} \times Q \rightarrow \textbf{DB}$
+		
+		\item \textbf{encQ}: $1^\lambda \times \textbf{sk} \times Q \rightarrow \textbf{eQ} \times \textbf{iQ}$
+		
+		\item \textbf{EQ}: $1^\lambda \times \textbf{sk} \times \textbf{EDB} \times \textbf{eQ} \rightarrow \textbf{EDB}$
+		
+		\item \textbf{DQ}: $1^\lambda \times \textbf{sk} \times \textbf{EDB} \times \textbf{iQ} \rightarrow \textbf{DB}$
+	\end{itemize}
+
+	\item TBD: add the commutative diagram and explain how it works.
+	
+	
+\end{itemize}
+
+
+
+
+\end{document}
