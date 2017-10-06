@@ -1,0 +1,41 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\title{Minutes from 27 September}
+
+\usepackage{float}
+\usepackage{amsmath}
+
+\begin{document}
+\section{Papers referred to}
+\begin{enumerate}
+	\item All previous papers on attacks on databases
+	\item Marie-Sarah Lacharit´e, Kenneth G. Paterson. \textbf{Frequency-smoothing encryption: preventing snapshot attacks on encrypted databases}
+\end{enumerate}
+
+
+\section{Formalising the frequency smoothing problem}
+\begin{itemize}
+	\item We consider the static case, i.e. we are given the realization of the database (not a distribution) and try to hide frequencies of the attributes,
+	
+	\item The main techniques identified are cutting (reducing height of the high-frequent attributes) and padding.
+	
+	\item Correlation between columns need to be considered too.
+\end{itemize}
+
+
+\section{A new OPE scheme}
+\begin{itemize}
+	\item Modified the construction so that the claim made in the earlier meeting is indeed met. \textbf{Modification: } instead of only merging disjoint blocks at each level, the `sliding window' only moves by one block at each time. The time/space complexity stays the same because the modification only results in an expansion factor of space by 2.
+	
+	\item Security of this scheme is not analysed yet. (\textbf{To think: } is security with a simulator proof (even perfectly defined) sufficient to ensure security in practice?)
+\end{itemize}
+
+
+\section{A weaker OPE scheme}
+\begin{itemize}
+	\item \textbf{Idea: } instead of having all the blocks to answer queries, we use only the bottom layer.
+	
+	\item In that case, relative order of the blocks will be revealed with queries. But how do we quantify leakage in this case?
+\end{itemize}
+
+\end{document}

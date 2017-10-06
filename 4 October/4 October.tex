@@ -1,0 +1,36 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\title{Minutes from 4 October}
+
+\usepackage{float}
+\usepackage{amsmath}
+
+\begin{document}
+\section{Papers referred to}
+\begin{enumerate}
+	\item Marie-Sarah Lacharit´e, Kenneth G. Paterson. \textbf{Frequency-smoothing encryption: preventing snapshot attacks on encrypted databases}
+	
+	\item Thomas Baign`eres, Pascal Junod, and Serge Vaudenay. \textbf{How Far Can We Go Beyond Linear Cryptanalysis?}
+\end{enumerate}
+
+
+\section{FSE revisited}
+\begin{itemize}
+	\item The security model measures the advantage of the adversary differentiating the resulting distribution from uniform distribution but the KL divergence used is an approximation to some other value ($P_e$) in the second paper listed above.
+	
+	\item The encryption scheme does not consider correlation between columns, i.e. encryption is done column by column.
+	
+	\item Maybe correlation can be exploited to attack the scheme. (\textbf{See folder `Attack on FSE'})
+\end{itemize}
+
+
+
+\section{More on formalising the frequency smoothing problem}
+\begin{itemize}
+	\item Cutting and padding are operations which will cause expansion of data size. We need to define a cost function to measure the performance of our frequency smoothing algorithm.
+	
+	\item We need to define security more carefully: we may not need uniformly distributed histogram by the end, e.g. a histogram that has two levels and attributes are randomly assigned to each one of them.
+\end{itemize}
+
+
+\end{document}
