@@ -100,7 +100,7 @@ We know that attribute $(i, j)$ will be encrypted to a set of homophones, indepe
 
 For each encoding of attribute $(i,j)$, the count on a particular homophone follows Bernoulli distribution with success rate $1 / S(i,j)$. Therefore with $N(i,j)$ iid copies of them, we obtain a binomial distribution 
 \begin{equation*}
-	\text{Bimon}\left(\frac{N(i,j)}{S(i,j)}, \frac{1}{S(i,j)}\right).
+	\text{Bimon}\left(N(i,j), \frac{1}{S(i,j)}\right).
 \end{equation*}
 
 This distribution can be approximated by a normal distribution
