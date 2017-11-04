@@ -1,5 +1,7 @@
 \documentclass{article}
 \usepackage[margin=1in]{geometry}
+\setlength\parindent{0pt}
+\setlength{\parskip}{1em}
 \title{Minutes from 3 November}
 
 \usepackage{float}
@@ -31,7 +33,7 @@
 \begin{itemize}
 	\item Full padding is very costly. On the experiment database, full padding after merging alphabets in attribute columns requires an expansion factor of over 17000, so it is completely not practical.
 	
-	\item If all we require is that the alphabets in attribute columns are indistinguishable (we are willing to leak the distribution of attributes), padding can be done much more efficiently. See dedicated document.
+	\item If all we require is that the alphabets in attribute columns are indistinguishable (we are willing to leak the distribution of attributes), padding can be done much more efficiently. See dedicated document (To be done).
 	
 	\item Padding fake alphabets to the columns are ok, as long as they are queried every now and then.
 \end{itemize}
@@ -60,7 +62,7 @@
 	
 	\item Idea: we can think of leakage as a map. e.g. In count attack, for keyword set $\mathcal{W}$, leakage can be modelled as a function $\mathcal{L}: \mathcal{W} \times \mathcal{W} \rightarrow \mathbb{N}$ so $\mathcal{L}(w_0, w_1)$ is mapped to the co-occurrence count of keywords $w_0$ and $w_1$. Count attack works exactly because a large proportion of co-occurrence counts are unique, so $\mathcal{L}$ is invertible on the corresponding restricted domain. The restricted domain can be written down quite nicely:
 	\begin{align*}
-		\{ (v, w)  \mid \ (\mathcal{L}(v, w) \neq  \mathcal{L}(v', w') \text{ for any } v', w' \text{ such that } v' \prec w') \text{ and } (v \prec w)\}
+		\{ (v, w)  \mid \ (\mathcal{L}(v, w) \neq  \mathcal{L}(v', w') \text{ for any } v', w' \text{ such that } v' \prec w') \text{ and } (v \preceq w)\}
 	\end{align*}
 	where $(\mathcal{W}, \prec)$ is a well order on keyword set $\mathcal{W}$.
 \end{itemize}
