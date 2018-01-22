@@ -1,0 +1,97 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\setlength\parindent{0pt}
+\setlength{\parskip}{1em}
+\title{Formal Definition of the Mathematical Properties}
+
+\usepackage{float, amsfonts}
+
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{example}{Example}
+
+
+\newcommand{\KK}{{\mathcal K}}
+
+\begin{document}
+
+\section{Outline of the Document}
+We will take bottom-up approach to construct the $d$-dimensional Latin square with desired property. We will first define what is a 2-dimensional Latin square, and pose some restrictions on it to make it `cryptographically secure'. We then extend the notion to higher dimensions and prove that our construction satisfies the properties we want.
+
+
+\section{The 2-dimensional Case}
+\begin{definition}
+	Let $\KK = \{1, 2, \ldots, k \}$. A $k \times k$ square $L$ with entries taking value from $\KK$ is called a $k$ by $k$ Latin square if:
+	\begin{enumerate}
+		\item $L(i, j) \neq L(i, k)$ for all $j \neq k$,
+		\item $L(i, j) \neq L(k, j)$ for all $i \neq k$.
+	\end{enumerate}
+\end{definition}
+
+
+\begin{definition}
+	Let $\sigma_1, \sigma_2$ be permutation on $\KK$ with order $k$. We say that $k$ by $k$ Latin square $L$ is $(\sigma_1, \sigma_2)$-permutable if for all $i,j \in \KK$, $L(i,j) = L(\sigma_1(i), \sigma_2(j))$
+\end{definition}
+
+
+\begin{example}
+	Consider a 4 by 4 Latin square $L$ (with indexing) as below:
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{lllll}
+			& 1 & 2 & 3 & 4 \\ \cline{2-5} 
+			\multicolumn{1}{l|}{1} & 1 & 2 & 3 & 4 \\
+			\multicolumn{1}{l|}{2} & 2 & 4 & 1 & 3 \\
+			\multicolumn{1}{l|}{3} & 3 & 1 & 4 & 2 \\
+			\multicolumn{1}{l|}{4} & 4 & 3 & 2 & 1
+		\end{tabular}
+	\end{table}
+
+	Let $\sigma_1 = (1 \ 3 \ 4 \ 2)$ and $\sigma_2 = (1 \ 2 \ 4 \ 3)$. Then $L$ is $(\sigma_1, \sigma_2)$-permutable. To see this visually, $L(\sigma_1(i), \sigma_2(j))$ is:
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{lllll}
+			& 3 & 1 & 4 & 2 \\ \cline{2-5} 
+			\multicolumn{1}{l|}{2} & 1 & 2 & 3 & 4 \\
+			\multicolumn{1}{l|}{4} & 2 & 4 & 1 & 3 \\
+			\multicolumn{1}{l|}{1} & 3 & 1 & 4 & 2 \\
+			\multicolumn{1}{l|}{3} & 4 & 3 & 2 & 1
+		\end{tabular}
+	\end{table}
+	In fact, as soon as we know $L$ is $(\sigma_1, \sigma_2)$-permutable for some $\sigma_1, \sigma_2$ of order $k$, we know that $L$ is $(\sigma_1^l, \sigma_2^l)$-permutable for all $l \in \{1, \ldots, k-1\}$. We formalise the statement in the following lemma.
+\end{example}
+
+
+\begin{lemma} \label{cryptographic property}
+	Let $L$ be a $k$ by $k$ $(\sigma_1, \sigma_2)$-permutable Latin square, with $ord(\sigma_1) = ord(\sigma_2) = k$. Then $L$ is $(\sigma_1^l, \sigma_2^l)$-permutable for all $l \in \{1, \ldots, k-1\}$.
+\end{lemma}
+
+\textit{Proof:} We prove the statement by induction on $i$. The proposition is trivially true for $l = 1$, so the base case is verified. Now we assume that the proposition is true for some arbitrary $l$, and try to show that it is true for $l+1$.
+
+By definition, $L$ is $(\sigma_1^l, \sigma_2^l)$-permutable means $L(i, j) = L(\sigma_1^l(i), \sigma_2^l(j))$ for all $i,j \in \KK$. The same result holds if we apply $\sigma_1$ and $\sigma_2$ to indices on both sides, i.e. $L(\sigma_1(i), \sigma_2(j)) = L(\sigma_1^{l+1}(i), \sigma_2^{l+1}(j))$ for all $i,j \in \KK$. But by assumption, we know that $L(i, j) = L(\sigma_1(i), \sigma_2(j))$ for all $i,j \in \KK$, so $L(i, j) = L(\sigma_1^{l+1}(i), \sigma_2^{l+1}(j))$ for all $i,j \in \KK$. $\square$
+
+The property in lemma \ref{cryptographic property} ensures indistinguishability of row and column indices because there are $k$ different configurations that gives the same Latin square. In particular, each row index can be assigned to any other row index and we still obtain the same Latin square, so no one can guess the correct row index with probability higher than $1/k$ if he is given the Latin square without the indices.
+
+
+\section{Generalization to Higher Dimensions}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

@@ -1,0 +1,145 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsmath,amsfonts,amssymb,latexsym,amsthm,verbatim,float,url}
+
+\setlength{\parskip}{2\parsep}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+\section{Attack against Searchable Encryption}
+In the setting of searchable encryption, documents are attached with a set of keywords each, and the goal of searchable encryption is to produce some secure data structure so that the user can query (encrypted) keywords, and the server returns the list of documents contains that keyword.
+
+\subsection{IKK Attack}
+\begin{itemize}
+	\item In paper: Access Pattern disclosure on Searchable Encryption: Ramification, Attack and Mitigation.
+	
+	\item URL: \url{http://www.utdallas.edu/~mxk055100/publications/ndss2012.pdf}.
+
+	\item Authors: Mohammad Saiful Islam, Mehmet Kuzu, Murat Kantarcioglu.
+	
+	\item Attack requirement: prior distribution on the co-occurrence matrix.
+
+	\item Attack method: use simulated annealing (a heuristic optimisation technique) to find a permutation between keywords and trapdoors. It can also be seen as minimisation of distance between prior distribution and realization (with rows and columns randomly permuted) of co-occurrence matrices.
+\end{itemize}
+
+
+\subsection{Count Attack}
+\begin{itemize}
+	\item In paper: Leakage-Abuse Attacks Against Searchable Encryption.
+	
+	\item Authors: David Cash, Paul Grubbs, Jason Perry, Thomas Ristenpart.
+	
+	\item URL: \url{https://eprint.iacr.org/2016/718.pdf}.
+	
+	\item Attack requirement: exact counts in co-occurrence matrix.
+	
+	\item Attack method: find matches between counts in co-occurrence matrix and number of documents returned by queries.
+	
+	\item \textbf{Note to myself:} We probably need much less information than the full co-occurrence matrix to recover keywords, because the way co-occurrence matrix is constrained: knowing one keyword means knowing one row up to permutation. It is interesting to see if we can construct an attack that requires way less information than that in the paper ($|W|^2$ entries in the co-occurrence matrix).
+\end{itemize}
+
+
+
+\subsection{Graph Matching based Attack}
+\begin{itemize}
+	\item In paper: The Shadow Nemesis: Inference Attacks on Efficiently Deployable, Efficiently Searchable Encryption.
+	
+	\item URL: \url{https://pdfs.semanticscholar.org/a344/060ddde7b86e8f2105ed8b96a54954ecc57c.pdf}.
+	
+	\item Authors: David Pouliot and Charles V. Wright.
+	
+	\item Attack requirement: prior distribution on the co-occurrence matrix.
+	
+	\item Attack method: view the co-occurrence matrix as an instance of graph matching problem and apply approximation algorithms that solves it.
+\end{itemize}
+
+
+
+
+\section{Attack against Property-preserving Encrypted Databases}
+\subsection{Inference Attack}
+\begin{itemize}
+	\item In paper: Inference Attacks on Property-Preserving Encrypted Databases.
+	
+	\item Authors: Muhammad Naveed, Seny Kamara, Charles V. Wright.
+	
+	\item URL: \url{https://cs.brown.edu/~seny/pubs/edb.pdf}.
+	
+	\item Attack requirement: prior knowledge on plaintext distribution.
+	
+	\item Underlying PPE: DE and OPE
+	
+	\item Attack method: Match prior distribution to realization. Only use single-column distributions.
+\end{itemize}
+
+
+\subsection{Reconstruction Attacks using Access Pattern on OPE/ORE}
+\begin{itemize}
+	\item In Paper: Generic Attacks on Secure Outsourced Databases
+	
+	\item Authors: Georgios Kellaris, George Kollios, Kobbi Nissim.
+	
+	\item URL: \url{https://privacytools.seas.harvard.edu/files/privacytools/files/generic.pdf}.
+	
+	\item In paper: Improved Reconstruction Attacks on Encrypted Data Using Range Query Leakage.
+	
+	\item Authors: Marie-Sarah Lacharit\'{e}, Brice Minaud.
+	
+	\item \url{https://eprint.iacr.org/2017/701.pdf}.
+	
+	\item Attack requirement: access to enough queries ($\mathcal{O}(N^4)$ in the first paper and $\mathcal{O}(N^2)$ in the second, they differ from each other because the assumption on query distributions are different, but the attacks are the same).
+	
+	\item Underlying PPE: OPE.
+	
+	\item Attack method: Abuse order-preserving property in the results of queries. e.g. if $x_0 < x_1 < x_2$, and we write $Q(x,y)$ to denote query result (as a set). Then by knowing $Q(x_0,x_1)$ and $Q(x_0,x_2)$, we also know $Q(x_1,x_2)$. Hence it is possible to recover query results for singletons (query on single plaintext rather than a range) completely, up to reflection.
+\end{itemize}
+
+\subsection{Paper to read}
+\begin{itemize}
+	\item In paper: Leakage-Abuse Attacks against Order-Revealing Encryption.
+	
+	\item Authors: Paul Grubbs, Kevin Sekniqi, Vincent Bindschaedler, Muhammad Naveed, Thomas Ristenpart.
+	
+	\item URL: \url{https://eprint.iacr.org/2016/895.pdf}.
+	
+	\item Note: This paper cites a few other papers with attacks with high recovery rate, worth to read all of them. We will see if our proposed scheme is secure under these attacks.
+\end{itemize}
+
+
+\section{Other attacks}
+\subsection{Variance Attack}
+\begin{itemize}
+	\item Underlying PPE: DE.
+	
+	\item Attack requirement: prior knowledge on plaintext distribution.
+	
+	\item Attack method: For random variables $X,Y$, $\mathbb{E}(X) = \mathbb{E}(y)$ is not sufficient to make the random variables indistinguishable. Given a realization, we know if the observed value is more likely to come from $X$ or $Y$.
+\end{itemize}
+
+
+\subsection{Co-occurrence attack on FSE}
+\begin{itemize}
+	\item Underlying PPE: FSE.
+	
+	\item Attack requirement: prior knowledge on plaintext distribution.
+	
+	\item Attack method: Similar to count attack in principle, but with additional technique to handle randomness in observed values.
+\end{itemize}
+
+
+\subsection{Improved co-occurrence based Attack taking into account number of keywords}
+\begin{itemize}
+	\item Underlying PPE: DE, inverted index.
+	
+	\item Attack requirement: prior knowledge on keyword distribution, for documents with different number of keywords.
+	
+	\item Attack method: there is no reason to assume homogeneousness of keyword distribution for different keyword sizes. By using that piece of information, the attack accuracy is only going to be better. 
+\end{itemize}
+
+
+
+
+\section{Various Other Attacks}
+There are many other attacks including file injection attack and query volume attack. They are either trivial or active, so we will not discuss them here (or just yet).
+
+\end{document}

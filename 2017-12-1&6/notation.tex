@@ -1,0 +1,97 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\setlength\parindent{0pt}
+\setlength{\parskip}{1em}
+
+\usepackage{amsmath,amsfonts,amssymb,latexsym,amsthm,verbatim,float}
+\usepackage [n, advantage, operators, sets, adversary, landau, probability, notions, logic, ff, mm, primitives, events, complexity, asymptotics, keys] {cryptocode}
+
+
+
+\begin{document}
+\section{General Properties of the Padding Scheme}
+\begin{itemize}
+	\item The expansion factor induced by a $k$ by $k$ Latin square is at most $k$.
+	
+	\item If the adversary does not know the Latin square applied, even in case he is given a set of pairs of plaintexts and ciphertexts, he cannot distinguish the remaining ciphertexts with success rate better than guessing.
+	
+	\item If he is not given any pairs of plaintexts and ciphertexts, any computationally unbounded adversary can only identify the plaintext-ciphertext pairs up to a set of permutations of size $k$. Furthermore, only one of the permutations gives the correct match between plaintexts and ciphertexts, all other permutations have no correct match.
+\end{itemize}
+
+
+\section{Security Notions}
+There are two types of adversary in terms of power. The first adversary is curious-but-honest, who does not do anything out of the protocol. The second adversary knows some pairs of plaintexts and ciphertexts. In both case, the adversary tries to learn at least a pair of plaintext and ciphertext that he has not seen before. Both of the adversaries are defined in terms of games.
+
+
+\subsection{First Adversary}
+\begin{center}
+	\fbox{
+		\pseudocode[linenumbering , syntaxhighlight=auto] {%
+			(\pk, \sk) \gets \kgen (\secparam) \\
+			d  \gets \adv (\secparam, \pk) \\
+			ed \gets \enc (\secparam, \pk, \sk, d) \\
+			(m, c) \gets  \adv (\secparam, \pk, d, ed) \\
+			\pcreturn \enc(m) = c
+		}
+	}
+\end{center}
+
+In the game, the adversary generates the database as he wishes, and pass it to the challenger for an encryption. Given the encrypted database $ed$, the adversary's goal is to find a pair of plaintext and ciphertext. He wins the game if he can succeed with probability significantly greater than $\frac{1}{k}$.
+
+Our padding scheme is secure against this adversary. The actual proof will consist of two parts, firstly the underlying ciphertexts are indistinguishable (in the usual sense), and secondly, the counts of the joint attributes do not reveal the plaintexts.
+
+
+\subsection{Second Adversary}
+\begin{center}
+	\fbox{
+		\pseudocode[linenumbering , syntaxhighlight=auto] {%
+			(\pk, \sk) \gets \kgen (\secparam) \\
+			d  \gets \adv (\secparam, \pk) \\
+			\{(m_i, c_i)\} \gets  \adv(\secparam, \pk, d) \\
+			ed \gets \enc (\secparam, \pk, d) \\
+			(m, c) \gets  \adv (\secparam, \pk, d, ed, \{(m_i, c_i)\}) \\
+			\pcreturn \enc(m) = c
+		}
+	}
+\end{center}
+
+In this game, the adversary has the freedom to choose the database he wants to encrypt and a set of known plaintext-ciphertext pairs. His goal is to find a pair of plaintext and ciphertext he has not seen before. He wins if he can succeed with probability greater than one over size of unseen plaintexts, i.e. $\frac{1}{k - |\{(m_i,c_i)\}|}$.
+
+
+Our padding scheme is not secure against this adversary if he can find Latin square we have applied, up to a permutation. By using a pair of plaintext and ciphertext, he is able to recover all plaintext-ciphertext pairs. In general, finding the Latin square used is NP-hard (any $k > 3$, and multiple attribute columns). Maybe we are giving the adversary too much power (knowledge and computation power)?
+
+It is also provable that to be secure in this sense, one needs full padding.
+
+
+\section{Inference Attack}
+We need to define formally what is an inference attack (in general, not the technique). Then we want to show that given a secure scheme in our definition, there is no possible inference attack.
+
+There are many ways to define inference attack. The most common attacks use accuracy of recovery as a measure.
+
+
+
+
+
+\section{Operations on the Database}
+We also want to understand what are the operations we can apply to the database and how they affect time and space complexities, and security.
+
+
+
+
+
+\section{Padding SSE Schemes on Relational Databases}
+\begin{center}
+	\fbox{
+		\pseudocode[linenumbering , syntaxhighlight=auto] {%
+			(\pk, \sk) \gets \kgen_1 (\secparam) \\
+			p \gets \kgen_2(\secparam) \\
+			d' \gets Pad(d, p) \\
+			ed \gets \enc (\secparam, \pk, d)
+		}
+	}
+\end{center}
+The scheme builds upon any secure SSE scheme. All we do is to pad the database before the encryption scheme.
+
+
+
+\end{document}
