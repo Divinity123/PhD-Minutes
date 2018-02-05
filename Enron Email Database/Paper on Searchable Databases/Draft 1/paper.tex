@@ -1,0 +1,78 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\setlength\parindent{0pt}
+\setlength{\parskip}{1em}
+\title{First Draft of Paper}
+
+% packages
+\usepackage{float, amsmath, amsfonts, url}
+\usepackage [n, advantage, operators, sets, adversary, landau, probability, notions, logic, ff, mm, primitives, events, complexity, asymptotics, keys] {cryptocode}
+
+% we need to change some of these
+\newcommand{\db}{DB}
+\newcommand{\edb}{EDB}
+\newcommand{\doc}{d}
+\newcommand{\file}{f}
+\newcommand{\kwset}{K}
+\newcommand{\kw}{k}
+
+
+\begin{document}
+\section{Introduction}
+
+\section{Related Work}
+\input{related_work}
+
+
+
+
+
+
+\section{Notation}
+\textbf{TODO: Notations on technicalities}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ll}
+		\textbf{Notation} & \textbf{Explanation} \\ \hline
+		$\db$     	  	  & Database that has not been encrypted \\
+		$\edb$    		  & Encrypted database \\
+		$\doc$            & A document in the database \\
+		$\file$     	  & A file associated to some document \\
+		$\kwset$          & A set of keywords associated to some file \\
+		$\kw$             & A keyword in a keyword set
+	\end{tabular}
+	\caption{Notations used in this paper.}
+\end{table}
+
+
+\section{Security Notions - Full Permutation}
+% May need a new name because someone already used it in another definition, and the definition is different
+\subsection{Indistinguishability under Inference Attack}
+% There will be two versions of this: a) the optimal case, b) the 1/a case.
+
+
+\subsection{Indistinguishability of Databases with respect to Permutation}
+
+
+\subsection{Indistinguishability of Keywords in Documents}
+% Maybe it is worth to include fake files too
+
+
+
+
+\section{Secure Construction - Full Permutation}
+
+
+
+
+
+
+
+
+
+% biblography
+\bibliographystyle{plain}
+\bibliography{abbrev0,crypto,additional_citations}{}
+
+\end{document}

@@ -1,0 +1,323 @@
+\begin{thebibliography}{10}
+
+\bibitem{ICICS:BalKamMon05}
+Lucas Ballard, Seny Kamara, and Fabian Monrose.
+\newblock Achieving efficient conjunctive keyword searches over encrypted data.
+\newblock In Sihan Qing, Wenbo Mao, Javier L{\'o}pez, and Guilin Wang, editors,
+  {\em ICICS 05: 7th International Conference on Information and Communication
+  Security}, volume 3783 of {\em Lecture Notes in Computer Science}, pages
+  414--426, Beijing, China, December~10--13, 2005. Springer, Heidelberg,
+  Germany.
+
+\bibitem{C:BelBolONe07}
+Mihir Bellare, Alexandra Boldyreva, and Adam {O'Neill}.
+\newblock Deterministic and efficiently searchable encryption.
+\newblock In Alfred Menezes, editor, {\em Advances in Cryptology --
+  {CRYPTO}~2007}, volume 4622 of {\em Lecture Notes in Computer Science}, pages
+  535--552, Santa Barbara, CA, USA, August~19--23, 2007. Springer, Heidelberg,
+  Germany.
+
+\bibitem{EC:BDOP04}
+Dan Boneh, Giovanni {Di Crescenzo}, Rafail Ostrovsky, and Giuseppe Persiano.
+\newblock Public key encryption with keyword search.
+\newblock In Christian Cachin and Jan Camenisch, editors, {\em Advances in
+  Cryptology -- {EUROCRYPT}~2004}, volume 3027 of {\em Lecture Notes in
+  Computer Science}, pages 506--522, Interlaken, Switzerland, May~2--6, 2004.
+  Springer, Heidelberg, Germany.
+
+\bibitem{TCC:BonWat07}
+Dan Boneh and Brent Waters.
+\newblock Conjunctive, subset, and range queries on encrypted data.
+\newblock In Salil~P. Vadhan, editor, {\em TCC~2007: 4th Theory of Cryptography
+  Conference}, volume 4392 of {\em Lecture Notes in Computer Science}, pages
+  535--554, Amsterdam, The Netherlands, February~21--24, 2007. Springer,
+  Heidelberg, Germany.
+
+\bibitem{5199004}
+J.~Bringer, H.~Chabanne, and B.~Kindarji.
+\newblock Error-tolerant searchable encryption.
+\newblock In {\em 2009 IEEE International Conference on Communications}, pages
+  1--6, June 2009.
+
+\bibitem{CCS:CGPR15}
+David Cash, Paul Grubbs, Jason Perry, and Thomas Ristenpart.
+\newblock Leakage-abuse attacks against searchable encryption.
+\newblock In Indrajit Ray, Ninghui Li, and Christopher Kruegel:, editors, {\em
+  ACM CCS 15: 22nd Conference on Computer and Communications Security}, pages
+  668--679, Denver, CO, USA, October~12--16, 2015. {ACM} Press.
+
+\bibitem{NDSS:CJJJKR14}
+David Cash, Joseph Jaeger, Stanislaw Jarecki, Charanjit~S. Jutla, Hugo
+  Krawczyk, Marcel-Catalin Rosu, and Michael Steiner.
+\newblock Dynamic searchable encryption in very-large databases: Data
+  structures and implementation.
+\newblock In {\em {ISOC} Network and Distributed System Security Symposium --
+  {NDSS}~2014}, San Diego, CA, USA, February~23--26, 2014. The Internet
+  Society.
+
+\bibitem{C:CJJKRS13}
+David Cash, Stanislaw Jarecki, Charanjit~S. Jutla, Hugo Krawczyk,
+  Marcel-Catalin Rosu, and Michael Steiner.
+\newblock Highly-scalable searchable symmetric encryption with support for
+  {Boolean} queries.
+\newblock In Ran Canetti and Juan~A. Garay, editors, {\em Advances in
+  Cryptology -- {CRYPTO}~2013, Part~I}, volume 8042 of {\em Lecture Notes in
+  Computer Science}, pages 353--373, Santa Barbara, CA, USA, August~18--22,
+  2013. Springer, Heidelberg, Germany.
+
+\bibitem{6364125}
+Q.~Chai and G.~Gong.
+\newblock Verifiable symmetric searchable encryption for
+  semi-honest-but-curious cloud servers.
+\newblock In {\em 2012 IEEE International Conference on Communications (ICC)},
+  pages 917--922, June 2012.
+
+\bibitem{EPRINT:ChaMit04}
+Yan-Cheng Chang and Michael Mitzenmacher.
+\newblock Privacy preserving keyword searches on remote encrypted data.
+\newblock Cryptology ePrint Archive, Report 2004/051, 2004.
+\newblock \url{http://eprint.iacr.org/2004/051}.
+
+\bibitem{CCS:CGKO06}
+Reza Curtmola, Juan~A. Garay, Seny Kamara, and Rafail Ostrovsky.
+\newblock Searchable symmetric encryption: improved definitions and efficient
+  constructions.
+\newblock In Ari Juels, Rebecca~N. Wright, and {Sabrina De Capitani di}
+  Vimercati, editors, {\em ACM CCS 06: 13th Conference on Computer and
+  Communications Security}, pages 79--88, Alexandria, Virginia, USA,
+  October~30~--~November~3, 2006. {ACM} Press.
+
+\bibitem{ESORICS:FJKNRS15}
+Sky Faber, Stanislaw Jarecki, Hugo Krawczyk, Quan Nguyen, Marcel-Catalin Rosu,
+  and Michael Steiner.
+\newblock Rich queries on encrypted data: Beyond exact matches.
+\newblock In G{\"u}nther Pernul, Peter Y.~A. Ryan, and Edgar~R. Weippl,
+  editors, {\em ESORICS~2015: 20th European Symposium on Research in Computer
+  Security, Part~II}, volume 9327 of {\em Lecture Notes in Computer Science},
+  pages 123--145, Vienna, Austria, September~21--25, 2015. Springer,
+  Heidelberg, Germany.
+
+\bibitem{SP:FVYSHG17}
+Benjamin Fuller, Mayank Varia, Arkady Yerukhimovich, Emily Shen, Ariel Hamlin,
+  Vijay Gadepally, Richard Shay, John~Darby Mitchell, and Robert~K. Cunningham.
+\newblock {SoK}: Cryptographically protected database search.
+\newblock In {\em 2017 {IEEE} Symposium on Security and Privacy}, pages
+  172--191, San Jose, CA, USA, May~22--26, 2017. {IEEE} Computer Society Press.
+
+\bibitem{RSA:Gajek16}
+Sebastian Gajek.
+\newblock Dynamic symmetric searchable encryption from constrained functional
+  encryption.
+\newblock In Kazue Sako, editor, {\em Topics in Cryptology -- CT-RSA~2016},
+  volume 9610 of {\em Lecture Notes in Computer Science}, pages 75--89, San
+  Francisco, CA, USA, February~29~--~March~4, 2016. Springer, Heidelberg,
+  Germany.
+
+\bibitem{EPRINT:Goh03}
+Eu-Jin Goh.
+\newblock Secure indexes.
+\newblock Cryptology ePrint Archive, Report 2003/216, 2003.
+\newblock \url{http://eprint.iacr.org/2003/216}.
+
+\bibitem{ACNS:GolStaWat04}
+Philippe Golle, Jessica Staddon, and Brent~R. Waters.
+\newblock Secure conjunctive keyword search over encrypted data.
+\newblock In Markus Jakobsson, Moti Yung, and Jianying Zhou, editors, {\em ACNS
+  04: 2nd International Conference on Applied Cryptography and Network
+  Security}, volume 3089 of {\em Lecture Notes in Computer Science}, pages
+  31--45, Yellow Mountain, China, June~8--11, 2004. Springer, Heidelberg,
+  Germany.
+
+\bibitem{CCS:HahKer14}
+Florian Hahn and Florian Kerschbaum.
+\newblock Searchable encryption with secure and efficient updates.
+\newblock In Gail-Joon Ahn, Moti Yung, and Ninghui Li, editors, {\em ACM CCS
+  14: 21st Conference on Computer and Communications Security}, pages 310--320,
+  Scottsdale, AZ, USA, November~3--7, 2014. {ACM} Press.
+
+\bibitem{PAIRING:HwaLee07}
+Yong~Ho Hwang and Pil~Joong Lee.
+\newblock Public key encryption with conjunctive keyword search and its
+  extension to a multi-user system.
+\newblock In Tsuyoshi Takagi, Tatsuaki Okamoto, Eiji Okamoto, and Takeshi
+  Okamoto, editors, {\em PAIRING 2007: 1st International Conference on
+  Pairing-based Cryptography}, volume 4575 of {\em Lecture Notes in Computer
+  Science}, pages 2--22, Tokyo, Japan, July~2--4, 2007. Springer, Heidelberg,
+  Germany.
+
+\bibitem{NDSS:IslKuzKan12}
+Mohammad~Saiful Islam, Mehmet Kuzu, and Murat Kantarcioglu.
+\newblock Access pattern disclosure on searchable encryption: Ramification,
+  attack and mitigation.
+\newblock In {\em {ISOC} Network and Distributed System Security Symposium --
+  {NDSS}~2012}, San Diego, CA, USA, February~5--8, 2012. The Internet Society.
+
+\bibitem{FC:KamPap13}
+Seny Kamara and Charalampos Papamanthou.
+\newblock Parallel and dynamic searchable symmetric encryption.
+\newblock In Ahmad-Reza Sadeghi, editor, {\em FC 2013: 17th International
+  Conference on Financial Cryptography and Data Security}, volume 7859 of {\em
+  Lecture Notes in Computer Science}, pages 258--274, Okinawa, Japan,
+  April~1--5, 2013. Springer, Heidelberg, Germany.
+
+\bibitem{JC:KatSahWat13}
+Jonathan Katz, Amit Sahai, and Brent Waters.
+\newblock Predicate encryption supporting disjunctions, polynomial equations,
+  and inner products.
+\newblock {\em Journal of Cryptology}, 26(2):191--224, April 2013.
+
+\bibitem{CCS:KKLPK17}
+Kee~Sung Kim, Minkyu Kim, Dongsoo Lee, Je~Hong Park, and Woo-Hwan Kim.
+\newblock Forward secure dynamic searchable symmetric encryption with efficient
+  updates.
+\newblock In Bhavani~M. Thuraisingham, David Evans, Tal Malkin, and Dongyan Xu,
+  editors, {\em ACM CCS 17: 24th Conference on Computer and Communications
+  Security}, pages 1449--1463, Dallas, TX, USA, October~31~--~November~2, 2017.
+  {ACM} Press.
+
+\bibitem{IWSEC:KSOY16}
+Kaoru Kurosawa, Keisuke Sasaki, Kiyohiko Ohta, and Kazuki Yoneyama.
+\newblock {UC}-secure dynamic searchable symmetric encryption scheme.
+\newblock In Kazuto Ogawa and Katsunari Yoshioka, editors, {\em IWSEC 16: 11th
+  International Workshop on Security, Advances in Information and Computer
+  Security}, volume 9836 of {\em Lecture Notes in Computer Science}, pages
+  73--90, Tokyo, Japan, September~12--14, 2016. Springer, Heidelberg, Germany.
+
+\bibitem{ASIACCS:LZDLC13}
+Junzuo Lai, Xuhua Zhou, Robert~Huijie Deng, Yingjiu Li, and Kefei Chen.
+\newblock Expressive search on encrypted data.
+\newblock In Kefei Chen, Qi~Xie, Weidong Qiu, Ninghui Li, and Wen-Guey Tzeng,
+  editors, {\em ASIACCS 13: 8th ACM Symposium on Information, Computer and
+  Communications Security}, pages 243--252, Hangzhou, China, May~8--10, 2013.
+  {ACM} Press.
+
+\bibitem{EC:LOSTW10}
+Allison~B. Lewko, Tatsuaki Okamoto, Amit Sahai, Katsuyuki Takashima, and Brent
+  Waters.
+\newblock Fully secure functional encryption: Attribute-based encryption and
+  (hierarchical) inner product encryption.
+\newblock In Henri Gilbert, editor, {\em Advances in Cryptology --
+  {EUROCRYPT}~2010}, volume 6110 of {\em Lecture Notes in Computer Science},
+  pages 62--91, French Riviera, May~30~--~June~3, 2010. Springer, Heidelberg,
+  Germany.
+
+\bibitem{Li2008}
+Feifei Li, Marios Hadjileftheriou, George Kollios, and Leonid Reyzin.
+\newblock {\em Authenticated Index Structures for Outsourced Databases}, pages
+  115--136.
+\newblock Springer US, Boston, MA, 2008.
+
+\bibitem{5462196}
+J.~Li, Q.~Wang, C.~Wang, N.~Cao, K.~Ren, and W.~Lou.
+\newblock Fuzzy keyword search over encrypted data in cloud computing.
+\newblock In {\em 2010 Proceedings IEEE INFOCOM}, pages 1--5, March 2010.
+
+\bibitem{EPRINT:LWWCRL09}
+Jin Li, Qian Wang, Cong Wang, Ning Cao, Kui Ren, and Wenjing Lou.
+\newblock Enabling efficient fuzzy keyword search over encrypted data in cloud
+  computing.
+\newblock Cryptology ePrint Archive, Report 2009/593, 2009.
+\newblock \url{http://eprint.iacr.org/2009/593}.
+
+\bibitem{7016139}
+P.~Liu, J.~Wang, H.~Ma, and H.~Nie.
+\newblock Efficient verifiable public key encryption with keyword search based
+  on kp-abe.
+\newblock In {\em 2014 Ninth International Conference on Broadband and Wireless
+  Computing, Communication and Applications}, pages 584--589, Nov 2014.
+
+\bibitem{CCS:NavKamWri15}
+Muhammad Naveed, Seny Kamara, and Charles~V. Wright.
+\newblock Inference attacks on property-preserving encrypted databases.
+\newblock In Indrajit Ray, Ninghui Li, and Christopher Kruegel:, editors, {\em
+  ACM CCS 15: 22nd Conference on Computer and Communications Security}, pages
+  644--655, Denver, CO, USA, October~12--16, 2015. {ACM} Press.
+
+\bibitem{SP:NavPraGun14}
+Muhammad Naveed, Manoj Prabhakaran, and Carl~A. Gunter.
+\newblock Dynamic searchable encryption via blind storage.
+\newblock In {\em 2014 {IEEE} Symposium on Security and Privacy}, pages
+  639--654, Berkeley, CA, USA, May~18--21, 2014. {IEEE} Computer Society Press.
+
+\bibitem{1320027}
+H.~H. Pang and K.~L. Tan.
+\newblock Authenticating query results in edge computing.
+\newblock In {\em Proceedings. 20th International Conference on Data
+  Engineering}, pages 560--571, March 2004.
+
+\bibitem{WISA:ParKimLee04}
+Dong~Jin Park, Kihyun Kim, and Pil~Joong Lee.
+\newblock Public key encryption with conjunctive field keyword search.
+\newblock In Chae~Hoon Lim and Moti Yung, editors, {\em WISA 04: 5th
+  International Workshop on Information Security Applications}, volume 3325 of
+  {\em Lecture Notes in Computer Science}, pages 73--86, Jeju Island, Korea,
+  August~23--25, 2004. Springer, Heidelberg, Germany.
+
+\bibitem{CCS:PouWri16}
+David Pouliot and Charles~V. Wright.
+\newblock The shadow nemesis: Inference attacks on efficiently deployable,
+  efficiently searchable encryption.
+\newblock In Edgar~R. Weippl, Stefan Katzenbeisser, Christopher Kruegel,
+  Andrew~C. Myers, and Shai Halevi, editors, {\em ACM CCS 16: 23rd Conference
+  on Computer and Communications Security}, pages 1341--1352, Vienna, Austria,
+  October~24--28, 2016. {ACM} Press.
+
+\bibitem{SP:SBCSP07}
+Elaine Shi, John Bethencourt, Hubert T.-H. Chan, Dawn~Xiaodong Song, and Adrian
+  Perrig.
+\newblock Multi-dimensional range query over encrypted data.
+\newblock In {\em 2007 {IEEE} Symposium on Security and Privacy}, pages
+  350--364, Oakland, CA, USA, May~20--23, 2007. {IEEE} Computer Society Press.
+
+\bibitem{SP:SonWagPer00}
+Dawn~Xiaodong Song, David Wagner, and Adrian Perrig.
+\newblock Practical techniques for searches on encrypted data.
+\newblock In {\em 2000 {IEEE} Symposium on Security and Privacy}, pages 44--55,
+  Oakland, CA, USA, May 2000. {IEEE} Computer Society Press.
+
+\bibitem{NDSS:StePapShi14}
+Emil Stefanov, Charalampos Papamanthou, and Elaine Shi.
+\newblock Practical dynamic searchable encryption with small leakage.
+\newblock In {\em {ISOC} Network and Distributed System Security Symposium --
+  {NDSS}~2014}, San Diego, CA, USA, February~23--26, 2014. The Internet
+  Society.
+
+\bibitem{7035110}
+J.~Wang, X.~Chen, X.~Huang, I.~You, and Y.~Xiang.
+\newblock Verifiable auditing for outsourced database in cloud computing.
+\newblock {\em IEEE Transactions on Computers}, 64(11):3293--3303, Nov 2015.
+
+\bibitem{CANS:WanWanPie08}
+Peishun Wang, Huaxiong Wang, and Josef Pieprzyk.
+\newblock Keyword field-free conjunctive keyword searches on encrypted data and
+  extension for dynamic groups.
+\newblock In Matthew~K. Franklin, Lucas Chi~Kwong Hui, and Duncan~S. Wong,
+  editors, {\em CANS 08: 7th International Conference on Cryptology and Network
+  Security}, volume 5339 of {\em Lecture Notes in Computer Science}, pages
+  178--195, Hong-Kong, China, December~2--4, 2008. Springer, Heidelberg,
+  Germany.
+
+\bibitem{EPRINT:XuJin10}
+Peng Xu and Hai Jin.
+\newblock Public-key encryption with fuzzy keyword search: A provably secure
+  scheme under keyword guessing attack.
+\newblock Cryptology ePrint Archive, Report 2010/626, 2010.
+\newblock \url{http://eprint.iacr.org/2010/626}.
+
+\bibitem{EPRINT:ZheXuAte13}
+Qingji Zheng, Shouhuai Xu, and Giuseppe Ateniese.
+\newblock {VABKS}: Verifiable attribute-based keyword search over outsourced
+  encrypted data.
+\newblock Cryptology ePrint Archive, Report 2013/462, 2013.
+\newblock \url{http://eprint.iacr.org/2013/462}.
+
+\bibitem{ACISP:ZMWLC17}
+Hong Zhu, Zhuolin Mei, Bing Wu, Hongbo Li, and Zongmin Cui.
+\newblock Fuzzy keyword search and access control over ciphertexts in cloud
+  computing.
+\newblock In Josef Pieprzyk and Suriadi Suriadi, editors, {\em ACISP 17: 22nd
+  Australasian Conference on Information Security and Privacy, Part~I}, volume
+  10342 of {\em Lecture Notes in Computer Science}, pages 248--265, Auckland,
+  New Zealand, July~3--5, 2017. Springer, Heidelberg, Germany.
+
+\end{thebibliography}
