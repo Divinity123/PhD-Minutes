@@ -1,0 +1,206 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\setlength\parindent{0pt}
+\setlength{\parskip}{1em}
+
+\usepackage{float, amsmath, amsfonts}
+
+\newcommand{\db}{\textbf{DB}}
+\newcommand{\edb}{\textbf{EDB}}
+\newcommand{\doc}{d}
+\newcommand{\edoc}{ed}
+\newcommand{\file}{f}
+\newcommand{\efile}{ef}
+\newcommand{\kwset}{W}
+\newcommand{\ekwset}{EW}
+\newcommand{\kw}{w}
+\newcommand{\ekw}{ew}
+\newcommand{\boolean}{B}
+\newcommand{\cmatrix}{CM}
+\newcommand{\ecmatrix}{ECM}
+
+\newcommand{\enc}{Enc}
+
+\newtheorem{definiton}{Definition}
+\newtheorem{theorem}{Theorem}
+
+
+
+\begin{document}
+\section{Notation}
+We use the following list of notations:
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ll}
+		Notation  & Explanation               				\\
+		$\db$     & Unencrypted database      				\\
+		$\edb$    & Encrypted database        				\\
+		$\doc$    & A document (row) in unencrypted database \\
+		$\edoc$   & A document (row) in encrypted database   \\
+		$\file$   & File associated to a document in unencrypted database \\
+		$\efile$  & File identifier of a document in encrypted database   \\
+		$\kwset$  & Set of unencrypted keywords across the whole database \\
+		$\ekwset$ & Set of encrypted keywords across the whole database   \\
+		$\kw$     & A particular unencrypted keyword \\
+		$\ekw$    & A particular encrypted keyword
+	\end{tabular}
+\end{table}
+
+We further abuse $\kwset(\file)$ to mean the set of unencrypted keywords associated to file $\file$. Similarly, we write $\ekwset(\efile)$ to mean the set of encrypted keywords associated to file identifier $\efile$.
+
+\textbf{Syntax of Unencrypted Database} We write $\db = (\doc_1, \cdots, \doc_n)$ where $n$ is the number of documents. Each document $\doc_i$ can be written as $\doc_i = (\file_i, \kwset_i)$, where $\kwset_i = \kwset(\file_i)$.
+
+\textbf{Syntax of Encrypted Database} Likewise, we write $\edb = (\edoc_1, \cdots, \edoc_n)$ where $n$ is the number of documents. Each document $\edoc_i$ can be written as $\edoc_i = ((\efile_i, \boolean), \ekwset_i)$, where $\boolean$ is the (probabilistic) encryption of true or false to indicate if the encrypted document is real or fake and $\ekwset_i = \ekwset(\efile_i)$.
+
+
+\begin{definiton}(Generalised co-occurrence matrix) We define co-occurrence matrix of degree $l$ on database $\db$ to be a $l$ dimensional matrix $\cmatrix_l$ such that
+\begin{center}
+	$\cmatrix_l(\kw_1, \cdots, \kw_l) = \left| \{\doc \mid \ (d = (\file, \kwset(\file))\in\db) \wedge (\{\kw_1, \cdots, \kw_l\} = \kwset(\file)) \wedge (|\kwset(\file)| = l) \} \right|$.
+\end{center}
+
+Correspondingly, the co-occurrence matrix of degree $l$ on encrypted database $\edb$ is defined as a $l$ dimensional matrix $\ecmatrix_l$ such that
+\begin{center}
+	$\ecmatrix_l(\ekw_1, \cdots, \ekw_l) = \left| \{\edoc \mid \ (d = (\efile, \ekwset(\efile))\in\edb) \wedge (\{\ekw_1, \cdots, \ekw_l\} = \ekwset(\efile)) \wedge (|\ekwset(\efile)| = l) \} \right|$.
+\end{center}
+\end{definiton}
+
+The three conditions in the definition can be understood as:
+\begin{enumerate}
+	\item $\file$ is a document in $\db$ (or $\edb$),
+	\item $\{\kw_1, \cdots, \kw_l\}$ is the (exact) set of keywords of $\file$,
+	\item there are exactly $l$ keywords in $\db$ (or $\edb$).
+\end{enumerate}
+The last condition is to rule out repeated keywords in $\{\kw_1, \cdots, \kw_l\}$.
+
+
+
+
+\section{Leakage}
+In all mechanisms studied (including ours), assuming the order of documents are permuted randomly by the mechanism, the leakage can be expressed as $\{\ecmatrix_l\}_{l=1}^{|\ekwset|}$. We omit details of the proof for now.
+
+
+
+
+\section{Construction}
+\subsection{Details of our Construction}
+Without loss of generality, we can assume that the set of keywords and set of encrypted keywords are $\{1, \cdots, |\kwset|\}$ and $\{1, \cdots, |\ekwset|\}$ respectively.
+
+Before the construction, we need a bit more notation. We write $P$ to mean a permutation on $[|\kwset|]$ and $P_a$ to be a permutation on $[|\kwset|]$ consisting of cycles of length $a$. For simplicity, we assume $a$ divides $|\kwset|$. We abuse the notation to write $P_a(\{\kw_1, \cdots, \kw_l\}) = \{P_a(\kw_1), \cdots, P_a(\kw_l)\}$.
+
+We need the following subroutines to make our scheme work. Let $PGen(n, a)$ be a secure random permutation generation algorithm that generate a permutation on $[n]$ consists of cycles of length $a$ each. Let $FGen(l)$ be a secure fake file generator taking input $l$, where $l$ is the number of keywords in the generated file. Let $\enc_k$ be a probabilistic encryption scheme with public key $k$.
+
+Let $\db = (\doc_1, \cdots, \doc_n)$ be the original unencrypted database. Our construction is the following.
+\begin{enumerate}
+	\item Pick security parameter $a$.
+	\item $P_a \leftarrow PGen(|\kwset|, a)$.
+	\item $\db' = ()$.
+	\item For $i = 1 \cdots n$:\\
+		\hspace*{2em} Write $\doc_i = (\file_i, \kwset_i)$ \\
+		\hspace*{2em} $\db' = \db' + ((\file_i, true), \kwset_i)$ \\
+		\hspace*{2em} $\kwset' = \kwset_i$ \\
+		\hspace*{2em} $j = 2 \cdots a:$ \\
+		\hspace*{4em}	$\kwset' = P_a(\kwset')$ \\
+		\hspace*{4em}	$f' = FGen(|\kwset_i|)$ \\
+		\hspace*{4em}	$\db' = \db' + ((\file', false), \kwset')$
+	\item $P_{row} = \leftarrow PGen(|\db'|, |\db'|)$
+	\item $\db^{''} = ()$
+	\item Write $\db' = (\db'_1, \cdots, \db'_{an})$
+	\item For $i = 1 \cdots an$:\\
+		\hspace*{2em} $\db^{''} = \db^{''} + \db'_{P_{row}(i)}$
+	\item Encrypt padded documents with any secure searchable encryption scheme, and the corresponding document tags with $\enc_k$. The new encrypted document identifiers takes the form $(\efile, \boolean)$.
+\end{enumerate}
+
+
+\subsection{Explanation of the Construction}
+Intuitively, our mechanism does the following:
+\begin{enumerate}
+	\item We begin by generating a random permutation $P_a$ consisting of cycles of length $a$ (Step 1 and 2).
+	\item Then, for each document in the database, say with keyword set $\kwset' = \{\kw_1, \cdots, \kw_l\}$, we insert fake documents with keyword sets $P_a(\kwset'), \cdots, P_a^{a-1}(\kwset')$ (Step 3 and 4).
+	\item After that, we permute rows of the padded database (step 5 to 8).
+	\item Finally, we encrypt the padded database using some secure searchable encryption scheme.
+\end{enumerate}
+
+We do not need to shuffle rows of the database in step 5 to 8 if the secure searchable encryption scheme includes this step (and is provably secure).
+
+
+
+
+\subsection{Leakage of our Construction}
+Since our construction uses searchable encryption scheme like all others, the generalised co-occurrence matrices on the encrypted documents are leaked (proof omitted for now). The difference between naive encryption scheme and our scheme is that all the generalised co-occurrence matrices in our scheme are $P_a$-permutable. We state it as a theorem.
+
+[Recall that an $l$ dimensional matrix $\ecmatrix_l$ is $P_a$-permutable if and only if for all $(\ekw_1, \cdots, \ekw_l) \in |\ekwset|^l$, $\ecmatrix_l(\ekw_1, \cdots, \ekw_l) = \ecmatrix_l(P_a(\ekw_1), \cdots, P_a(\ekw_l))$.]
+
+\begin{theorem}
+	Leakage generated by applying our scheme to any well-formed database $\db$ can be written as $\mathcal{L} = \{\ecmatrix_l\}_{l=1}^{|\ekwset|}$, where $\ekwset$ is the set of encrypted keywords generated by the encryption scheme, and $\ecmatrix_l$ for each $l$ is $P_a$-permutable.
+\end{theorem}
+
+
+\textit{Proof:} We can prove the statement with simple induction. In the base case, the database is empty so the statement is trivially true. Now we assume the statement is true up to insertion of $b$ documents, and we try to show that the statement still hold with $b+1$ document. Let $(b+1)$-th document be $((\efile_{b+1}, B_{b+1}), \kwset_{b+1})$. WLOG, we assume $\kwset_{b+1} = \{\ekw_1, \cdots, \ekw_q \}$ for some $q$. In step 4 of the scheme, we insert documents with keywords $\kwset_{b+1}, P_a(\kwset_{b+1}), \cdots, P_a^{a-1}(\kwset_{b+1})$, so all $\ecmatrix_l$ stays the same except $\ecmatrix_q$. With keywords $\kwset_{b+1} = \{\ekw_1, \cdots, \ekw_q\}$, we have $\ecmatrix_q(\ekw_1, \cdots, \ekw_q)$ incremented by 1. But we also insert a document with $P_a(\kwset_{b+1})$ as the keyword set, so $\ecmatrix_q(P_a(\ekw_1), \cdots, P_a(\ekw_q))$ is incremented by 1 too. Using the same argument, we have all $\ecmatrix_q(P_a^{r}(\ekw_1), \cdots, P_a^{r}(\ekw_q))$ for $r = 0, \cdots, a-1$ are incremented by 1. Furthermore, by symmetry of co-occurrence matrix, we see that for any permutation $\sigma$ on $[q]$, $\ecmatrix_q(P_a^{r}(\ekw_\sigma(1)), \cdots, P_a^{r}(\ekw_\sigma(q)))$ are incremented by 1. So the permutation property still holds on those entries. Since all other entries are not affected by the file insertion, $\ecmatrix_q$ is still $P_a$-permutable. Thus, $\ecmatrix_l$ is $P_a$-permutable for any $l$. $\square$
+
+
+
+
+\subsection{Example}
+\textbf{Set-up} To understand the construction and its leakage, we demonstrate the scheme using an example. Let $\kwset = \{1,2,3,4\}$, and $\db = (\doc_1, \cdots, \doc_5)$ such that:
+\begin{enumerate}
+	\item $\doc_1 = (\file_1, \{1,2\})$,
+	\item $\doc_2 = (\file_2, \{1,2\})$,
+	\item $\doc_3 = (\file_3, \{2,3\})$,
+	\item $\doc_4 = (\file_3, \{1,3\})$,
+	\item $\doc_5 = (\file_3, \{2,3,4\})$.
+\end{enumerate}
+
+\textbf{Leakage with Trivial Scheme} The leakage using trivial searchable encryption is a permutation (in terms of plaintext to ciphertext, since the adversary does not know the exact order of plaintexts) of $\{\cmatrix_l\}_{l=1}^{4}$, where:
+\begin{enumerate}
+	\item $\cmatrix_1 = \textbf{0}$,
+	
+	\item $\cmatrix_2 = 
+	\begin{bmatrix}
+	0 & 2 & 1 & 0\\ 
+	2 & 0 & 1 & 0\\ 
+	1 & 1 & 0 & 0\\ 
+	0 & 0 & 0 & 0 
+	\end{bmatrix}$,
+	
+	\item $\cmatrix_3$ has 0 everywhere except $\cmatrix_3(2,3,4) = \cmatrix_3(2,4,3) = \cmatrix_3(3,2,4) = \cmatrix_3(3,4,2) = \cmatrix_3(4,2,3) = \cmatrix_3(4,3,2) = 1$,
+	
+	\item $\cmatrix_4 = \textbf{0}$.
+\end{enumerate}
+
+\textbf{Padding with our Scheme} Suppose we set $a=2$ and $P_a = (1 \ 2)(3 \ 4)$. Then:
+\begin{enumerate}
+	\item For the first document $\doc_1$, we pad a fake document $\doc_1'$ with keywords $P_a(\{1,2\}) = \{1,2\}$.
+	
+	\item For $d_2$, we pad $\doc_2'$ with keywords $P_a(\{1,2\}) = \{1,2\}$.
+	
+	\item For $d_3$, we pad $\doc_3'$ with keywords $P_a(\{2,3\}) = \{1,4\}$.
+	
+	\item For $d_4$, we pad $\doc_4'$ with keywords $P_a(\{1,3\}) = \{2,4\}$.
+	
+	\item For $d_5$, we pad $\doc_5'$ with keywords $P_a(\{2,3,4\}) = \{1,3,4\}$.
+\end{enumerate}
+
+\textbf{Leakage with our Scheme} With simple counting, we find leakage to be a permutation  of $\{\cmatrix_l'\}_{l=1}^{4}$, where:
+\begin{enumerate}
+	\item $\cmatrix_1' = \textbf{0}$,
+	
+	\item $\cmatrix_2' = 
+	\begin{bmatrix}
+	0 & 4 & 1 & 1\\ 
+	4 & 0 & 1 & 1\\ 
+	1 & 1 & 0 & 0\\ 
+	1 & 1 & 0 & 0 
+	\end{bmatrix}$,
+	
+	\item $\cmatrix_3'$ has 0 everywhere except $\cmatrix_3(2,3,4) = \cmatrix_3(2,4,3) = \cmatrix_3(3,2,4) = \cmatrix_3(3,4,2) = \cmatrix_3(4,2,3) = \cmatrix_3(4,3,2) = 1$, and $\cmatrix_3(1,3,4) = \cmatrix_3(1,4,3) = \cmatrix_3(3,1,4) = \cmatrix_3(3,4,1) = \cmatrix_3(4,1,3) = \cmatrix_3(4,3,1) = 1$
+	
+	\item $\cmatrix_4' = \textbf{0}$.
+\end{enumerate}
+
+
+\textbf{Security of our Scheme (Intuition)} We see that the co-occurrence matrices using trivial construction are not permutable so the adversary can recover the permutation between plaintext and ciphertext with certainty. On the other hand, all the co-occurrence matrices in our scheme can be permuted by permutation $P_a$. For instance, one can check $P_a \cmatrix_2' P_a^{T} = \cmatrix_2'$ (if we write $P_a$ as a permutation matrix). In particular, for documents with 2 keywords, joint distribution of keyword $3$ with all other keywords is indistinguishable from that of $4$ so the adversary cannot distinguish the two in this way. 
+
+One thing to note is that the number of documents containing $\{1,2\}$ is 4, which is unique in this database. So if the adversary sees two encrypted keywords with co-occurrence 4, he knows those are encryptions of $1$ and $2$, even though he cannot distinguish the two. This implies that for the documents that only contain those two keywords, the adversary knows everything. The only uncertainty left is the probability that the document is fake to begin with, which is $\frac{a-1}{a}$. So the adversary guesses everything correctly, including if the document is real or fake, with probability $\frac{1}{a}$. (One can check that there are two files with keywords $\{1,2\}$ in the original database. We have padded two fake documents with the same set of keywords. So the probability that the adversary guesses if the document is real correctly is $\frac{1}{2}$.)
+
+
+\end{document}
