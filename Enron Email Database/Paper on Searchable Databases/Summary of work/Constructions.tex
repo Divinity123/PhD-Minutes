@@ -1,0 +1,212 @@
+In this section, we motivate and give several constructions of searchable encryption.
+
+\subsection{Additional Notations}
+Let $\kwset(\cdot)$ denotes a function that takes in a file or document and returns the set of keywords associated to it. If it takes the whole database as input, it returns the set of keywords in all documents. Similarly, we let $f(\doc)$ to be a function that returns the file associated to a document $\doc$. We write $\perm_a^{\kwset(\db)}$ to mean a permutation on $\kwset(\db)$. The permutation is a product of $\frac{|\kwset(\db)|}{a}$ disjoint cycles of length $a$. When the keyword set is well-understood, we omit it from the notation. Let $\kwset$ be a set of keywords, we abuse the notation $\perm_a(\kwset)$ to mean $\perm_a(\kwset) = \{ \perm_a^n(w) \mid w \in \kwset \}$.
+
+
+
+
+\subsection{Motivation}
+From previous works, we know that the leakage of most searchable encryptions is repetition of keywords in files, meaning that if the same keyword appears in two different documents, the adversary is aware of that. There are constructions that hides this information from the adversary in the passive case but this is nonetheless leaked through queries. There are many known attacks that abuse this information to perform inference attack. Our goal is to construct a scheme that is secure against any inference attack.
+
+To motivate, we start by describing the attacks. The basic attack is the well-known frequency analysis. Upon obtaining the information on the database, the adversary computes the frequency of each encrypted keyword. The information is then compared to his prior knowledge on the distribution. The encrypted keywords are matched to their most likely unencrypted counterparts. Naveed et al. \cite{CCS:NavKamWri15} have shown that this attack is very efficient and accurate on attribute-based encrypted tables, and their attack can be extended to other forms of encrypted databases easily.
+
+The more advanced attacks aim to improve accuracy of keyword recovery by making use of co-occurrences of keywords. In this case, instead of looking at frequency of keywords one by one, the adversary looks at pairs of keywords and find frequencies on them. The frequencies computed is usually put into a matrix, known as the co-occurrence matrix and some optimization algorithm is performed to find a permutation between keywords and their encryptions which fits the objective function the best. It has been shown that attacks of this form can recover a substantial amount of plaintext-ciphertext pairs even if frequency analysis fails so.
+
+Attack of this genre does not stop here. We imagine there are adversaries who make use of higher order information such as frequency of every three keywords occur together and more. So ultimately, a necessary condition for a scheme to be secure is that it is secure against inference attack that abuses co-occurrence matrices at all levels.
+
+All of our constructions rely on a permutation $P_a$. The idea is that we transform the original database into a form such that after permuting the keywords with $P_a$, the view of the encrypted database should stay the same. Thus, the adversary cannot distinguish if the original keywords are those without the permutation or the ones with it. Of course, since $P_a$ is a permutation, we can apply $P_a$ again and the view of the encrypted database is still unchanged. In fact, there are (at least) $a$ different orientations of the transformed database such that the encrypted views are the same.
+
+
+
+
+\subsection{Co-occurrence Matrices and Permutability}
+In this subsection, we give definition of co-occurrence matrices and permutable co-occurrence matrices, and show how these can help us achieve security.
+
+\begin{definition}[Co-occurrence at level $l$ with Documents]
+Co-occurrence at level $l$ on database $\db$ with documents is defined to be $\dcm_{l}^{\db}: \kwset(\db)^l \rightarrow \doc^{*}$.
+\begin{equation}
+	\dcm_{l}^{\db}(\kw_1, \dots, \kw_l) := \{ \doc \mid  (\kw_i \neq \kw_j \forall i,j) \wedge (\doc \in \db) \wedge (\{\kw_1, \dots, \kw_l\} = \kwset(\doc)) \}.
+\end{equation}
+\end{definition}
+
+Sometimes, only the counts in the co-occurrence matrix is of interest to us. So we define the corresponding co-occurrence matrix to be:
+\begin{definition}[Co-occurrence at level $l$ with Counts]
+	Co-occurrence at level $l$ on database $\db$ with counts is defined to be $\ccm_{l}^{\db}: \kwset(\db)^l \rightarrow \mathbb{N}$.
+	\begin{equation}
+	\ccm_{l}^{\db}(\kw_1, \dots, \kw_l) := \left| \dcm_{l}^{\db}(\kw_1, \dots, \kw_l) \right|.
+	\end{equation}
+\end{definition}
+
+When the database $\db$ is well-understood, we omit it from the notation. With this definition, we can talk about co-occurrence of arbitrary number of keywords. For example, counts of keywords corresponds to $\ccm_1$, and co-occurrence is $\ccm_2$. Similar definition can be made with the encrypted database, we give them briefly here.
+
+\begin{definition}[Co-occurrence at level $d$ with Encrypted Documents]
+	Co-occurrence at level $l$ on encrypted database $\edb$ with encrypted documents is defined to be $\edcm_{l}^{\edb}: \ekwset(\edb)^l \rightarrow \edoc^{*}$.
+	\begin{equation}
+	\edcm_{l}^{\edb}(\ekw_1, \dots, \ekw_l) := \{ \edoc \mid  (\ekw_i \neq \ekw_j \forall i,j) \wedge (\edoc \in \edb) \wedge (\{\ekw_1, \dots, \ekw_l\} = \dec(\edoc)) \}.
+	\end{equation}
+\end{definition}
+
+\begin{definition}[Co-occurrence at level $l$ with Encrypted Counts]
+	Co-occurrence at level $d$ on database $\db$ with encrypted counts is defined to be $\eccm_{l}^{\edb}: \ekwset(\edb)^l \rightarrow \mathbb{N}$.
+	\begin{equation}
+	\eccm_{l}^{\edb}(\ekw_1, \dots, \ekw_l) := \left| \edcm_{l}^{\edb}(\ekw_1, \dots, \ekw_l) \right|.
+	\end{equation}
+\end{definition}
+
+Finally, we can define the collection of co-occurrences at all levels with the following definition.
+
+\begin{definition}[Co-occurrences at all levels]
+Co-occurrences at all levels with documents is $\dcm^{\db} = \left\{ \dcm_1^{\db}, \dots, \dcm_{\kwset(\db)}^{\db} \right\}$. Co-occurrences at all levels with counts is $\ccm^{\db} = \left\{ \ccm_1^{\db}, \dots, \ccm_{\kwset(\db)}^{\db} \right\}$.
+
+Co-occurrences at all levels with encrypted documents is $\edcm^{\edb} = \left\{ \edcm_1^{\edb}, \dots, \edcm_{\kwset(\edb)}^{\edb} \right\}$. Co-occurrences at all levels with encrypted counts is $\eccm^{\edb} = \left\{ \eccm_1^{\edb}, \dots, \eccm_{\ekwset(\edb)}^{\edb} \right\}$.
+\end{definition}
+
+All of our constructions rely on transforming co-occurrences into a way such that the adversary can no longer recover the information he wants. The property we achieve with our transformation is what we called permutability.
+
+\begin{definition}[Permutability]
+Given co-occurrence $C$ of any form above, and a permutation $\perm$ on a co-ordinate of the input, we say $C$ is $\perm$-permutable if
+\begin{equation}
+	C_l(w_1, \dots, w_l) = C_l(P(w_1), \dots, P(w_l))
+\end{equation}
+for all $w_1, \dots, w_l$.
+
+We say that co-occurrence at all levels are permutable by $\perm$ if all co-occurrences are permutable by $\perm$.
+\end{definition}
+
+In dimensions 1 and 2, this is easier to understand in terms of vectors and matrices. The following is an example of $(w_1\ w_2\ w_3)$-permutable co-occurrence count in matrix form:
+\begin{equation}
+\begin{bmatrix}0 & 5 & 5 \\5 & 0 & 5 \\ 5 & 5 & 0\end{bmatrix}
+\end{equation}
+
+Note that co-occurrences are always symmetric due to the definition. Now imagine these are the only documents in our database. If we use a secure deterministic encryption scheme to encrypt these keywords, the adversary is going to see a permuted version of this co-occurrence. But he is not able to tell which ciphertext corresponds to which keyword because all pairs of keywords have the same count. Our encryption schemes essentially takes co-occurrences (at all levels) in any shape, and transform them into these permutable matrices. With a clever choice of permutation $\perm$, we can achieve desired security with respect to some gain functions. In the next subsection, we will show how to transform arbitrary co-occurrence into a permutable one.
+
+
+
+
+\subsection{Our Constructions}
+In this section, we describe our constructions. All of the constructions are secure against keyword guessing attack (it is going to be a security notion slightly different from the one defined above, see later) but they achieve different level of security against other attacks.
+
+
+\subsection{Permutation with Adding Fake Documents}
+One straightforward way to achieve the permutation property is to pad fake documents. Let $(\overline{\kgen}, \overline{\enc}, \overline{\dec})$ be a secure encryption scheme on searchable encryption (i.e. with leakage being repetition of keywords). Let $\kgen'(a, \kwset(\db))$ be a key generation scheme that takes in a positive integer a which divides $|\kwset(\db)|$ and set of keywords in $\db$, and returns a permutation on $\kwset(\db)$ that is a product of disjoint cycles of length $a$. Let $\texttt{FGen}(\secparam, \kwset)$ be a function that generates a random fake file with the given set of keywords $\kwset$. We can define scheme 1 to be $\texttt{scheme1} = (\kgen, \enc, \dec)$ in the following way.
+
+\begin{pcvstack}[center]
+\begin{pchstack}
+\procedure{$\kgen(n, a, \kwset(\db))$}{%
+	\pcln \key \gets \overline{\kgen}(\secparam) \\
+	\pcln \perm_a \gets \kgen'(a, \kwset(\db)) \\
+	\pcln \pcreturn (\key, \perm_a)
+}
+
+\pchspace
+\procedure{$\enc(\secparam, (\key, \perm_a), \db)$}{%
+	\pcln \db' = () \\
+	\pcln \pcfor \doc \in \db: \\
+	\pcln \pcind[1] \db' = \db' + (\kwset(\doc), (True, \file(\doc))) \\
+	\pcln \pcind[1] \pcfor i = 1, \dots, a-1: \\
+	\pcln \pcind[2] \db' = \db' + ((P_a)^i(\kwset(\doc)), (False, \texttt{FGen}(\secparam, (P_a)^i(\kwset(\doc)))) \\
+	\pcln \pcreturn \overline{\enc}(\secparam, \key, \db')
+}
+\end{pchstack}
+
+\pcvspace
+\procedure{$\dec(\secparam, (\key, \perm_a), \edb)$}{%
+	\pcln \db = () \\
+	\pcln \pcfor \edoc \in \edb: \\
+	\pcln \pcind[1] (\kwset, (b, \file)) \gets \overline{\dec}(\secparam, (\key, \perm_a), \edoc) \\
+	\pcln \pcind[1] \pcif b = True: \\
+	\pcln \pcind[2] \db = \db + ((\kwset, \file)) \\
+	\pcln \pcreturn \db
+}
+\end{pcvstack}
+
+Insertion and deletion are straightforward and other functions, namely trapdoor generation and search, are taken from the aforementioned encryption scheme directly so we will omit them here.
+
+
+
+\subsection{Scheme in IKK paper}
+In the paper written by Islam et al. \cite{NDSS:IslKuzKan12}, the authors introduced an encryption scheme that is secure against inference attack. Their security notion is different from the one we described in section \ref{Security Notions}. We recall their definition and results here.
+
+\begin{definition}[$(\alpha, t)$-secure index] We say an $m \times n$ binary index matrix $ID$ is $(\alpha, t)$-secure for a given $\alpha \in [1,m]$ and $t \in \mathcal{N}$ if there exists a set of partitions $\{ S_i \}$ s.t. the following holds.
+\begin{enumerate}
+	\item The partition set is complete. That is $\cup_i S_i = [1,m]$.
+	
+	\item The partitions in the set are non-overlapping. That is, $\forall i,j, S_i \cap S_j = \emptyset$.
+	
+	\item Each partition has at least $\alpha$ rows. That is, $\forall j, |S_j| \geq \alpha$.
+	
+	\item Finally, the hamming distance between any two rows of a given partition $j$ is at most $t$. That is, $\forall i_1, i_2 \in S_j, d_H(ID_{i_1}, ID_{i_2}) \leq t$.
+\end{enumerate}
+\end{definition}
+
+Intuitively, $(\alpha, t)$-secure index is a measure on how indistinguishable keywords are. If we want to achieve better security, we want to have large $\alpha$ and small $t$. Indeed, the authors' goal is to find a lossless (there is no deletion of documents or keywords) transformation from the given index to an $(\alpha, 0)$-secure index, for some $\alpha$ specified by the user as the security parameter. The authors have given a theorem on  $(\alpha, 0)$-secure index as follows.
+
+\begin{theorem}
+Let $ID$ be an $m \times n$ $(\alpha, 0)$-secure index for some $0 < \alpha \leq m$. Given the response of a query $q_i = \text{Trapdoor}_w$ for some keyword $w$ and the complete $ID$ matrix, an attacker can successfully identify the keyword $w$ with probability at most $\frac{1}{a}$ by just using background information related to $ID$ matrix.
+\end{theorem}
+
+It is important to note that the adversary described in the above theorem is different from the one we discussed in definition \ref{Security against Keyword Guessing Attack}. In particular, we have here that the adversary cannot guess any keyword from its encryption with probability greater than $\frac{1}{a}$, which is independent from the keyword frequencies. In fact, all of our schemes have this property.
+
+To transform an index to an $(\alpha, 0)$-secure one, the authors used a clustering algorithm to pad the original index with fake keywords.
+
+
+
+\subsection{Permutation with Adding Fake Keywords}
+In this section, we describe a scheme that is very similar to that in the IKK paper. The main difference is that our scheme is dynamic, i.e. it supports document insertions and deletions. The idea is similar: our goal is to pad fake keywords so that groups of $a$ keywords are indistinguishable from each other. Again, we can use a permutation $\perm_a$ to achieve this.
+
+Let $(\overline{\kgen}, \overline{\enc}, \overline{\dec})$ be a secure encryption scheme on searchable encryption (i.e. with leakage being repetition of keywords). Let $\kgen'(a, \kwset(\db))$ be a key generation scheme that takes in a positive integer a which divides $|\kwset(\db)|$ and set of keywords in $\db$, and returns a permutation on $\kwset(\db)$ that is a product of disjoint cycles of length $a$. We can define scheme 1 to be $\texttt{scheme2} = (\kgen, \enc, \dec)$ in the following way.
+
+\begin{pchstack}[center]
+\procedure{$\kgen(n, a, \kwset(\db))$}{%
+	\pcln \key \gets \overline{\kgen}(\secparam) \\
+	\pcln \perm_a \gets \kgen'(a, \kwset(\db)) \\
+	\pcln \pcreturn (\key, \perm_a)
+}
+		
+\pchspace
+\procedure{$\enc(\secparam, (\key, \perm_a), \db)$}{%
+	\pcln \db' = () \\
+	\pcln \pcfor \doc \in \db: \\
+	\pcln \kwset' = \cup_{i=0}^{a-1} (P_a)^i(\kwset(\doc))\\
+	\pcln \pcind[1] \db' = \db' + (\kwset', \file(\doc)) \\
+	\pcln \pcreturn \overline{\enc}(\secparam, \key, \db')
+}
+	
+\pchspace
+\procedure{$\dec(\secparam, (\key, \perm_a), \edb)$}{%
+	\pcln \db = () \\
+	\pcln \pcfor \edoc \in \edb: \\
+	\pcln \db = \db + \dec(\edoc) \\
+	\pcln \pcreturn \db
+}
+\end{pchstack}
+
+
+Insertion and deletion are straightforward and other functions, namely trapdoor generation and search, are taken from the aforementioned encryption scheme directly so we will omit them here.
+
+
+
+
+\subsection{Permutation with $a$ Documents}
+Our last scheme takes a step further and apply the permutation to a set of files instead of one file each time. All functions except the encryption function for this scheme are the same as that of \texttt{scheme2} so we will not repeat it here. For simplicity, we assume that the number of documents in $\db$ is a multiple of $a$. The encryption scheme for \texttt{scheme3} is the following.
+
+\begin{pchstack}[center]
+\procedure{$\enc(\secparam, (\key, \perm_a), \db)$}{%
+	\pcln \db' = () \\
+	\pcln \pcfor \{\doc_1, \cdots, \doc_a\} \sample \db: \\
+	\pcln \pcind[1] \kwset' = \cup_{i=1}^{a} (P_a)^{a-i+1} (\kwset(\doc_i)) \\
+	\pcln \pcind[1] db' = db' + ((\kwset', \file(\doc_1))) \\
+	\pcln \pcind[1] \pcfor j = 2, \cdots, a: \\
+	\pcln \pcind[2] \kwset' = (P_a) (\kwset') \\
+	\pcln \pcind[2] \db' = \db' + ((\kwset', \file(\doc_j))) \\
+	\pcln \pcind[1] \db = \db \backslash \{\doc_1, \cdots, \doc_a\} \\
+	\pcln \pcreturn \overline{\enc}(\secparam, \key, \db')
+}
+\end{pchstack}
+
+Insertion (of $a$ documents each time) is straightforward and other functions, namely trapdoor generation and search, are taken from the aforementioned encryption scheme directly so we will omit them here. The drawback of this scheme is that deletion cannot be done straightaway in a way such that security is still preserved. One way to achieve deletion is to delete the target file and retrieve the other $a-1$ files with keywords permuted from the target file, and insert them back with future insertions or documents that are already in local cache. It is also possible to store this information on the server side with an IND-CPA secure scheme without the the index structure.
+
+
+
+

@@ -15,6 +15,12 @@
 \newcommand{\file}{f}
 \newcommand{\kwset}{K}
 \newcommand{\kw}{k}
+\newcommand{\edoc}{ed}
+\newcommand{\efile}{ef}
+\newcommand{\ekwset}{EK}
+\newcommand{\ekw}{ek}
+
+\newtheorem{definition}{Definition}
 
 
 \begin{document}
@@ -23,14 +29,7 @@
 \section{Related Work}
 \input{related_work}
 
-
-
-
-
-
 \section{Notation}
-\textbf{TODO: Notations on technicalities}
-
 \begin{table}[H]
 	\centering
 	\begin{tabular}{ll}
@@ -40,28 +39,27 @@
 		$\doc$            & A document in the database \\
 		$\file$     	  & A file associated to some document \\
 		$\kwset$          & A set of keywords associated to some file \\
-		$\kw$             & A keyword in a keyword set
+		$\kw$             & A keyword in a keyword set \\
+		$\edoc$           & An encrypted document \\
+		$\efile$          & An encrypted file \\
+		$\ekwset$         & A set of encrypted keywords \\
+		$\ekw$            & An encrypted keyword
 	\end{tabular}
 	\caption{Notations used in this paper.}
 \end{table}
 
-
-\section{Security Notions - Full Permutation}
-% May need a new name because someone already used it in another definition, and the definition is different
-\subsection{Indistinguishability under Inference Attack}
-% There will be two versions of this: a) the optimal case, b) the 1/a case.
+\section{Security Notions}
+% once we decide what is the best...
 
 
-\subsection{Indistinguishability of Databases with respect to Permutation}
+\section{Construction}
+\subsection{Motivation}
+\input{construction_motivation}
 
+\subsection{Permutable Matrix}
+\input{construction_permutable_matrix}
 
-\subsection{Indistinguishability of Keywords in Documents}
-% Maybe it is worth to include fake files too
-
-
-
-
-\section{Secure Construction - Full Permutation}
+\subsection{Permutation-based Padding}
 
 
 

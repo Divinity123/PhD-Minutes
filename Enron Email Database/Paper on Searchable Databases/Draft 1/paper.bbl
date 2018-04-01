@@ -33,6 +33,13 @@ Dan Boneh and Brent Waters.
   535--554, Amsterdam, The Netherlands, February~21--24, 2007. Springer,
   Heidelberg, Germany.
 
+\bibitem{EPRINT:BosFou17}
+Raphael Bost and Pierre-Alain Fouque.
+\newblock Thwarting leakage abuse attacks against searchable encryption -- {A}
+  formal approach and applications to database padding.
+\newblock Cryptology ePrint Archive, Report 2017/1060, 2017.
+\newblock \url{http://eprint.iacr.org/2017/1060}.
+
 \bibitem{5199004}
 J.~Bringer, H.~Chabanne, and B.~Kindarji.
 \newblock Error-tolerant searchable encryption.
@@ -182,6 +189,13 @@ Kaoru Kurosawa, Keisuke Sasaki, Kiyohiko Ohta, and Kazuki Yoneyama.
   International Workshop on Security, Advances in Information and Computer
   Security}, volume 9836 of {\em Lecture Notes in Computer Science}, pages
   73--90, Tokyo, Japan, September~12--14, 2016. Springer, Heidelberg, Germany.
+
+\bibitem{cryptoeprint:2017:1068}
+Marie-Sarah Lacharité and Kenneth~G. Paterson.
+\newblock Frequency-smoothing encryption: preventing snapshot attacks on
+  deterministically-encrypted data.
+\newblock Cryptology ePrint Archive, Report 2017/1068, 2017.
+\newblock \url{https://eprint.iacr.org/2017/1068}.
 
 \bibitem{ASIACCS:LZDLC13}
 Junzuo Lai, Xuhua Zhou, Robert~Huijie Deng, Yingjiu Li, and Kefei Chen.

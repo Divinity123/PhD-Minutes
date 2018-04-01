@@ -1,0 +1,323 @@
+In this section, we analyse security of the schemes we described above. We begin by defining and proving the leakage of our schemes. The, we show that all of our schemes are secure against the inference attack (different from definition \ref{Security against Keyword Guessing Attack}) we will define in this section. We show that security against inference attack is not sufficient. Namely, a scheme that is secure against inference attack can still leak a lot of information about the unencrypted database. We demonstrate this with a gain function and analysis of this gain function on the schemes we proposed.
+
+
+
+
+\subsection{Cryptographic Proofs}
+\textbf{IND-DCPA is equivalent to Indistinguishability under Permutation.} In this part, we prove equivalence between IND-DCPA and indistinguishability under permutation. The first notion is used to exam security of deterministic encryption schemes. We recall it here.
+
+\begin{definition}[IND-DCPA]
+Let $(\kgen, \enc, \dec)$ be a deterministic encryption scheme. Let $\adv$ be an adversary that has access to a left-right encryption oracle and $b \in \{0,1\}$ a random bit. Consider the following experiment:
+
+\begin{pchstack}[center]
+	\procedure{Exp$_{\adv}^{\text{IND-DCPA-b}}(n)$}{%
+		\pcln \key \sample \kgen(\secparam) \\
+		\pcln b' \gets \adv^{\enc(\key, \mathcal{LR}(\cdot, \cdot, b))} \\
+		\pcln \pcreturn b'
+	}
+\end{pchstack}
+
+It is required that the messages queried to the left oracle are all unique, so does the right oracle. The IND-DCPA advantage is defined to be
+\begin{equation}
+\advantage_{\adv}^{IND-DCPA}(n) = \left| \prob{\text{Exp}_{\adv}^{\text{IND-DCPA-1}}(n) = 1} - \prob{\text{Exp}_{\adv}^{\text{IND-DCPA-0}}(n) = 1} \right|.
+\end{equation}
+
+A scheme is said to be secure in IND-DCPA if for any PPT adversary $\adv$, the advantage above is negligible in $n$.
+\end{definition}
+
+
+Intuitively, if a scheme is IND-DCPA secure, no adversary should be able to identify the right permutation between plaintexts and ciphertexts with probability better than random guessing. We formalise this idea as a security notion we call indistinguishability for deterministic encryption under permutation (IND-DP).
+
+\begin{definition}[IND-DP]
+Let $(\kgen, \enc, \dec)$ be a deterministic encryption scheme. Let $\adv = (\adv_0, \adv_1)$ be an adversary where $\adv_0$ is an adversary that given security parameter, generates a list of non-repeating messages and a permutation on messages; $\adv_1$ is an adversary that given security parameter, a list of encrypted messages and a permutation on the plaintexts, determine if the encryption is an encryption of original messages or those in permuted order. Let $b \in \{0,1\}$ be a random bit. The experiment for IND-DP can be described as follows.
+
+\begin{pchstack}[center]
+	\procedure{Exp$_{\adv}^{\text{IND-DP-b}}(n)$}{%
+		\pcln \key \sample \kgen(\secparam) \\
+		\pcln ((m_0, \cdots, m_l), \sigma) \gets \adv_0(\secparam) \\
+		\pcln M_0 = (m_0, \cdots, m_l); M_1 = (\sigma(m_0), \cdots, \sigma(m_l)) \\
+		\pcln C \gets \enc(\secparam, \key, M_b) \\
+		\pcln b' \gets \adv_1(\secparam, (m_0, \cdots, m_l), \sigma, C) \\
+		\pcln \pcreturn b'
+	}
+\end{pchstack}
+
+It is required that $m_i$ are all unique. The IND-DP advantage is defined as:
+\begin{equation}
+\advantage_{\adv}^{IND-DP}(n) = \left| \prob{\text{Exp}_{\adv}^{\text{IND-DP-1}}(n) = 1} - \prob{\text{Exp}_{\adv}^{\text{IND-DP-0}}(n) = 1} \right|.
+\end{equation}
+
+A scheme is said to be secure in IND-DP if for any PPT adversary $\adv$, the advantage above is negligible in $n$.
+\end{definition}
+
+
+Now we will show that a scheme is IND-DCPA secure if and only if it is IND-DP secure. We formalise it in the following theorem.
+
+\begin{theorem}[IND-DCPA and IND-DP are Equivalent] \label{Theorem: IND-DCPA and IND-DP are Equivalent}
+A scheme is IND-DCPA secure if and only if it is IND-DP secure.
+\end{theorem}
+
+
+\begin{proof}
+(IND-DCPA $\Rightarrow$ IND-DP) We show the contrapositive is true. Suppose a scheme is not secure under IND-DP, so there is some list of non-repeating messages $M_0$ and permutation $\sigma$ such that the adversary for IND-DP can distinguish encryption of $M_0$ from $M_1$ (as those defined in the experiment above). We construct an IND-DCPA adversary $\mathcal{B}$ as follows:
+\begin{itemize}
+	\item Let the message to the left oracle be $M_0$, and that to the right oracle be $M_1$.
+	\item Query pairs of messages one by one until $C = \enc(\key, M_b)$ is obtained.
+	\item Run $\adv_1(\secparam, M_0, \sigma, C)$ for IND-DP, return what the adversary returns. 
+\end{itemize}
+
+If $M = (m_0, \cdot, m_l)$, and $\sigma$ a permutation on $\{m_0, m_1, \cdot, m_l\}$, we abuse the notation and write $\sigma(M)$ to mean $(\sigma(m_0), \cdot, \sigma(m_l))$. Working out the advantages, we see that:
+\begin{align*}
+  & \advantage_{\mathcal{B}}^{IND-DCPA}(n) \\
+= & \left| \prob{\text{Exp}_{\mathcal{B}}^{\text{IND-DCPA-1}}(n) = 1} - \prob{\text{Exp}_{\mathcal{B}}^{\text{IND-DCPA-0}}(n) = 1} \right| \\
+= & \left| \prob{\adv_1(\secparam, M_0, \sigma, \enc(\sigma(M_0))) = 1} - \prob{\adv_1(\secparam, M_0, \sigma, \enc(\sigma(M_0))) = 0} \right| \\
+= &\left| \prob{\text{Exp}_{\adv}^{\text{IND-DP-1}}(n) = 1} - \prob{\text{Exp}_{\adv}^{\text{IND-DP-0}}(n) = 1} \right| \\
+= & \advantage_{\adv}^{IND-DP}(n).
+\end{align*}
+So the forward implication is verified.
+
+(IND-DP $\Rightarrow$ IND-DCPA) The reverse direction is straightforward. Suppose $\adv$ is an adversary against IND-DCPA. We construct IND-DP adversary $\mathcal{B}$ as follows:
+\begin{itemize}
+	\item Generate a list of non-repeating plaintexts $M_0$ and a permutation $\sigma$.
+	\item Upon obtaining the list of ciphertexts $C$, run $\adv^{\enc(\key, \mathcal{LR}(M_0, \sigma(M_0), b))}$. Return what the adversary returns.
+\end{itemize}
+
+By analysing the advantage of the corresponding IND-DP adversary, we see that:
+\begin{align*}
+& \advantage_{\mathcal{B}}^{IND-DP}(n) \\
+= &\left| \prob{\text{Exp}_{\mathcal{B}}^{\text{IND-DP-1}}(n) = 1} - \prob{\text{Exp}_{\mathcal{B}}^{\text{IND-DP-0}}(n) = 1} \right| \\
+= & \left| \prob{\adv^{\enc(\key, \mathcal{LR}(M_0, \sigma(M_0), 1))} = 1} - \prob{\adv^{\enc(\key, \mathcal{LR}(M_0, \sigma(M_0), 1))} = 0} \right| \\
+= & \left| \prob{\text{Exp}_{\adv}^{\text{IND-DCPA-1}}(n) = 1} - \prob{\text{Exp}_{\adv}^{\text{IND-DCPA-0}}(n) = 1} \right| \\
+= & \advantage_{\adv}^{IND-DCPA}(n).
+\end{align*}
+So the reverse implication is verified.
+\end{proof}
+
+In fact IND-DP says a bit more than what is in the experiment. From the experiment, we see that $\enc(M)$ and $\enc(\sigma(M))$ are indistinguishable. But since $\enc(\cdot)$ is a deterministic encryption, there is some permutation $\tau$ on the ciphertexts such that $\enc(\sigma(M)) = \tau(\enc(M))$. Therefore, the order of ciphertext looks completely random in the view of the adversary. Since deterministic encryption itself can be seen as a bijection between plaintexts and ciphertexts, we conclude that IND-DCPA secure deterministic encryption schemes acts like a random bijection.
+
+
+
+
+\textbf{Leakage as Co-occurrences.} We have so far not specified any encryption scheme to build the index so the leakage is not fixed for the overall scheme. Now we consider those schemes whose leakage is repetition of keywords in files. Let $\db(\kwset)$ be a function to return all documents containing keywords $\kwset$, and $\edb(\ekwset)$ be a function to return all encrypted documents containing encrypted keywords $\ekwset$. We abuse the notation $\enc(\kwset)$ to mean encryption of the keywords in the search index. Then formally, we have that for all keyword sets $\kwset$, $|\db(\kwset)| = |\edb(\enc(\kwset))|$.
+
+Since we are only interested in the security of the index (assuming the documents are securely encrypted and there is no leakage), the unencrypted database is reduced to co-occurrence at all levels with documents, and the encrypted index is reduced to co-occurrence at all levels with encrypted documents. Leakage described above is just the count version of the two.
+
+
+
+
+\subsection{All of our Constructions are Secure against Inference Attack}
+In this subsection, we show that all of our schemes are secure against inference attack. We will use extended posterior g-vulnerability to analyse the schemes. For simplicity, we assume that the database is a point distribution, i.e. the adversary knows exactly how the database looks like. The gain function we consider here is the following:
+\begin{itemize}
+	\item $\mathcal{W} = \kwset(\db) \times \ekwset(\edb)$,
+	\item $\mathcal{X} = \dcm \times \mathcal{P}$,
+	\item $\mathcal{Y} = \leak(\mathcal{X}) = \{\enc(\dcm, \sigma) \mid \sigma \in \mathcal{P} \}$,
+	\item $g((m,c), (\dcm, \sigma), y) = \mathbbm{1}(\sigma(m) = c)$.
+\end{itemize}
+Here $\mathcal{P}$ denotes the set of all possible bijections from $\kwset(\db)$ to $\ekwset(\edb)$, and $\enc(\dcm, \sigma)$ is an idealised encryption function that encrypts with bijection $\sigma$ and returns co-occurrences at all levels with encrypted documents. The gain function is 1 if the adversary can guess any pair of keyword and its encryption correctly in one try, and 0 otherwise. Here, the permutation $\perm_a$ we used for the encryption is assumed to be known to the adversary. He can recover this piece of information by file injection attack or inspecting the algebraic structure of the leakage (since we are working with an information-theoretic adversary, this is permitted).
+
+Furthermore, we assume in this section that the unencrypted database is singular, i.e. co-occurrences at all levels with counts is not permutable by any permutation except the identity permutation. This is an assumption that is opposite of that in \cite{CCS:CGKO06}. We argue that their assumption is unrealistic because even for simple databases this assumption does not hold, e.g. $\db = ((\{1\}, \file_0), (\{1\}, \file_1), (\{2\}, \file_2))$ and one queries keyword $1$ and $2$ once each. In fact, it is evident from the known attacks that non-singularity is not a reasonable assumption. Furthermore, non-singularity is not a very strong classification on encrypted databases. For instance, one can achieve non-singularity by making only two keywords indistinguishable and reveal all other information.
+
+
+In the next part of the subsection, we first show that any scheme that preserves singularity after encryption is not secure in our notion. We then prove that permutability can be used to achieve security. Finally, we prove that all of our constructions satisfies some form of permutability, thus they are secure under our notion.
+
+
+\textbf{Insecure Schemes are Insecure.} We present the result as a theorem.
+
+\begin{theorem}
+Let the distribution of database be a fixed distribution $\pi$, i.e. the adversary knows that the unencrypted database is $\db$. Let $\mathcal{X}$ be the secrets and $\mathcal{Y}$ be the leakage. given $y \in \mathcal{Y}$, and $\leak$ the leakage function for the encryption scheme. We assume that there is a unique $x \in \mathcal{X}$ such that $\leak(x) = y$. Then, for the gain function $g$ defined above,
+\begin{equation}
+	EV_g(\pi, \mathcal{C}_{\leak}) = 1
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+\begin{align*}
+  & EV_g(\pi, \mathcal{C}_{\leak}) \\
+= & \sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \prob{\mathcal{X} = x \mid \mathcal{Y} = y} g(w, x, y) \\
+= & \sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \prob{\mathcal{X} = \leak^{-1}(y) \mid \mathcal{Y} = y} g(w, \leak^{-1}(y), y) \\
+= & \sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} 1 \cdot g(w, \leak^{-1}(y), y) \\
+= & \sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \cdot 1 \\
+= & 1.
+\end{align*}
+The proof uses the property that $\prob{\mathcal{X} = x \mid \mathcal{Y} = y}$ is 1 when $x = \leak^{-1}(y)$ and 0 otherwise. Furthermore, since the adversary knows the pre-image completely, his maximal guess is 1 for every $g(\cdot)$.
+\end{proof}
+
+
+
+
+\textbf{Permutability of Encryption implies Security.} The encryption schemes we proposed do not have invertible leakage function. This is because the padding part of our schemes transforms the database into one that is $\perm_a$ permutable, where $\perm_a$ is part of the secret key in our schemes. We always assume that document identifiers are permuted randomly by the encryption scheme so there is no leakage by looking at the document identifiers only. Therefore, it suffices to look at the co-occurrences with counts. We formalise this as a theorem.
+
+\begin{theorem} \label{Theorem: Permutability of Encryption implies Security}
+Let $\ccm^{\db}$ be a $\perm_a$-permutable co-occurrences at all levels with counts. Let $Q$ be a bijection from $\kwset(\db)$ to $\ekwset(\edb)$ that represents the idealised IND-DCPA secure encryption function on keywords. Then $Q \cdot (\perm_a)^i$ for $i=1,\dots, a-1$ generates the same leakage as $Q$. Furthermore, no PPT adversary can guess the correct idealised encryption function on keywords with probability greater than $\frac{1}{a}$.
+\end{theorem}
+
+
+\begin{proof}
+Since $\ccm^{\db}$ is $\perm_a$-permutable, $(\perm_a)^i (\ccm^{\db}) = \ccm^{\db}$ for all $i = 0, \dots, a-1$. By definition, this means for all $i = 0, \dots, a-1$, for all $l = 1, \dots, |\ekwset(\edb)|$, for all $\kw_1, \dots, \kw_l \in \ekwset(\edb)^l$, 
+\begin{equation}
+\ccm_{l}^{\db}((\perm_a)^i(\kw_1), \dots, (\perm_a)^i(\kw_l)) = \ccm_{l}^{\db}(\kw_1, \dots, \kw_l). \label{Permutation on CC}
+\end{equation}
+
+Recall from above that the encryption scheme for the index leaks repetition of keywords. So
+\begin{equation}
+	\ccm_{l}^{\db}(\kw_1, \dots, \kw_l) = \eccm_{l}^{\edb}(Q(\kw_1), \dots, Q(\kw_l))
+\end{equation}
+and 
+\begin{equation}
+\ccm_{l}^{\db}((\perm_a)^i(\kw_1), \dots, (\perm_a)^i(\kw_l)) = \eccm_{l}^{\edb}(Q \cdot (\perm_a)^i(\kw_1), \dots, Q \cdot (\perm_a)^i(\kw_l)).
+\end{equation}
+
+Using equation \ref{Permutation on CC}, we obtain the desired result as
+\begin{equation}
+	\eccm_{l}^{\edb}(Q(\kw_1), \dots, Q(\kw_l)) = \eccm_{l}^{\edb}(Q \cdot (\perm_a)^i(\kw_1), \dots, Q \cdot (\perm_a)^i(\kw_l)).
+\end{equation}
+
+The second half of the theorem follows immediately from theorem \ref{Theorem: IND-DCPA and IND-DP are Equivalent}.
+\end{proof}
+
+Because $\perm_a$ is a permutation, for any $i \neq 0 \mod a$, $Q \cdot (\perm_a)^i(\kw) \neq Q(\kw)$ for all $\kw \in \kwset(\db)$. That is, if the adversary's guess is based on the wrong permutation, he cannot guess any pair of keyword and its encryption correctly. With this observation, we can compute extended posterior vulnerability with gain function for inference attack with the following proposition.
+
+
+\begin{proposition} \label{Proposition: g-vulnerability of Inference Attack}
+Let the distribution of database be a fixed distribution $\pi$, i.e. the adversary knows that the unencrypted database is $\db$. Let $\ccm^{\db}$ be a $\perm_a$-permutable co-occurrence at all levels with counts. Let $Q$ be a bijection from $\kwset(\db)$ to $\ekwset(\edb)$ that represents the idealised IND-DCPA secure encryption on keywords. Let $g$ be the gain function defined at the start of the subsection. Then
+\begin{equation}
+	EV_g(\pi, \mathcal{C}_{\leak}) = \frac{1}{a}.
+\end{equation}
+\end{proposition}
+
+
+\begin{proof}
+From theorem \ref{Theorem: Permutability of Encryption implies Security}, we know that if $Q$ is a bijection between keywords and their encryptions as an idealised encryption which can generate some given leakage, then so does $Q \cdot (\perm_a)^i$ for $i=1,\dots, a-1$. Due to indistinguishability of the encryption scheme, all these can be the actual encryption function with probability $\frac{1}{a}$. Putting everything together, we get
+\begin{align*}
+  &EV_g(\pi, \mathcal{C}_{\leak})\\
+= &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \prob{\mathcal{X} = x \mid \mathcal{Y} = y} g(w, x, y) \\
+= &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \sum_{i = 0}^{a-1} \prob{\mathcal{X} = (\db, Q_y \cdot (\perm_a)^i) \mid \mathcal{Y} = y} g(w, (\db, Q_y \cdot (\perm_a)^i), y) \\
+= &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \sum_{i = 0}^{a-1} \frac{1}{a} \cdot g(w, (\db, Q_y \cdot (\perm_a)^i), y) \\
+= &\sum_{y \in {\mathcal{Y}}} \frac{\prob{\mathcal{Y} = y}}{a} \max_{w \in {\mathcal{W}}} \sum_{i = 0}^{a-1} g(w, (\db, Q_y \cdot (\perm_a)^i), y) \\
+= &\sum_{y \in {\mathcal{Y}}} \frac{\prob{\mathcal{Y} = y}}{a} \cdot 1 \\
+= & \frac{1}{a}.
+\end{align*}
+
+The second line is obtained by re-writing the vulnerability. The third and fourth lines are obtained as a result of theorem \ref{Theorem: Permutability of Encryption implies Security}. The fifth line is just re-arranging the equation. The sixth line is due to the fact that if the guess is correct for some $i$, then it cannot be correct for any other $i$. So the maximum over the expression is 1. Hence, the extended posterior vulnerability is $\frac{1}{a}$.
+\end{proof}
+
+
+\textbf{Our Schemes are Secure against Inference Attack.} We are now ready to show that our schemes are secure against inference attack. It suffices to show that the (unencrypted) padded database is $P_a$-permutable for all the schemes.
+
+\begin{theorem}
+All of our schemes produces $\perm_a$-permutable padded databases.
+\end{theorem} 
+
+\begin{proof}
+Since document identifiers are not relevant in this proof, we can simply look at the co-occurrences at all levels with counts.
+
+(\texttt{scheme1}) Let $\ccm$ be the co-occurrences at all levels with counts for the original database. We compute an expression for the padded co-occurrences $\ccm'$ at all levels with counts and show that it is $\perm_a$-permutable. Pick an arbitrary level $l$, for some $\kw_1, \dots, \kw_l \in \kwset(\db)^l$, we see that
+\begin{equation*}
+\ccm'_l(\kw_1, \dots, \kw_l) = \sum_{i = 0}^{a-1} \ccm((\perm_a)^i(\kw_1), \dots, (\perm_a)^i(\kw_l)).
+\end{equation*}
+Therefore,
+\begin{align*}
+  &\ccm'_l((\perm_a)(\kw_1), \dots, (\perm_a)(\kw_l))\\
+= &\sum_{i = 0}^{a-1} \ccm((\perm_a)^{i+1}(\kw_1), \dots, (\perm_a)^{i+1}(\kw_l))\\
+= &\sum_{i = 0}^{a-1} \ccm((\perm_a)^i(\kw_1), \dots, (\perm_a)^i(\kw_l))\\
+= &\ccm'_l(\kw_1, \dots, \kw_l).
+\end{align*}
+Since our choice of $l$ and $\kw_1, \dots, \kw_l$ are arbitrary, we conclude that $\ccm'$ is $\perm_a$-permutable at all levels.
+
+
+(\texttt{scheme2}) Let $\ccm$ be the co-occurrences at all levels with counts for the padded database. We check that for any level $l$ and for any $\kw_1, \dots, \kw_l \in \kwset(\db)^l$, $\ccm_l(\kw_1, \dots, \kw_l) > 0$ implies $\ccm_l(\kw_1, \dots, \kw_l) = \ccm_l((\perm_a)(\kw_1), \dots, (\perm_a)(\kw_l))$. We show that for each document insertion, this holds, and by induction on the number of documents, this holds for the whole database. Suppose we insert some document with keyword $\kwset = \{\kw'_1, \dots, \kw'_m\} \subset \kwset(\db)$. Then the set of keywords we have with padding is $\kwset' = \cup_{i=0}^{a-1} (\perm_a)^{i}(\kwset)$. Clearly, $(\perm_a)(\kwset') = (\kwset')$, so the statement is verified for the document. By induction on the number of documents, this holds for the whole database. Thus, $\ccm$ is $\perm_a$-permutable.
+
+
+(\texttt{scheme3}) We show that for groups of $a$ documents inserted together, the permutation property holds. And then by induction on the number of documents, we have that the co-occurrences at all levels with counts for the padded database is $\perm_a$-permutable. Let $\kwset_1, \dots, \kwset_a$ be the sets of keywords for the documents. Padded keyword sets for the document can be written as $\kwset'_j = $
+\begin{align*}
+  &\kwset'_j \\
+= &\cup_{i=1}^{a} (\perm_a)^{a-i+j}(\kwset_i) \\
+= &\cup_{i=1}^{a} (\perm_a)(\perm_a)^{a-i+j-1}(\kwset_i) \\
+= &(\perm_a) \left( \cup_{i=1}^{a} (\perm_a)^{a-i+j-1}(\kwset_i) \right) \\
+= &(\perm_a)(\kwset'_{j-1}).
+\end{align*}
+Thus, the co-occurrences with counts generated by the padded keyword sets are indeed $\perm_a$-permutable. By induction on the number of documents, the co-occurrences at all levels with counts for the whole database is $\perm_a$-permutable.
+\end{proof}
+
+\textbf{Note: do we have to write down the induction explicitly?}
+
+
+
+
+\subsection{Security against Inference Attack is not Enough}
+In this subsection, we show that it is not sufficient to judge security of an encryption scheme by its security against inference attack. We show an attack on one of our schemes that can recover significant amount of information. We use extended posterior g-vulnerability to compare security of our schemes against that attack. The comparison cannot be done in the traditional setting of indistinguishability-based notions, thus demonstrating the advantages of our approach.
+
+
+\textbf{Exact Keyword Set Guessing Attack.} The goal of adversary for exact keyword set guess attack is to recover the exact set of keywords for some document. Without loss of generality, we can assume that the goal of the adversary is to recover the keyword set for the first encrypted file. 
+
+From above, we know that the set of encryption functions indistinguishable by the adversary is $Q \cdot (\perm_a)^i$ for $i=1,\dots, a-1$ where $Q$ is the true idealised encryption function. So in the leakage channel, we only have to look at these as secrets corresponding to encryption because all others result in $p(x\mid y) = 0$. To make it more interesting, we assume that the adversary does not have access to the exact unencrypted database (otherwise there are trivial attacks for some databases). Note that in this case, the encryption function mentioned above can still be recovered. This is because the adversary can work with aggregated information such as aggregated co-occurrences at level 1 and 2 with counts. Thus, we can model the secret as the set of keywords in the first encrypted document and the encryption function, and the leakage as the encrypted keywords in the first encrypted document. We define the leakage channel and gain function as follows.
+\begin{itemize}
+	\item $\mathcal{W} = \mathcal{P}(\kwset(\db))$,
+	\item $\mathcal{X} = \mathcal{P}(\kwset(\db)) \times \{Q \cdot (\perm_a)^i \mid  i=0,\dots, a-1\}$,
+	\item $\mathcal{Y} = \mathcal{P}(\ekwset(\edb))$,
+	\item $g(w, (\kwset, Q \cdot (\perm_a)^i), \ekwset) = \mathbbm{1}(w = \kwset)$.
+\end{itemize}
+
+
+
+
+\textbf{Security of \texttt{Scheme1} against Exact Keyword Set Guessing Attack.} Under the gain function above, we will show that extended posterior g-vulnerability of \texttt{scheme1} is $\frac{1}{a}$. We will then argue that by combining exact keyword set guess attack with semantics of keywords, one can break the security of the scheme.
+
+
+\begin{theorem}
+Let the leakage channel and gain function be those described above. Furthermore, we assume that for all $y \in \mathcal{Y}, (\perm_a)(y) \neq y$. Then
+\begin{equation}
+	EV_g^{\texttt{scheme1}}(\pi, \mathcal{C}_{\leak}) = \frac{1}{a}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+We observe that for any leakage $y = \ekwset$, if we know the encryption function is $Q \cdot (\perm_a)^i$ for some $i$, then the set of keywords for the unencrypted document is exactly $(Q \cdot (\perm_a)^i)^{-1}(\ekwset)$. Because $(\perm_a)(y) \neq y$ for all $y \in \mathcal{Y}$, $(Q \cdot (\perm_a)^i)^{-1}(\ekwset)$ is the exact set of keywords only when $(Q \cdot (\perm_a)^i)^{-1}$ is the correct decryption function. This happens with probability $\frac{1}{a}$. In terms of extended posterior g-vulnerability, we have
+\begin{align*}
+  &EV_g^{\texttt{scheme1}}(\pi, \mathcal{C}_{\leak})\\
+= &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \prob{\mathcal{X} = x \mid \mathcal{Y} = y} g(w, x, y)\\
+= &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \sum_{i = 0}^{a-1} \prob{\mathcal{X} = ((Q \cdot (\perm_a)^i)^{-1}(y), Q \cdot (\perm_a)^i) \mid \mathcal{Y} = y} g(w, ((Q \cdot (\perm_a)^i)^{-1}(y), Q \cdot (\perm_a)^i)), y)\\
+= &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \sum_{i = 0}^{a-1} \frac{1}{a} \cdot g(w, ((Q \cdot (\perm_a)^i)^{-1}(y), Q \cdot (\perm_a)^i)), y)\\
+= &\sum_{y \in {\mathcal{Y}}} \frac{\prob{\mathcal{Y} = y}}{a} \max_{w \in {\mathcal{W}}} \sum_{i = 0}^{a-1} g(w, ((Q \cdot (\perm_a)^i)^{-1}(y), Q \cdot (\perm_a)^i)), y)\\
+= &\sum_{y \in {\mathcal{Y}}} \frac{\prob{\mathcal{Y} = y}}{a} \cdot 1 \\
+= & \frac{1}{a}.
+\end{align*}
+\end{proof}
+
+
+There is in fact a more detrimental attack based on this. In the adversary above, the sets of keywords $(Q \cdot (\perm_a)^i)^{-1}(y)$ are equally likely because we do not care if the first encrypted document is a real or fake one. Suppose now our goal is to recover the exact keyword set for some real document (not necessarily the first one). By the algebraic structure of the encryption scheme, all of $(Q \cdot (\perm_a)^i)^{-1}(y)$ can be the keyword set for a real document. But in practice, they are not equally likely to happen. This is because keywords have semantic meaning so some set of keywords occur together more frequently than the others. By using this extra information, one can guess with success rate higher than $\frac{1}{a}$.
+
+
+
+
+\textbf{\texttt{Scheme2} and \texttt{scheme3} are more Secure.} Now we show that \texttt{Scheme2} and \texttt{scheme3} achieves better security with respect to the gain function. We will do this by comparing the extended posterior g-vulnerability of the three schemes without explicitly computing them. Hence, demonstrating the advantage of using extended posterior g-vulnerability to evaluate security of encryption schemes.
+
+
+\begin{theorem}
+Let the leakage channel and gain function be those described above. Furthermore, we assume that for all $y \in \mathcal{Y}, (\perm_a)(y) \neq y$. Then
+\begin{equation}
+EV_g^{\texttt{scheme1}}(\pi, \mathcal{C}_{\leak}) \geq EV_g^{\texttt{scheme2}}(\pi, \mathcal{C}_{\leak}) \geq EV_g^{\texttt{scheme3}}(\pi, \mathcal{C}_{\leak}).
+\end{equation}
+\end{theorem}
+
+
+\begin{proof}
+We examine the sets of keywords which can possibly give leakage $y$ in each scheme, and compare the conditional probability $\prob{x \mid y}$ for the schemes. For \texttt{scheme1}, we see that $\{((Q \cdot (\perm_a)^i)^{-1}(y), Q \cdot (\perm_a)^i) \mid i = 0, \dots, a-1\}$ is the set of $x$ that can generate leakage $y$. Each occurs with probability $\frac{1}{a}$ and only one of them contains the correct keyword set. So $\max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \prob{\mathcal{X} = x \mid \mathcal{Y} = y} g(w, x, y) = \frac{1}{a}$.
+
+On the other hand, the feasible keyword sets is $\bar{\mathcal{X}} = \{ (\perm_a)^{i}(x) \mid (x \subset y) \wedge (i = 0, \dots, a-1) \wedge (\cup_{i=0}^{a-1} (\perm_a)^{i}(x) = y) \}$. Each keyword set can be paired with any encryption function $Q \cdot (\perm_a)^j$ for $j = 0, \dots, a-1$. Therefore, we only need to look at the distribution of elements in $\bar{\mathcal{X}}$. But there are at least $a$ elements (since $y$ is not $\perm_a$-permutable), so the probability of guessing the correct keyword is less than or equal to $\frac{1}{a}$. This means $\max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \text{Pr}_{\texttt{scheme2}}[\mathcal{X} = x \mid \mathcal{Y} = y] g(w, x, y) \leq \max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \text{Pr}_{\texttt{scheme1}}[\mathcal{X} = x \mid \mathcal{Y} = y] g(w, x, y)$. Thus, $EV_g^{\texttt{scheme1}}(\pi, \mathcal{C}_{\leak}) \geq EV_g^{\texttt{scheme2}}(\pi, \mathcal{C}_{\leak})$.
+
+
+For \texttt{scheme3}, we see that the set of feasible keyword sets contains all of $\bar{\mathcal{X}}$. At the same time, we have that each keyword set can be paired with any encryption function $Q \cdot (\perm_a)^j$ for $j = 0, \dots, a-1$. So it must be the case that $\max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \text{Pr}_{\texttt{scheme3}}[\mathcal{X} = x \mid \mathcal{Y} = y] g(w, x, y) \leq \max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \text{Pr}_{\texttt{scheme2}}[\mathcal{X} = x \mid \mathcal{Y} = y] g(w, x, y)$. Therefore, $EV_g^{\texttt{scheme2}}(\pi, \mathcal{C}_{\leak}) \geq EV_g^{\texttt{scheme3}}(\pi, \mathcal{C}_{\leak})$.
+\end{proof}
+
+There is an easy way to see this inequality. We simplify the attack to only guessing the number of real keywords in the first document. Let $n$ be the number of keywords in the first encrypted document. For \texttt{scheme1}, since there is no padding of keywords to documents, so the number of real keywords is $n$. For \texttt{scheme2}, due to collisions, we only know that the number of keywords can fall in the range $\lceil \frac{n}{a} \rceil$ to $n$. For \texttt{scheme3}, the number of keywords can be any integer from $1$ to $n$.
+
+
+
+
+
+
+
+
+
+

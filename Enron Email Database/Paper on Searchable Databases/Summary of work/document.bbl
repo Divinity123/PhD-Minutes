@@ -1,0 +1,32 @@
+\begin{thebibliography}{1}
+
+\bibitem{6266165}
+M.~S. Alvim, K.~Chatzikokolakis, C.~Palamidessi, and G.~Smith.
+\newblock Measuring information leakage using generalized gain functions.
+\newblock In {\em 2012 IEEE 25th Computer Security Foundations Symposium},
+  pages 265--279, June 2012.
+
+\bibitem{CCS:CGKO06}
+Reza Curtmola, Juan~A. Garay, Seny Kamara, and Rafail Ostrovsky.
+\newblock Searchable symmetric encryption: improved definitions and efficient
+  constructions.
+\newblock In Ari Juels, Rebecca~N. Wright, and {Sabrina De Capitani di}
+  Vimercati, editors, {\em ACM CCS 06: 13th Conference on Computer and
+  Communications Security}, pages 79--88, Alexandria, Virginia, USA,
+  October~30~--~November~3, 2006. {ACM} Press.
+
+\bibitem{NDSS:IslKuzKan12}
+Mohammad~Saiful Islam, Mehmet Kuzu, and Murat Kantarcioglu.
+\newblock Access pattern disclosure on searchable encryption: Ramification,
+  attack and mitigation.
+\newblock In {\em {ISOC} Network and Distributed System Security Symposium --
+  {NDSS}~2012}, San Diego, CA, USA, February~5--8, 2012. The Internet Society.
+
+\bibitem{CCS:NavKamWri15}
+Muhammad Naveed, Seny Kamara, and Charles~V. Wright.
+\newblock Inference attacks on property-preserving encrypted databases.
+\newblock In Indrajit Ray, Ninghui Li, and Christopher Kruegel:, editors, {\em
+  ACM CCS 15: 22nd Conference on Computer and Communications Security}, pages
+  644--655, Denver, CO, USA, October~12--16, 2015. {ACM} Press.
+
+\end{thebibliography}

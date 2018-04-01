@@ -1,0 +1,74 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\setlength\parindent{0pt}
+\setlength{\parskip}{1em}
+\title{First Draft of Paper}
+
+% packages
+\usepackage{float, amsmath, amsthm, bbm, amsfonts, mathtools, url}
+\usepackage [n, operators, sets, adversary, landau, probability, notions, logic, ff, mm, primitives, events, complexity, asymptotics, keys] {cryptocode}
+
+% we need to change some of these
+\newcommand{\db}{DB}
+\newcommand{\edb}{EDB}
+\newcommand{\doc}{d}
+\newcommand{\file}{f}
+\newcommand{\kwset}{K}
+\newcommand{\kw}{k}
+\newcommand{\edoc}{ed}
+\newcommand{\efile}{ef}
+\newcommand{\ekwset}{EK}
+\newcommand{\ekw}{ek}
+\newcommand{\leak}{\mathcal{L}}
+
+\newcommand{\perm}{P}
+\newcommand{\dcm}{DC}
+\newcommand{\ccm}{CC}
+\newcommand{\edcm}{EDC}
+\newcommand{\eccm}{ECC}
+
+
+
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{proposition}[definition]{Proposition}
+
+\newcommand{\advantage}{\text{Adv}}
+
+
+\begin{document}
+\section{Introduction}
+\input{Introduction}
+
+
+\section{Notation}
+\input{Notation}
+
+
+\section{g-leakage}
+\input{g-leakage}
+
+
+
+
+\section{Security Notions} \label{Security Notions}
+\input{Security_Notions}
+
+
+\section{Constructions}
+\input{Constructions}
+
+
+\section{Security Analysis}
+\input{Security_Analysis}
+
+
+
+
+
+
+% biblography
+\bibliographystyle{plain}
+\bibliography{abbrev0,crypto,additional_citations}{}
+
+\end{document}

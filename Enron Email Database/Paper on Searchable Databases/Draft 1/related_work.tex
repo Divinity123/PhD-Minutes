@@ -22,7 +22,11 @@ By observing that a large fraction of keywords match to unique number of documen
 \textbf{TODO:} one more attack proposed in 2017
 
 \subsection{Countermeasures}
-Islam et al. \cite{NDSS:IslKuzKan12} suggested $(\alpha, t)-$secure index to prevent inference attack. The scheme aims to have partitions of keyword 
+Islam et al. \cite{NDSS:IslKuzKan12} suggested $(\alpha, t)-$secure index to prevent inference attack. The scheme aims to have partitions of keywords of size at least $\alpha$ each, such that in each partition, the sets of documents containing those keywords differ by at most $t$ documents. They proposed an algorithm to achieve $(\alpha, 0)$-secure index for any databases. The scheme uses clustering algorithm on the database so it is static in nature.
+
+Lacharit{\'e} et al. proposed to use frequency-smoothing encryption to defend against frequency analysis \cite{cryptoeprint:2017:1068}. The authors have only considered single-column encryption in relational databases so the scheme is not provably secure against attacks based on co-occurrence of keywords. Bost et al. \cite{EPRINT:BosFou17} attempted to fix security notion for searchable encryption by posting additional constraints. They proposed a padding-based scheme and tested the scheme against count attack \cite{CCS:CGPR15}. The experiment results show that their scheme is still vulnerable to count attack.
+
+To our best knowledge, there is yet a satisfactory security notion for searchable encryption that is secure against statistical attacks (leakage-abuse attacks in general), and there is no scheme known to be secure under all statistical attacks. 
 
 
 
