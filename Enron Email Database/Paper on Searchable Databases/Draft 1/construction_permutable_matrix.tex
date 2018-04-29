@@ -1,8 +1,8 @@
 In this section, we will define permutable matrix. In short, permutable matrix is a special type of matrix with the property that after applying row and column permutations, we get the same matrix as before. After that, we generalize the idea to higher dimensions.
 
-\begin{definiton}
+\begin{definition}
 	Let $M$ be a two-dimensional $n$ by $n$ matrix. Let $P,Q$ be permutation matrices on $[n]$. Then we say $M$ is $(P,Q)$-permutable if $PMQ^{T} = M$. If $P=Q$, we simply say $M$ is $P$-permutable.
-\end{definiton}
+\end{definition}
 
 We stress that the following is not a proof of security. Imagine we have $G$ an co-occurrence count matrix on keywords $(m_1, \cdots m_k)$. The adversary knows $G$ and a permutation of it, say $H = QGQ^{T}$ for some permutation matrix $Q$. His goal is to recover $Q$ so he can map the encrypted keywords to the plaintexts. Indeed, we know from \cite{CCS:PouWri16} that this can be done with high accuracy. We imagine the worst case where the adversary recovers $Q$ completely. If $Q$ is the unique solution to $\min_{X} \norm{XGX^{T} - H}$, then the adversary can recover all keywords with certainty. However, if $G$ is $P$-permutable, we see $\norm{QGQ^{T} - H} = \norm{QPGP^{T}Q^{T} - H} = \norm{(QP)G(QP)^{T} - H}$, so $QP$ also minimizes the objective function. In fact, all permutations of the shape $QP^i$ for $i = 0, \cdots, k-1$ minimizes the norm. In that case, the adversary can no longer map keywords to their encryptions uniquely. Since $P$ is a permutation of full length, $QP^i$ sends keywords to different encryptions for each $i$. Hence, if we start with an co-occurrence count matrix that permutable by some permutation of full length, we can significantly reduce the likelihood of the adversary recovering encryptions of keywords via co-occurrence based attacks.
 

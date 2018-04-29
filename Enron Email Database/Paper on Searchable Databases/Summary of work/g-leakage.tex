@@ -2,7 +2,7 @@ G-leakage is first studied by Alvim et al. in \cite{6266165}. To understand how 
 
 
 \begin{definition}[Information Channel]
-	A channel is a triple $(\mathcal{X}, \mathcal{Y}, \mathcal{C})$, where $\mathcal{X}$ and $\mathcal{Y}$ are finite sets and $\mathcal{C}$ is a channel matrix, an $|\mathcal{X}| \times |\mathcal{Y}|$ matrix whose entries are between 0 and 1 and whose rows each sum to 1. 
+	A channel is a triple $(\mathcal{X}, \mathcal{Y}, \channel)$, where $\mathcal{X}$ and $\mathcal{Y}$ are finite sets and $\channel$ is a channel matrix, an $|\mathcal{X}| \times |\mathcal{Y}|$ matrix whose entries are between 0 and 1 and whose rows each sum to 1. 
 \end{definition}
 
 
@@ -14,16 +14,16 @@ Given prior distribution $\pi$ on $\mathcal{X}$ and channel $C$, the \textit{pri
 
 and the \textit{posterior vulnerability} is given by:
 \begin{equation}
-	V(\pi, \mathcal{C}) = \sum_{y \in \mathcal{Y}} \max_{x in \mathcal{X}} \pi [x] \mathcal{C} [x,y].
+	V(\pi, \channel) = \sum_{y \in \mathcal{Y}} \max_{x in \mathcal{X}} \pi [x] \channel [x,y].
 \end{equation}
 \end{definition}
 
 
 \begin{definition}[Leakage and Capacity]
-We define \textit{min-entropy leakage} $\mathcal{L}(\pi, \mathcal{C})$ and \textit{min-capacity} $\mathcal{ML}(\mathcal{C})$ to be:
+We define \textit{min-entropy leakage} $\mathcal{L}(\pi, \channel)$ and \textit{min-capacity} $\mathcal{ML}(\channel)$ to be:
 \begin{align}
-\mathcal{L}(\pi, \mathcal{C}) &= - \log V(\pi) + \log V(\pi, \mathcal{C}) = \log \frac{V(\pi, \mathcal{C})}{V(\pi)} \\
-\mathcal{ML}(\mathcal{C}) &= \sup_{\pi} \mathcal{L}(\pi, \mathcal{C}).  
+\mathcal{L}(\pi, \channel) &= - \log V(\pi) + \log V(\pi, \channel) = \log \frac{V(\pi, \channel)}{V(\pi)} \\
+\mathcal{ML}(\channel) &= \sup_{\pi} \mathcal{L}(\pi, \channel).  
 \end{align}
 \end{definition}
 
@@ -55,10 +55,10 @@ V_{g}(\pi, C) = \sum_{y \in {\mathcal{Y}}} \max_{w \in {\mathcal{W}}} \sum_{x \i
 
 
 \begin{definition}[g-leakage and g-capacity]
-\textit{G-leakage} $\mathcal{L}_{g} (\pi, \mathcal{C})$ and \textit{g-capacity} $\mathcal{ML}_{g} (\mathcal{C})$ are defined as:
+\textit{G-leakage} $\mathcal{L}_{g} (\pi, \channel)$ and \textit{g-capacity} $\mathcal{ML}_{g} (\channel)$ are defined as:
 \begin{align*}
-\mathcal{L}_{g} (\pi, \mathcal{C}) & = - \log V_{g}(\pi) + \log V_{g}(\pi, \mathcal{C}) = \log \frac{V_{g}(\pi, \mathcal{C})}{V_{g}(\pi)} \\
-\mathcal{ML}_{g}(\mathcal{C}) &= \sup_{\pi} \mathcal{L}_{g}(\pi, \mathcal{C}). 
+\mathcal{L}_{g} (\pi, \channel) & = - \log V_{g}(\pi) + \log V_{g}(\pi, \channel) = \log \frac{V_{g}(\pi, \channel)}{V_{g}(\pi)} \\
+\mathcal{ML}_{g}(\channel) &= \sup_{\pi} \mathcal{L}_{g}(\pi, \channel). 
 \end{align*} 
 \end{definition}
 

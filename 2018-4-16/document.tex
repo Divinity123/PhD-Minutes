@@ -1,0 +1,91 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\setlength\parindent{0pt}
+\setlength{\parskip}{1em}
+
+\usepackage{amsmath,amsfonts,amssymb,latexsym,amsthm,verbatim,float}
+\usepackage [n, operators, sets, adversary, landau, probability, notions, logic, ff, mm, primitives, events, complexity, asymptotics, keys] {cryptocode}
+
+% we need to change some of these
+\newcommand{\db}{DB}
+\newcommand{\edb}{EDB}
+\newcommand{\doc}{d}
+\newcommand{\file}{f}
+\newcommand{\kwset}{K}
+\newcommand{\kw}{k}
+\newcommand{\edoc}{ed}
+\newcommand{\efile}{ef}
+\newcommand{\ekwset}{EK}
+\newcommand{\ekw}{ek}
+
+\newcommand{\leak}{l}
+\newcommand{\leakm}{\mathcal{L}_\mathcal{M}}
+\newcommand{\channel}{\mathcal{C}}
+\newcommand{\channelm}{\mathcal{C}_{\leakm}}
+
+\newcommand{\perm}{P}
+\newcommand{\dcm}{DC}
+\newcommand{\ccm}{CC}
+\newcommand{\edcm}{EDC}
+\newcommand{\eccm}{ECC}
+
+\newcommand{\advantage}{\text{Adv}}
+
+\begin{document}
+\section{Definitions of Leakages}
+\begin{itemize}
+	\item  We have considered two definitions of leakage.
+	
+	\item The first notion requires the simulator to produce the same view (encrypted database) as the real encryption scheme given only the leakage.
+	
+	\begin{pchstack}[center]
+		\procedure{Real$_{\mathcal{A}}(n)$}{%
+			\pcln \key \sample \kgen(\secparam) \\
+			\pcln \db  \gets \mathcal{A}(\secparam) \\
+			\pcln \edb \gets \enc(\secparam, \key, \db) \\
+			\pcln \pcreturn \edb
+		}	
+		
+		\pchspace
+		\procedure{Sim$_{\mathcal{A,S}}(n)$}{%
+			\pcln \key  \sample \kgen(\secparam) \\
+			\pcln \db   \gets \mathcal{A}(\secparam) \\
+			\pcln \leak \gets \leakm(\secparam, \key, \db) \\
+			\pcln \edb  \gets \mathcal{S}(\secparam, \leak) \\
+			\pcln \pcreturn \edb
+		}
+	\end{pchstack}
+
+	\item The second notion uses an additional adversary to produce some information on the real encrypted database and the simulated one. The information produced is required to be indistinguishable. There is also a slight difference where the first adversary generates some state together with the database.
+	
+	\begin{pchstack}[center]
+		\procedure{Real$_{\mathcal{A}}(n)$}{%
+			\pcln \key \sample \kgen(\secparam) \\
+			\pcln (\db, \st)  \gets \mathcal{A}_1(\secparam) \\
+			\pcln \edb \gets \enc(\secparam, \key, \db) \\
+			\pcln info \gets \mathcal{A}_2(\secparam, \edb, \st) \\
+			\pcln \pcreturn info
+		}	
+		
+		\pchspace
+		\procedure{Sim$_{\mathcal{A,S}}(n)$}{%
+			\pcln \key  \sample \kgen(\secparam) \\
+			\pcln (\db, \st)  \gets \mathcal{A}_1(\secparam) \\
+			\pcln \leak \gets \leakm(\secparam, \key, \db) \\
+			\pcln \edb  \gets \mathcal{S}(\secparam, \leak) \\
+			\pcln info \gets \mathcal{A}_2(\secparam, \edb, \st) \\
+			\pcln \pcreturn info
+		}
+	\end{pchstack}
+	
+	\item We show the two definitions are in fact equivalent under quantifications `there exists a simulator, for all adversaries'. i.e. if there is a distinguisher for one notion, there is a distinguisher for the other. 
+\end{itemize}
+
+
+\section{Proof of Equivalence between the two Notions}
+\begin{itemize}
+	\item We call the first notion \texttt{notion1} and second notion \texttt{notion2}. It is easy to see that indistinguishability in \texttt{notion2} implies that in \texttt{notion1} for free by letting $\mathcal{A}_2$ return its second argument. So we will prove implication in the other direction.
+	
+	\item Suppose there is a distinguisher for \texttt{notion2}, then the distinguisher must work for $\mathcal{A}_1$ that returns a constant state, and $\mathcal{A}_2$ that returns its second argument. So the distinguisher can break \texttt{notion1} with non-negligible probability.
+\end{itemize}
+\end{document}

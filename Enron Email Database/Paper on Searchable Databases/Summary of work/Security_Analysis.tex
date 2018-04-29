@@ -105,12 +105,12 @@ Since we are only interested in the security of the index (assuming the document
 
 
 
-\subsection{All of our Constructions are Secure against Inference Attack}
-In this subsection, we show that all of our schemes are secure against inference attack. We will use extended posterior g-vulnerability to analyse the schemes. For simplicity, we assume that the database is a point distribution, i.e. the adversary knows exactly how the database looks like. The gain function we consider here is the following:
+\subsection{All of our Constructions are Secure against Keyword Guessing Attack}
+In this subsection, we show that all of our schemes are secure against keyword guessing attack. We will use extended posterior g-vulnerability to analyse the schemes. For simplicity, we assume that the database is a point distribution, i.e. the adversary knows exactly how the database looks like. The gain function we consider here is the following:
 \begin{itemize}
 	\item $\mathcal{W} = \kwset(\db) \times \ekwset(\edb)$,
 	\item $\mathcal{X} = \dcm \times \mathcal{P}$,
-	\item $\mathcal{Y} = \leak(\mathcal{X}) = \{\enc(\dcm, \sigma) \mid \sigma \in \mathcal{P} \}$,
+	\item $\mathcal{Y} = \leakm(\mathcal{X}) = \{\enc(\dcm, \sigma) \mid \sigma \in \mathcal{P} \}$,
 	\item $g((m,c), (\dcm, \sigma), y) = \mathbbm{1}(\sigma(m) = c)$.
 \end{itemize}
 Here $\mathcal{P}$ denotes the set of all possible bijections from $\kwset(\db)$ to $\ekwset(\edb)$, and $\enc(\dcm, \sigma)$ is an idealised encryption function that encrypts with bijection $\sigma$ and returns co-occurrences at all levels with encrypted documents. The gain function is 1 if the adversary can guess any pair of keyword and its encryption correctly in one try, and 0 otherwise. Here, the permutation $\perm_a$ we used for the encryption is assumed to be known to the adversary. He can recover this piece of information by file injection attack or inspecting the algebraic structure of the leakage (since we are working with an information-theoretic adversary, this is permitted).
@@ -124,22 +124,22 @@ In the next part of the subsection, we first show that any scheme that preserves
 \textbf{Insecure Schemes are Insecure.} We present the result as a theorem.
 
 \begin{theorem}
-Let the distribution of database be a fixed distribution $\pi$, i.e. the adversary knows that the unencrypted database is $\db$. Let $\mathcal{X}$ be the secrets and $\mathcal{Y}$ be the leakage. given $y \in \mathcal{Y}$, and $\leak$ the leakage function for the encryption scheme. We assume that there is a unique $x \in \mathcal{X}$ such that $\leak(x) = y$. Then, for the gain function $g$ defined above,
+Let the distribution of database be a fixed distribution $\pi$, i.e. the adversary knows that the unencrypted database is $\db$. Let $\mathcal{X}$ be the secrets and $\mathcal{Y}$ be the leakage. given $y \in \mathcal{Y}$, and $\leakm$ the leakage function for the encryption scheme. We assume that there is a unique $x \in \mathcal{X}$ such that $\leakm(x) = y$. Then, for the gain function $g$ defined above,
 \begin{equation}
-	EV_g(\pi, \mathcal{C}_{\leak}) = 1
+	EV_g(\pi, \channelm) = 1
 \end{equation}
 \end{theorem}
 
 \begin{proof}
 \begin{align*}
-  & EV_g(\pi, \mathcal{C}_{\leak}) \\
+  & EV_g(\pi, \channelm) \\
 = & \sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \prob{\mathcal{X} = x \mid \mathcal{Y} = y} g(w, x, y) \\
-= & \sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \prob{\mathcal{X} = \leak^{-1}(y) \mid \mathcal{Y} = y} g(w, \leak^{-1}(y), y) \\
-= & \sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} 1 \cdot g(w, \leak^{-1}(y), y) \\
+= & \sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \prob{\mathcal{X} = \leakm^{-1}(y) \mid \mathcal{Y} = y} g(w, \leakm^{-1}(y), y) \\
+= & \sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} 1 \cdot g(w, \leakm^{-1}(y), y) \\
 = & \sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \cdot 1 \\
 = & 1.
 \end{align*}
-The proof uses the property that $\prob{\mathcal{X} = x \mid \mathcal{Y} = y}$ is 1 when $x = \leak^{-1}(y)$ and 0 otherwise. Furthermore, since the adversary knows the pre-image completely, his maximal guess is 1 for every $g(\cdot)$.
+The proof uses the property that $\prob{\mathcal{X} = x \mid \mathcal{Y} = y}$ is 1 when $x = \leakm^{-1}(y)$ and 0 otherwise. Furthermore, since the adversary knows the pre-image completely, his maximal guess is 1 for every $g(\cdot)$.
 \end{proof}
 
 
@@ -181,7 +181,7 @@ Because $\perm_a$ is a permutation, for any $i \neq 0 \mod a$, $Q \cdot (\perm_a
 \begin{proposition} \label{Proposition: g-vulnerability of Inference Attack}
 Let the distribution of database be a fixed distribution $\pi$, i.e. the adversary knows that the unencrypted database is $\db$. Let $\ccm^{\db}$ be a $\perm_a$-permutable co-occurrence at all levels with counts. Let $Q$ be a bijection from $\kwset(\db)$ to $\ekwset(\edb)$ that represents the idealised IND-DCPA secure encryption on keywords. Let $g$ be the gain function defined at the start of the subsection. Then
 \begin{equation}
-	EV_g(\pi, \mathcal{C}_{\leak}) = \frac{1}{a}.
+	EV_g(\pi, \channelm) = \frac{1}{a}.
 \end{equation}
 \end{proposition}
 
@@ -189,7 +189,7 @@ Let the distribution of database be a fixed distribution $\pi$, i.e. the adversa
 \begin{proof}
 From theorem \ref{Theorem: Permutability of Encryption implies Security}, we know that if $Q$ is a bijection between keywords and their encryptions as an idealised encryption which can generate some given leakage, then so does $Q \cdot (\perm_a)^i$ for $i=1,\dots, a-1$. Due to indistinguishability of the encryption scheme, all these can be the actual encryption function with probability $\frac{1}{a}$. Putting everything together, we get
 \begin{align*}
-  &EV_g(\pi, \mathcal{C}_{\leak})\\
+  &EV_g(\pi, \channelm)\\
 = &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \prob{\mathcal{X} = x \mid \mathcal{Y} = y} g(w, x, y) \\
 = &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \sum_{i = 0}^{a-1} \prob{\mathcal{X} = (\db, Q_y \cdot (\perm_a)^i) \mid \mathcal{Y} = y} g(w, (\db, Q_y \cdot (\perm_a)^i), y) \\
 = &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \sum_{i = 0}^{a-1} \frac{1}{a} \cdot g(w, (\db, Q_y \cdot (\perm_a)^i), y) \\
@@ -265,16 +265,16 @@ From above, we know that the set of encryption functions indistinguishable by th
 
 
 \begin{theorem}
-Let the leakage channel and gain function be those described above. Furthermore, we assume that for all $y \in \mathcal{Y}, (\perm_a)(y) \neq y$. Then
+Let the leakage channel and gain function be those described above. Furthermore, we assume that for all $i = 1, \dots, a-1$, the real keyword set $\kwset$ for the first encrypted document has the property that $(\perm_a)^i(\kwset) \neq \kwset$. Then
 \begin{equation}
-	EV_g^{\texttt{scheme1}}(\pi, \mathcal{C}_{\leak}) = \frac{1}{a}.
+	EV_g^{\texttt{scheme1}}(\pi, \channelm) = \frac{1}{a}.
 \end{equation}
 \end{theorem}
 
 \begin{proof}
-We observe that for any leakage $y = \ekwset$, if we know the encryption function is $Q \cdot (\perm_a)^i$ for some $i$, then the set of keywords for the unencrypted document is exactly $(Q \cdot (\perm_a)^i)^{-1}(\ekwset)$. Because $(\perm_a)(y) \neq y$ for all $y \in \mathcal{Y}$, $(Q \cdot (\perm_a)^i)^{-1}(\ekwset)$ is the exact set of keywords only when $(Q \cdot (\perm_a)^i)^{-1}$ is the correct decryption function. This happens with probability $\frac{1}{a}$. In terms of extended posterior g-vulnerability, we have
+We observe that for any leakage $y = \ekwset$, if we know the encryption function is $Q \cdot (\perm_a)^i$ for some $i$, then the set of keywords for the unencrypted document is exactly $\kwset = (Q \cdot (\perm_a)^i)^{-1}(\ekwset)$. Because $(\perm_a)^i(\kwset) \neq \kwset$ for all $i = 1, \dots, a-1$, $(Q \cdot (\perm_a)^i)^{-1}(\ekwset)$ is the exact set of keywords only when $(Q \cdot (\perm_a)^i)^{-1}$ is the correct decryption function. This happens with probability $\frac{1}{a}$. In terms of extended posterior g-vulnerability, we have
 \begin{align*}
-  &EV_g^{\texttt{scheme1}}(\pi, \mathcal{C}_{\leak})\\
+  &EV_g^{\texttt{scheme1}}(\pi, \channel_{\leak_\texttt{scheme1}})\\
 = &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \prob{\mathcal{X} = x \mid \mathcal{Y} = y} g(w, x, y)\\
 = &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \sum_{i = 0}^{a-1} \prob{\mathcal{X} = ((Q \cdot (\perm_a)^i)^{-1}(y), Q \cdot (\perm_a)^i) \mid \mathcal{Y} = y} g(w, ((Q \cdot (\perm_a)^i)^{-1}(y), Q \cdot (\perm_a)^i)), y)\\
 = &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \sum_{i = 0}^{a-1} \frac{1}{a} \cdot g(w, ((Q \cdot (\perm_a)^i)^{-1}(y), Q \cdot (\perm_a)^i)), y)\\
@@ -290,24 +290,66 @@ There is in fact a more detrimental attack based on this. In the adversary above
 
 
 
-\textbf{\texttt{Scheme2} and \texttt{scheme3} are more Secure.} Now we show that \texttt{Scheme2} and \texttt{scheme3} achieves better security with respect to the gain function. We will do this by comparing the extended posterior g-vulnerability of the three schemes without explicitly computing them. Hence, demonstrating the advantage of using extended posterior g-vulnerability to evaluate security of encryption schemes.
+\textbf{\texttt{Scheme2} and \texttt{scheme3} are more Secure.} Now we show that \texttt{Scheme2} and \texttt{scheme3} achieves better security with respect to the gain function. We will do this by comparing the extended posterior g-vulnerability of the three schemes.
 
 
 \begin{theorem}
-Let the leakage channel and gain function be those described above. Furthermore, we assume that for all $y \in \mathcal{Y}, (\perm_a)(y) \neq y$. Then
+Let the leakage channel and gain function be those described above. Furthermore, we assume that for all $i = 1, \dots, a-1$, the real keyword set $\kwset$ for the first encrypted document has the property that $(\perm_a)^i(\kwset) \neq \kwset$. Then
 \begin{equation}
-EV_g^{\texttt{scheme1}}(\pi, \mathcal{C}_{\leak}) \geq EV_g^{\texttt{scheme2}}(\pi, \mathcal{C}_{\leak}) \geq EV_g^{\texttt{scheme3}}(\pi, \mathcal{C}_{\leak}).
+EV_g^{\texttt{scheme1}}(\pi, \channel_{\mathcal{L}_\texttt{scheme1}}) \geq EV_g^{\texttt{scheme2}}(\pi, \channel_{\mathcal{L}_\texttt{scheme2}}) \geq EV_g^{\texttt{scheme3}}(\pi, \channel_{\mathcal{L}_\texttt{scheme3}}).
 \end{equation}
 \end{theorem}
 
 
 \begin{proof}
-We examine the sets of keywords which can possibly give leakage $y$ in each scheme, and compare the conditional probability $\prob{x \mid y}$ for the schemes. For \texttt{scheme1}, we see that $\{((Q \cdot (\perm_a)^i)^{-1}(y), Q \cdot (\perm_a)^i) \mid i = 0, \dots, a-1\}$ is the set of $x$ that can generate leakage $y$. Each occurs with probability $\frac{1}{a}$ and only one of them contains the correct keyword set. So $\max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \prob{\mathcal{X} = x \mid \mathcal{Y} = y} g(w, x, y) = \frac{1}{a}$.
+Let $y$ be the set of encrypted keywords for the first encrypted file and $Q$ be the real encryption function on the database. We have already derived $EV_g^{\texttt{scheme1}}(\pi, \channel_{\mathcal{L}_\texttt{scheme1}})$ for \texttt{scheme1} so it suffices to work out the expression for \texttt{scheme2} and \texttt{scheme3}. We begin by writing down inverse of leakage functions for \texttt{scheme2} and \texttt{scheme3}.
 
-On the other hand, the feasible keyword sets is $\bar{\mathcal{X}} = \{ (\perm_a)^{i}(x) \mid (x \subset y) \wedge (i = 0, \dots, a-1) \wedge (\cup_{i=0}^{a-1} (\perm_a)^{i}(x) = y) \}$. Each keyword set can be paired with any encryption function $Q \cdot (\perm_a)^j$ for $j = 0, \dots, a-1$. Therefore, we only need to look at the distribution of elements in $\bar{\mathcal{X}}$. But there are at least $a$ elements (since $y$ is not $\perm_a$-permutable), so the probability of guessing the correct keyword is less than or equal to $\frac{1}{a}$. This means $\max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \text{Pr}_{\texttt{scheme2}}[\mathcal{X} = x \mid \mathcal{Y} = y] g(w, x, y) \leq \max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \text{Pr}_{\texttt{scheme1}}[\mathcal{X} = x \mid \mathcal{Y} = y] g(w, x, y)$. Thus, $EV_g^{\texttt{scheme1}}(\pi, \mathcal{C}_{\leak}) \geq EV_g^{\texttt{scheme2}}(\pi, \mathcal{C}_{\leak})$.
+\begin{align*}
+	\mathcal{L}_\texttt{scheme2}^{-1}(y) & = \{ z \subset (Q \cdot (\perm_a)^i)^{-1} (y) \mid (i = 0, \dots, a-1) \wedge (\cup_{i=0}^{a-1} (\perm_a)^i (z) = y) \} \\
+	\mathcal{L}_\texttt{scheme3}^{-1}(y) & = \{ z \subset (Q \cdot (\perm_a)^i)^{-1} (y) \mid (i  = 0, \dots, a-1)\}.
+\end{align*}
+
+These can be written as
+\begin{align*}
+\mathcal{L}_\texttt{scheme2}^{-1}(y,i) & = \{ z \subset (Q \cdot (\perm_a)^i)^{-1} (y) \mid \cup_{i=0}^{a-1} (\perm_a)^i (z) = y \} \\
+\mathcal{L}_\texttt{scheme3}^{-1}(y,i) & = \{ z \subset (Q \cdot (\perm_a)^i)^{-1} (y)\},
+\end{align*}
+with $\cup_{i=0}^{a-1} \mathcal{L}_\texttt{scheme2}^{-1}(y,i) = \mathcal{L}_\texttt{scheme2}^{-1}(y)$ and $\cup_{i=0}^{a-1} \mathcal{L}_\texttt{scheme3}^{-1}(y,i) = \mathcal{L}_\texttt{scheme3}^{-1}(y)$.
+
+\textbf{(Comparing \texttt{scheme1} and \texttt{scheme2})} The extended posterior g-vulnerability of \texttt{scheme2} can be written as
+\begin{align*}
+  &EV_g^{\texttt{scheme1}}(\pi, \channel_{\leak_\texttt{scheme2}})\\
+= &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \text{Pr}_{\texttt{scheme2}}\left[\mathcal{X} = x \mid \mathcal{Y} = y\right] g(w, x, y)\\
+= &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \max_{w \in {\mathcal{W}}} \sum_{i = 0}^{a-1} \sum_{z \in \mathcal{L}_\texttt{scheme2}^{-1}(y,i)} \text{Pr}_{\texttt{scheme2}}\left[\mathcal{X} = (z, Q \cdot (\perm_a)^i) \mid \mathcal{Y} = y\right] g(w, (z, Q \cdot (\perm_a)^i)), y)
+\end{align*}
+
+Since $g$ is a binary gain function, it is only possible for the adversary to achieve positive gain if his guess is in the set $\mathcal{L}_\texttt{scheme2}^{-1}(y)$. So the guess function takes the form $w: \mathcal{Y} \rightarrow \mathcal{L}_\texttt{scheme2}^{-1}(y)$. Since the guess needs to be exactly the same as the real keyword set, we have
+\begin{align*}
+  &EV_g^{\texttt{scheme2}}(\pi, \channel_{\leak_\texttt{scheme2}})\\
+= &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \sum_{i = 0}^{a-1} \text{Pr}_{\texttt{scheme2}}\left[\mathcal{X} = (w(y), Q \cdot (\perm_a)^i) \mid \mathcal{Y} = y\right] g(w(y), (w(y), Q \cdot (\perm_a)^i)), y) \\
+= &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \sum_{i = 0}^{a-1} \text{Pr}_{\texttt{scheme2}}\left[\mathcal{X} = (w(y), Q \cdot (\perm_a)^i) \mid \mathcal{Y} = y\right].
+\end{align*}
+But $\sum_{i = 0}^{a-1} \text{Pr}_{\texttt{scheme2}}\left[\mathcal{X} = (w(y), Q \cdot (\perm_a)^i) \mid \mathcal{Y} = y\right] \leq \frac{1}{a}$ as
+\begin{align*}
+	\text{Pr}_{\texttt{scheme2}}\left[\mathcal{X} = (w(y), Q \cdot (\perm_a)^i) \mid \mathcal{Y} = y\right] = \text{Pr}_{\texttt{scheme2}}\left[\mathcal{X} = (\perm_a^j(w(y)), Q \cdot (\perm_a)^{i+j}) \mid \mathcal{Y} = y\right]
+\end{align*}
+for all $j = 1, \dots, a-1$. So
+\begin{align*}
+EV_g^{\texttt{scheme1}}(\pi, \channel_{\leak_\texttt{scheme2}}) \leq \frac{1}{a} = EV_g^{\texttt{scheme1}}(\pi, \channel_{\leak_\texttt{scheme1}}).
+\end{align*}
 
 
-For \texttt{scheme3}, we see that the set of feasible keyword sets contains all of $\bar{\mathcal{X}}$. At the same time, we have that each keyword set can be paired with any encryption function $Q \cdot (\perm_a)^j$ for $j = 0, \dots, a-1$. So it must be the case that $\max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \text{Pr}_{\texttt{scheme3}}[\mathcal{X} = x \mid \mathcal{Y} = y] g(w, x, y) \leq \max_{w \in {\mathcal{W}}} \sum_{x \in {\mathcal{X}}} \text{Pr}_{\texttt{scheme2}}[\mathcal{X} = x \mid \mathcal{Y} = y] g(w, x, y)$. Therefore, $EV_g^{\texttt{scheme2}}(\pi, \mathcal{C}_{\leak}) \geq EV_g^{\texttt{scheme3}}(\pi, \mathcal{C}_{\leak})$.
+\textbf{(Comparing \texttt{scheme2} and \texttt{scheme3})} To see the inequality from \texttt{scheme2} to \texttt{scheme3}, we observe that $\mathcal{L}_\texttt{scheme3}^{-1}(y) \subseteq \mathcal{L}_\texttt{scheme2}^{-1}(y)$. The two schemes also share the same set of possible encryption functions. So for any $z \in \mathcal{L}_\texttt{scheme3}^{-1}(y)$ and $i = 0, \dots, a-1$, 
+\begin{align*}
+\text{Pr}_{\texttt{scheme3}}\left[\mathcal{X} = (z, Q \cdot (\perm_a)^i) \mid \mathcal{Y} = y\right] \leq \text{Pr}_{\texttt{scheme2}}\left[\mathcal{X} = (z, Q \cdot (\perm_a)^i) \mid \mathcal{Y} = y\right].
+\end{align*} 
+Let $w: \mathcal{Y} \rightarrow \mathcal{L}_\texttt{scheme3}^{-1}(y)$ be a deterministic strategy which maximises $EV_g^{\texttt{scheme3}}(\pi, \channel_{\leak_\texttt{scheme3}})$, we get
+\begin{align*}
+  &EV_g^{\texttt{scheme3}}(\pi, \channel_{\leak_\texttt{scheme3}})\\
+= &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \sum_{i = 0}^{a-1} \text{Pr}_{\texttt{scheme3}}\left[\mathcal{X} = (w(y), Q \cdot (\perm_a)^i) \mid \mathcal{Y} = y\right] \\
+\leq &\sum_{y \in {\mathcal{Y}}} \prob{\mathcal{Y} = y} \sum_{i = 0}^{a-1} \text{Pr}_{\texttt{scheme2}}\left[\mathcal{X} = (w(y), Q \cdot (\perm_a)^i) \mid \mathcal{Y} = y\right] \\
+= &EV_g^{\texttt{scheme2}}(\pi, \channel_{\leak_\texttt{scheme2}}).
+\end{align*}
 \end{proof}
 
 There is an easy way to see this inequality. We simplify the attack to only guessing the number of real keywords in the first document. Let $n$ be the number of keywords in the first encrypted document. For \texttt{scheme1}, since there is no padding of keywords to documents, so the number of real keywords is $n$. For \texttt{scheme2}, due to collisions, we only know that the number of keywords can fall in the range $\lceil \frac{n}{a} \rceil$ to $n$. For \texttt{scheme3}, the number of keywords can be any integer from $1$ to $n$.
