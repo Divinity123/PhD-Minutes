@@ -5,21 +5,50 @@
 \title{First Draft of Paper}
 
 % packages
-\usepackage{float, amsmath, amsthm, bbm, amsfonts, mathtools, url}
-\usepackage [n, operators, sets, adversary, landau, probability, notions, logic, ff, mm, primitives, events, complexity, asymptotics, keys] {cryptocode}
+\usepackage{float, amsmath, amsthm, bbm, amsfonts, mathtools, url, tikz}
+\usepackage [n, operators, sets, adversary, landau, probability, notions, logic, ff, mm, primitives, events, complexity, asymptotics] {cryptocode}
 
-% we need to change some of these
-\newcommand{\db}{DB}
-\newcommand{\edb}{EDB}
-\newcommand{\doc}{d}
+% Notation for sets
+\newcommand{\key}{\textbf{K}}
+\newcommand{\DB}{DB}
+\newcommand{\EDB}{EDB}
+\newcommand{\KWset}{\mathcal{K}}
+\newcommand{\EKWset}{\mathcal{EK}}
+\newcommand{\EIndex}{\mathcal{EI}}
+\newcommand{\File}{F}
+\newcommand{\EFile}{EF}
+\newcommand{\Query}{Q}
+\newcommand{\EQuery}{EQ}
+\newcommand{\QState}{QST}
+\newcommand{\Response}{R}
+\newcommand{\EResponse}{ER}
+
+
+% Notation for realisations
+\newcommand{\db}{db}
+\newcommand{\edb}{edb}
+\newcommand{\kwset}{W}
+\newcommand{\kw}{w}
+\newcommand{\ekwset}{EW}
+\newcommand{\ekw}{ew}
+\newcommand{\eindex}{EI}
 \newcommand{\file}{f}
-\newcommand{\kwset}{K}
-\newcommand{\kw}{k}
-\newcommand{\edoc}{ed}
 \newcommand{\efile}{ef}
-\newcommand{\ekwset}{EK}
-\newcommand{\ekw}{ek}
+\newcommand{\query}{q}
+\newcommand{\equery}{eq}
+\newcommand{\qState}{qst}
+\newcommand{\response}{r}
+\newcommand{\eResponse}{er}
 
+
+% Notation for functions
+\newcommand{\QueryFunction}{\text{Query}}
+\newcommand{\EncQ}{\text{EncQ}}
+\newcommand{\EQueryFunction}{\text{EQuery}}
+\newcommand{\DecResponse}{\text{DecR}}
+
+
+\newcommand{\state}{\textbf{state}}
 \newcommand{\leak}{l}
 \newcommand{\leakm}{\mathcal{L}_\mathcal{M}}
 \newcommand{\channel}{\mathcal{C}}
@@ -53,6 +82,8 @@
 \input{g-leakage}
 
 
+\section{Syntax of Searchable Encrypted Database}
+\input{Syntax}
 
 
 \section{Security Notions} \label{Security Notions}
@@ -72,7 +103,7 @@
 
 
 % biblography
-\bibliographystyle{plain}
+\bibliographystyle{unsrt}
 \bibliography{abbrev0,crypto,additional_citations}{}
 
 \end{document}

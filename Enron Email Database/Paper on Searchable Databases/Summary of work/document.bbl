@@ -1,10 +1,35 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{6266165}
 M.~S. Alvim, K.~Chatzikokolakis, C.~Palamidessi, and G.~Smith.
 \newblock Measuring information leakage using generalized gain functions.
 \newblock In {\em 2012 IEEE 25th Computer Security Foundations Symposium},
   pages 265--279, June 2012.
+
+\bibitem{CCS:CGPR15}
+David Cash, Paul Grubbs, Jason Perry, and Thomas Ristenpart.
+\newblock Leakage-abuse attacks against searchable encryption.
+\newblock In Indrajit Ray, Ninghui Li, and Christopher Kruegel:, editors, {\em
+  ACM CCS 15: 22nd Conference on Computer and Communications Security}, pages
+  668--679, Denver, CO, USA, October~12--16, 2015. {ACM} Press.
+
+\bibitem{C:CJJKRS13}
+David Cash, Stanislaw Jarecki, Charanjit~S. Jutla, Hugo Krawczyk,
+  Marcel-Catalin Rosu, and Michael Steiner.
+\newblock Highly-scalable searchable symmetric encryption with support for
+  {Boolean} queries.
+\newblock In Ran Canetti and Juan~A. Garay, editors, {\em Advances in
+  Cryptology -- {CRYPTO}~2013, Part~I}, volume 8042 of {\em Lecture Notes in
+  Computer Science}, pages 353--373, Santa Barbara, CA, USA, August~18--22,
+  2013. Springer, Heidelberg, Germany.
+
+\bibitem{AC:ChaKam10}
+Melissa Chase and Seny Kamara.
+\newblock Structured encryption and controlled disclosure.
+\newblock In Masayuki Abe, editor, {\em Advances in Cryptology --
+  {ASIACRYPT}~2010}, volume 6477 of {\em Lecture Notes in Computer Science},
+  pages 577--594, Singapore, December~5--9, 2010. Springer, Heidelberg,
+  Germany.
 
 \bibitem{CCS:CGKO06}
 Reza Curtmola, Juan~A. Garay, Seny Kamara, and Rafail Ostrovsky.
@@ -14,6 +39,22 @@ Reza Curtmola, Juan~A. Garay, Seny Kamara, and Rafail Ostrovsky.
   Vimercati, editors, {\em ACM CCS 06: 13th Conference on Computer and
   Communications Security}, pages 79--88, Alexandria, Virginia, USA,
   October~30~--~November~3, 2006. {ACM} Press.
+
+\bibitem{ESORICS:FJKNRS15}
+Sky Faber, Stanislaw Jarecki, Hugo Krawczyk, Quan Nguyen, Marcel-Catalin Rosu,
+  and Michael Steiner.
+\newblock Rich queries on encrypted data: Beyond exact matches.
+\newblock In G{\"u}nther Pernul, Peter Y.~A. Ryan, and Edgar~R. Weippl,
+  editors, {\em ESORICS~2015: 20th European Symposium on Research in Computer
+  Security, Part~II}, volume 9327 of {\em Lecture Notes in Computer Science},
+  pages 123--145, Vienna, Austria, September~21--25, 2015. Springer,
+  Heidelberg, Germany.
+
+\bibitem{EPRINT:Goh03}
+Eu-Jin Goh.
+\newblock Secure indexes.
+\newblock Cryptology ePrint Archive, Report 2003/216, 2003.
+\newblock \url{http://eprint.iacr.org/2003/216}.
 
 \bibitem{NDSS:IslKuzKan12}
 Mohammad~Saiful Islam, Mehmet Kuzu, and Murat Kantarcioglu.
@@ -28,5 +69,21 @@ Muhammad Naveed, Seny Kamara, and Charles~V. Wright.
 \newblock In Indrajit Ray, Ninghui Li, and Christopher Kruegel:, editors, {\em
   ACM CCS 15: 22nd Conference on Computer and Communications Security}, pages
   644--655, Denver, CO, USA, October~12--16, 2015. {ACM} Press.
+
+\bibitem{CCS:PouWri16}
+David Pouliot and Charles~V. Wright.
+\newblock The shadow nemesis: Inference attacks on efficiently deployable,
+  efficiently searchable encryption.
+\newblock In Edgar~R. Weippl, Stefan Katzenbeisser, Christopher Kruegel,
+  Andrew~C. Myers, and Shai Halevi, editors, {\em ACM CCS 16: 23rd Conference
+  on Computer and Communications Security}, pages 1341--1352, Vienna, Austria,
+  October~24--28, 2016. {ACM} Press.
+
+\bibitem{NDSS:StePapShi14}
+Emil Stefanov, Charalampos Papamanthou, and Elaine Shi.
+\newblock Practical dynamic searchable encryption with small leakage.
+\newblock In {\em {ISOC} Network and Distributed System Security Symposium --
+  {NDSS}~2014}, San Diego, CA, USA, February~23--26, 2014. The Internet
+  Society.
 
 \end{thebibliography}

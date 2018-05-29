@@ -1,4 +1,15 @@
-In this section, we consider several experiment-based adversary on searchable encryption. We motivate with an experiment that is very similar to an IND-CPA experiment (for brevity, we do not give definition of standard IND-CPA here) specifically for keyword guessing attack. In the experiment, the adversary receives the encryption of the database he chooses, and his goal is to match keywords to their encryptions. To move a step further, we modify this experiment by only giving the adversary leakage of the encryption scheme associated to the database in the experiment. We then generalise the experiments to allow for arbitrary target functions of the adversary.
+In this section, we discuss why previous notions are not sufficient in defining security of searchable encryption schemes. We then motivates with a security notion for keyword guessing attack on searchable encrypted databases. We modify the experiment by considering a leakage function instead of the real encryption function. After that, we generalise the experiment to allow for arbitrary adversarial goals.
+
+
+
+\subsection{Previous Notions}
+In the literature, security notions for searchable encrypted databases comes in two flavors. The first type is based on an indistinguishability game which tries to capture the idea that the encrypted index does not leak any information about the underlying files. The first notion, known as indistinguishability under chosen keyword attack (IND-CKA) is proposed by Goh in \cite{EPRINT:Goh03}. The notion is shown to be insufficient so a stronger notion called IND2-CKA is proposed in the same paper. Most of the security notions in the literature are along this line. The main problem with this notion is that it is non-adaptive in nature. Curtmola et al. \cite{CCS:CGKO06} improved on the notion and proposed non-adaptive indistinguishability security and adaptive indistinguishability security for searchable symmetric encryption (SSE). The most remarkable difference between Curtmola's notion and Goh's is that the trace\footnote{Trace is defined to be the collection of document sizes, search pattern and access pattern.} of database is allowed to be leaked. This is exactly the second type of notions. The idea of allowing some leakage is then generalised to be beyond just the trace \cite{AC:ChaKam10, C:CJJKRS13, NDSS:StePapShi14,ESORICS:FJKNRS15}. 
+
+However, security with leakage does not imply security in practice. One needs to understand what those leakages really reveals about the underlying database. In some cases, that is obvious. For example, if the leakage function is everything of the database then we know the encryption scheme is not secure, and if the leakage function reveals nothing then the scheme is secure. But with anything in between, we are not able to draw conclusion immediately. In fact, many types of leakages can be abused to recover information about the underlying database. If a scheme leaks repetition of keywords then it may be vulnerable to frequency-based statistical attack \cite{CCS:NavKamWri15}. If a scheme leaks co-occurrence of keywords then it can be exploited by IKK attack \cite{NDSS:IslKuzKan12} and count attack \cite{CCS:CGPR15}. Notably, co-occurrence is part of search pattern and access pattern and those are leaked by most of the schemes. More complicated leakage pattern involving bloom filter can also be misused \cite{CCS:PouWri16}. Therefore, in order to prove that a scheme is secure for practical use, we have to show that the leakage does not reveal information of the underlying database we try to hide.
+
+The first step towards this goal is to consider a snapshot adversary who only has access to the encrypted database in the static manner and tries to recover some information. To make it more concrete, we consider an adversary who tries to recover some encrypted keywords. We call the security notion security against keyword guessing attack.
+
+
 
 
 \subsection{Security Notion for Keyword Guessing Attack}
@@ -7,15 +18,16 @@ There is a multitude of ways to evaluate how well the adversary has recovered in
 For simplicity, we only consider snapshot attack here, so it suffices to assume that the searchable encryption scheme has some key generation function $\kgen(\cdot)$, some encryption function $\enc(\cdot)$ that encrypts the database, and there is a decryption function $\dec(\cdot)$ that decrypts encrypted documents one at a time. Because we are interested in security of the search index, we abuse $\dec(\cdot)$ to be the function that decrypts an encrypted document or a set of encrypted keywords associated to an encrypted document, and outputs the set of real keywords.
 
 \begin{definition}[Security against Keyword Guessing Attack] \label{Security against Keyword Guessing Attack}
-We define an keyword guessing attack adversary to be $\mathcal{A} = (\mathcal{A}_0, \mathcal{A}_1)$, where $\mathcal{A}_0$ is a probabilistic polynomial time (PPT) adversary which takes in the security parameter and generates a database $\db$, and $\mathcal{A}_1$ is a PPT adversary which takes in the security parameter, generated database $\db$ and encrypted database $\edb$, and returns a pair of keyword and encrypted keyword. The experiment can be described as follows:
+We define an keyword guessing attack adversary to be $\mathcal{A} = (\mathcal{A}_0, \mathcal{A}_1)$, where $\mathcal{A}_0$ is a probabilistic polynomial time (PPT) adversary which takes in the security parameter and generates a state $\state$ and a database $\db$, and $\mathcal{A}_1$ is a PPT adversary which takes in the security parameter, state $\state$ and encrypted database $\edb$, and returns a pair of keyword and encrypted keyword. The experiment can be described as follows:
 
 \begin{pchstack}[center]
 	\procedure{Exp$_{\adv}^{\text{Keyword-Guessing}}(n)$}{%
 		\pcln \key \sample \kgen(\secparam) \\
-		\pcln \db  \gets \mathcal{A}_0(\secparam) \\
+		\pcln (\state, \db)  \gets \mathcal{A}_0(\secparam) \\
 		\pcln \edb \gets \enc(\secparam, \key, \db) \\
-		\pcln (m, c) \gets \mathcal{A}_1(\secparam, \db, \edb) \\
-		\pcln \pcif (\dec(c) = m) \pcreturn 1 - f(m, \db) \\
+		\pcln (m, c) \gets \mathcal{A}_1(\secparam, \state, \edb) \\
+		\pcln \pcif (m \in \KWset(\db)) \wedge (c \in \EKWset(\edb)) \wedge (\dec(c) = m) \\
+		\pcln \pcind \pcreturn 1 - f(m, \db) \\
 		\pcln \pcelse \pcreturn - f(m, \db)
 	}
 \end{pchstack}
@@ -36,7 +48,7 @@ This security notion is hard to work with because the database the adversary can
 In the next experiment, the adversary is only given the leakage associated to the mechanism applied to the generated database. We argue that by choosing the leakage carefully, the advantage for the experiment will be the same as the previous one, up to an additive negligible term. We begin by defining leakage of searchable encryption.
 
 
-\begin{definition}[Leakage of Searchable Encryption]
+\begin{definition}[Leakage of Encryption Schemes for Searching]
 Let $\enc$ be the encryption algorithm for some searchable encryption scheme. We say $\leakm: \db \times \key \rightarrow \{0,1\}^{*}$ is a valid leakage function for the mechanism if for all adversaries $\mathcal{A}$ there exists a simulator $\mathcal{S}$ such that for any PPT distinguishers $\mathcal{D}$, the following two games are indistinguishable.
 	
 \begin{pchstack}[center]
@@ -65,14 +77,15 @@ Now we are ready to define security against idealised keyword guessing attack.
 
 
 \begin{definition}[Security against Idealised Keyword Guessing Attack]
-We define an idealised keyword guessing attack adversary to be $\mathcal{A} = (\mathcal{A}_0, \mathcal{A}_1)$, where $\mathcal{A}_0$ is a PPT adversary which takes in the security parameter and generates a database $\db$, and $\mathcal{A}_1$ is any adversary (not necessarily polynomial time bounded) which takes in the security parameter, generated database $\db$ and leakage $\leak$ generated by the minimal leakage function $\leakm$, and returns a pair of keyword and encrypted keyword. The experiment can be described as follows:
+We define an idealised keyword guessing attack adversary to be $\mathcal{A} = (\mathcal{A}_0, \mathcal{A}_1)$, where $\mathcal{A}_0$ is a PPT adversary which takes in the security parameter and generates a state $\state$ and a database $\db$, and $\mathcal{A}_1$ is any adversary (not necessarily polynomial time bounded) which takes in the security parameter, state $\state$ and leakage $\leak$ generated by the minimal leakage function $\leakm$, and returns a pair of keyword and encrypted keyword. The experiment can be described as follows:
 \begin{pchstack}[center]
 	\procedure{Exp$_{\adv}^{\text{Keyword-Guessing-Ideal}}(n)$}{%
 		\pcln \key \sample \kgen(\secparam) \\
-		\pcln \db  \gets \mathcal{A}_0(\secparam) \\
+		\pcln (\state, \db)  \gets \mathcal{A}_0(\secparam) \\
 		\pcln \leak \gets \leakm(\secparam, \key, \db) \\
-		\pcln (m, c) \gets \mathcal{A}_1(\secparam, \db, \leak) \\
-		\pcln \pcif (\dec(c) = m) \ \pcreturn 1 - f(m, \db) \\
+		\pcln (m, c) \gets \mathcal{A}_1(\secparam, \state, \edb) \\
+		\pcln \pcif (m \in \KWset(\db)) \wedge (c \in \EKWset(\edb)) \wedge (\dec(c) = m) \\
+		\pcln \pcind \pcreturn 1 - f(m, \db) \\
 		\pcln \pcelse \pcreturn - f(m, \db)
 	}
 \end{pchstack}

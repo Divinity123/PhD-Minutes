@@ -26,6 +26,6 @@ for file in files:
     words = set(word_tokenize(fp.read()))
     sizes.append(len(words))
 
-sizes = sorted(sizes, reverse=True)
-print(sizes)
+#sizes = sorted(sizes, reverse=True)
+print(sum(sizes)/len(files))
 

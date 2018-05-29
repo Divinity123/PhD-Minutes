@@ -1,7 +1,7 @@
 In this section, we motivate and give several constructions of searchable encryption.
 
 \subsection{Additional Notations}
-Let $\kwset(\cdot)$ denotes a function that takes in a file or document and returns the set of keywords associated to it. If it takes the whole database as input, it returns the set of keywords in all documents. Similarly, we let $f(\doc)$ to be a function that returns the file associated to a document $\doc$. We write $\perm_a^{\kwset(\db)}$ to mean a permutation on $\kwset(\db)$. The permutation is a product of $\frac{|\kwset(\db)|}{a}$ disjoint cycles of length $a$. When the keyword set is well-understood, we omit it from the notation. Let $\kwset$ be a set of keywords, we abuse the notation $\perm_a(\kwset)$ to mean $\perm_a(\kwset) = \{ \perm_a^n(w) \mid w \in \kwset \}$.
+Let $\kwset(\cdot)$ denotes a function that takes in a file and returns the set of keywords associated to it. We write $\perm_a^{\kwset(\db)}$ to mean a permutation on $\kwset(\db)$. The permutation is a product of $\frac{|\kwset(\db)|}{a}$ disjoint cycles of length $a$. When the keyword set is well-understood, we omit it from the notation. Let $\kwset$ be a set of keywords, we abuse the notation $\perm_a(\kwset)$ to mean $\perm_a(\kwset) = \{ \perm_a^n(w) \mid w \in \kwset \}$.
 
 
 
@@ -24,9 +24,9 @@ All of our constructions rely on a permutation $P_a$. The idea is that we transf
 In this subsection, we give definition of co-occurrence matrices and permutable co-occurrence matrices, and show how these can help us achieve security.
 
 \begin{definition}[Co-occurrence at level $l$ with Documents]
-Co-occurrence at level $l$ on database $\db$ with documents is defined to be $\dcm_{l}^{\db}: \kwset(\db)^l \rightarrow \doc^{*}$.
+Co-occurrence at level $l$ on database $\db$ with documents is defined to be $\dcm_{l}^{\db}: \kwset(\db)^l \rightarrow \mathcal{P}(\File)$.
 \begin{equation}
-	\dcm_{l}^{\db}(\kw_1, \dots, \kw_l) := \{ \doc \mid  (\kw_i \neq \kw_j \forall i,j) \wedge (\doc \in \db) \wedge (\{\kw_1, \dots, \kw_l\} = \kwset(\doc)) \}.
+	\dcm_{l}^{\db}(\kw_1, \dots, \kw_l) := \{ \file \mid  (\kw_i \neq \kw_j \forall i,j) \wedge (\file \in \File) \wedge (\{\kw_1, \dots, \kw_l\} = \kwset(\file)) \}.
 \end{equation}
 \end{definition}
 
@@ -41,9 +41,9 @@ Sometimes, only the counts in the co-occurrence matrix is of interest to us. So 
 When the database $\db$ is well-understood, we omit it from the notation. With this definition, we can talk about co-occurrence of arbitrary number of keywords. For example, counts of keywords corresponds to $\ccm_1$, and co-occurrence is $\ccm_2$. Similar definition can be made with the encrypted database, we give them briefly here.
 
 \begin{definition}[Co-occurrence at level $d$ with Encrypted Documents]
-	Co-occurrence at level $l$ on encrypted database $\edb$ with encrypted documents is defined to be $\edcm_{l}^{\edb}: \ekwset(\edb)^l \rightarrow \edoc^{*}$.
+	Co-occurrence at level $l$ on encrypted database $\edb$ with encrypted documents is defined to be $\edcm_{l}^{\edb}: \ekwset(\edb)^l \rightarrow \mathcal{P}(\EFile)$.
 	\begin{equation}
-	\edcm_{l}^{\edb}(\ekw_1, \dots, \ekw_l) := \{ \edoc \mid  (\ekw_i \neq \ekw_j \forall i,j) \wedge (\edoc \in \edb) \wedge (\{\ekw_1, \dots, \ekw_l\} = \dec(\edoc)) \}.
+	\edcm_{l}^{\edb}(\ekw_1, \dots, \ekw_l) := \{ \efile \mid  (\ekw_i \neq \ekw_j \forall i,j) \wedge (\efile \in \edb) \wedge (\{\ekw_1, \dots, \ekw_l\} = \dec(\efile)) \}.
 	\end{equation}
 \end{definition}
 
@@ -102,10 +102,10 @@ One straightforward way to achieve the permutation property is to pad fake docum
 \pchspace
 \procedure{$\enc(\secparam, (\key, \perm_a), \db)$}{%
 	\pcln \db' = () \\
-	\pcln \pcfor \doc \in \db: \\
-	\pcln \pcind[1] \db' = \db' + (\kwset(\doc), (True, \file(\doc))) \\
+	\pcln \pcfor \file \in \db: \\
+	\pcln \pcind[1] \db' = \db' + (\kwset(\file), (True, \file)) \\
 	\pcln \pcind[1] \pcfor i = 1, \dots, a-1: \\
-	\pcln \pcind[2] \db' = \db' + ((P_a)^i(\kwset(\doc)), (False, \texttt{FGen}(\secparam, (P_a)^i(\kwset(\doc)))) \\
+	\pcln \pcind[2] \db' = \db' + ((P_a)^i(\kwset(\file)), (False, \texttt{FGen}(\secparam, (P_a)^i(\kwset(\file)))) \\
 	\pcln \pcreturn \overline{\enc}(\secparam, \key, \db')
 }
 \end{pchstack}
@@ -113,8 +113,8 @@ One straightforward way to achieve the permutation property is to pad fake docum
 \pcvspace
 \procedure{$\dec(\secparam, (\key, \perm_a), \edb)$}{%
 	\pcln \db = () \\
-	\pcln \pcfor \edoc \in \edb: \\
-	\pcln \pcind[1] (\kwset, (b, \file)) \gets \overline{\dec}(\secparam, (\key, \perm_a), \edoc) \\
+	\pcln \pcfor \efile \in \edb: \\
+	\pcln \pcind[1] (\kwset, (b, \file)) \gets \overline{\dec}(\secparam, (\key, \perm_a), \efile) \\
 	\pcln \pcind[1] \pcif b = True: \\
 	\pcln \pcind[2] \db = \db + ((\kwset, \file)) \\
 	\pcln \pcreturn \db
@@ -167,17 +167,17 @@ Let $(\overline{\kgen}, \overline{\enc}, \overline{\dec})$ be a secure encryptio
 \pchspace
 \procedure{$\enc(\secparam, (\key, \perm_a), \db)$}{%
 	\pcln \db' = () \\
-	\pcln \pcfor \doc \in \db: \\
-	\pcln \kwset' = \cup_{i=0}^{a-1} (P_a)^i(\kwset(\doc))\\
-	\pcln \pcind[1] \db' = \db' + (\kwset', \file(\doc)) \\
+	\pcln \pcfor \file \in \db: \\
+	\pcln \kwset' = \cup_{i=0}^{a-1} (P_a)^i(\kwset(\file))\\
+	\pcln \pcind[1] \db' = \db' + (\kwset', \file) \\
 	\pcln \pcreturn \overline{\enc}(\secparam, \key, \db')
 }
 	
 \pchspace
 \procedure{$\dec(\secparam, (\key, \perm_a), \edb)$}{%
 	\pcln \db = () \\
-	\pcln \pcfor \edoc \in \edb: \\
-	\pcln \db = \db + \dec(\edoc) \\
+	\pcln \pcfor \efile \in \edb: \\
+	\pcln \db = \db + \dec(\efile) \\
 	\pcln \pcreturn \db
 }
 \end{pchstack}
@@ -194,13 +194,13 @@ Our last scheme takes a step further and apply the permutation to a set of files
 \begin{pchstack}[center]
 \procedure{$\enc(\secparam, (\key, \perm_a), \db)$}{%
 	\pcln \db' = () \\
-	\pcln \pcfor \{\doc_1, \cdots, \doc_a\} \sample \db: \\
-	\pcln \pcind[1] \kwset' = \cup_{i=1}^{a} (P_a)^{a-i+1} (\kwset(\doc_i)) \\
-	\pcln \pcind[1] db' = db' + ((\kwset', \file(\doc_1))) \\
+	\pcln \pcfor \{\file_1, \cdots, \file_a\} \sample \db: \\
+	\pcln \pcind[1] \kwset' = \cup_{i=1}^{a} (P_a)^{a-i+1} (\kwset(\file_i)) \\
+	\pcln \pcind[1] db' = db' + ((\kwset', \file(\file_1))) \\
 	\pcln \pcind[1] \pcfor j = 2, \cdots, a: \\
 	\pcln \pcind[2] \kwset' = (P_a) (\kwset') \\
-	\pcln \pcind[2] \db' = \db' + ((\kwset', \file(\doc_j))) \\
-	\pcln \pcind[1] \db = \db \backslash \{\doc_1, \cdots, \doc_a\} \\
+	\pcln \pcind[2] \db' = \db' + ((\kwset', \file(\file_j))) \\
+	\pcln \pcind[1] \db = \db \backslash \{\file_1, \cdots, \file_a\} \\
 	\pcln \pcreturn \overline{\enc}(\secparam, \key, \db')
 }
 \end{pchstack}

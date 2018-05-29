@@ -1,22 +1,44 @@
+The following notations are used for sets we used to describe a searchable database.
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ll}
+		\textbf{Notation} & \textbf{Explanation} \\ \hline
+		$\DB$     	  	  & Set of searchable databases \\
+		$\EDB$    		  & Set of encrypted searchable databases \\
+		$\KWset$		  & Set of keywords in a database \\
+		$\EKWset$		  & Set of encrypted keywords in a encrypted searchable databases \\
+		$\EIndex$		  & Set of encrypted indices for keyword searching \\
+		$\File$			  & Set of files \\
+		$\EFile$		  & Set of encrypted files \\
+		$\Query$		  & Set of queries on the database \\
+		$\EQuery$		  & Set of encrypted queries on encrypted database \\
+		$\QState$		  & Set of states to remember the query \\
+		$\Response$		  & Set of responses from a query \\
+		$\EResponse$	  & Set of encrypted responses from an encrypted query
+	\end{tabular}
+\end{table}
+
+
+The following notations are used to describe realisations of a database.
 \begin{table}[H]
 	\centering
 	\begin{tabular}{ll}
 		\textbf{Notation} & \textbf{Explanation} \\ \hline
 		$\db$     	  	  & Database that has not been encrypted \\
 		$\edb$    		  & Encrypted database \\
-		$\doc$            & A document in the database \\
-		$\file$     	  & A file associated to some document \\
-		$\kwset$          & A set of keywords associated to some file \\
-		$\kw$             & A keyword in a keyword set \\
-		$\edoc$           & An encrypted document \\
-		$\efile$          & An encrypted file \\
-		$\ekwset$         & A set of encrypted keywords \\
-		$\ekw$            & An encrypted keyword
+		$\kwset$		  & Keyword set associated to some file \\
+		$\kw$			  & A keyword from keyword set $\KWset$ \\
+		$\ekwset$		  & Encrypted set associated to some encrypted file \\
+		$\ekw$			  & An encrypted keyword from encrypted keyword set $\EKWset$ \\
+		$\eindex$		  & An encrypted index associated to an encrypted database \\
+		$\file$			  & A file in the database \\
+		$\efile$		  & An encrypted file \\
+		$\query$		  & A query on the database \\
+		$\equery$		  & An encrypted query on the encrypted database \\
+		$\qState$		  & A state to remember the query \\
+		$\response$		  & A response from a query \\
+		$\eResponse$	  & An encrypted response from an encrypted query
 	\end{tabular}
 \end{table}
 
-\textbf{Structure of the database.} We write $\db = (\doc_1, \doc_2, \dots, \doc_{n_0})$ where $n_0$ is the number of documents in the database. Each document $\doc$ can be written as $\doc = (\kwset, \file)$ where $\file$ is some file and $\kwset$ is the set of keywords associated to $\file$. Finally, $\kwset$ is a list of keywords so $\kwset = \{\kw_1, \dots, \kw_l\}$ for some $l$.
-
-\textbf{Structure of the encrypted database.} Similarly, on encrypted database, we have $\edb = (\edoc_1, \edoc_2, \dots, \edoc_{n_1})$ where $n_1$ is the number of encrypted documents in the database. Each encrypted document $\edoc$ can be written as $\edoc = (\ekwset, \efile)$ where $\efile$ is some encrypted file and $\ekwset$ is the set of encrypted keywords associated to $\efile$. Finally, $\kwset$ is a list of encrypted keywords so $\ekwset = \{\ekw_1, \dots, \ekw_l\}$ for some $l$.
-
-We omit definition of syntax of searchable encryption in this document.
+We use $\Pi_i$ to mean projection of a product of sets to its $i$-th component. For example, $\Pi_1(A \times B) = A$. We abuse $\kwset(\file)$ and $\File(\kwset)$ to mean set of keywords associated to file $\file$ and the set of files associated to keyword set $\kwset$. Similarly, we abuse $\ekwset(\efile)$ and $\EFile(\kwset)$ to mean set of encrypted keywords associated to encrypted file $\efile$ and the set of encrypted files associated to keyword set $\kwset$. We may write $\KWset(\db)$ to mean the set of keywords associated to the database $\db$ and $\EKWset(\edb)$ to mean the set of encrypted keywords associated to the encrypted database $\edb$.
