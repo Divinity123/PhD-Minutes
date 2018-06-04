@@ -12,7 +12,7 @@ The following notations are used for sets we used to describe a searchable datab
 		$\EFile$		  & Set of encrypted files \\
 		$\Query$		  & Set of queries on the database \\
 		$\EQuery$		  & Set of encrypted queries on encrypted database \\
-		$\QState$		  & Set of states to remember the query \\
+		$\CState$		  & Set of states of the client \\
 		$\Response$		  & Set of responses from a query \\
 		$\EResponse$	  & Set of encrypted responses from an encrypted query
 	\end{tabular}
@@ -35,10 +35,10 @@ The following notations are used to describe realisations of a database.
 		$\efile$		  & An encrypted file \\
 		$\query$		  & A query on the database \\
 		$\equery$		  & An encrypted query on the encrypted database \\
-		$\qState$		  & A state to remember the query \\
+		$\cState$		  & A state of the client \\
 		$\response$		  & A response from a query \\
 		$\eResponse$	  & An encrypted response from an encrypted query
 	\end{tabular}
 \end{table}
 
-We use $\Pi_i$ to mean projection of a product of sets to its $i$-th component. For example, $\Pi_1(A \times B) = A$. We abuse $\kwset(\file)$ and $\File(\kwset)$ to mean set of keywords associated to file $\file$ and the set of files associated to keyword set $\kwset$. Similarly, we abuse $\ekwset(\efile)$ and $\EFile(\kwset)$ to mean set of encrypted keywords associated to encrypted file $\efile$ and the set of encrypted files associated to keyword set $\kwset$. We may write $\KWset(\db)$ to mean the set of keywords associated to the database $\db$ and $\EKWset(\edb)$ to mean the set of encrypted keywords associated to the encrypted database $\edb$.
+We use $\Pi_i$ to mean projection of a product of sets to its $i$-th component. For example, $\Pi_1(A \times B) = A$. We may also use it to return the $i$-th element in a tuple. For example, $\Pi_1((A, B)) = A$.  We abuse $\kwset(\file)$ and $\File(\kwset)$ to mean set of keywords associated to file $\file$ and the set of files associated to keyword set $\kwset$. Similarly, we abuse $\ekwset(\efile)$ and $\EFile(\kwset)$ to mean set of encrypted keywords associated to encrypted file $\efile$ and the set of encrypted files associated to keyword set $\kwset$.

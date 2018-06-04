@@ -2,29 +2,30 @@
 \usepackage[margin=1in]{geometry}
 \setlength\parindent{0pt}
 \setlength{\parskip}{1em}
-\title{First Draft of Paper}
+\title{Draft of Paper}
 
 % packages
-\usepackage{float, amsmath, amsthm, bbm, amsfonts, mathtools, url, tikz}
+\usepackage{float, amsmath, amsthm, bbm, amsfonts, mathtools, url, tikz, comment}
 \usepackage [n, operators, sets, adversary, landau, probability, notions, logic, ff, mm, primitives, events, complexity, asymptotics] {cryptocode}
 
 % Notation for sets
-\newcommand{\key}{\textbf{K}}
+\newcommand{\Key}{\mathcal{K}}
 \newcommand{\DB}{DB}
 \newcommand{\EDB}{EDB}
-\newcommand{\KWset}{\mathcal{K}}
-\newcommand{\EKWset}{\mathcal{EK}}
+\newcommand{\KWset}{\mathcal{W}}
+\newcommand{\EKWset}{\mathcal{EW}}
 \newcommand{\EIndex}{\mathcal{EI}}
 \newcommand{\File}{F}
 \newcommand{\EFile}{EF}
 \newcommand{\Query}{Q}
 \newcommand{\EQuery}{EQ}
-\newcommand{\QState}{QST}
+\newcommand{\CState}{CST}
 \newcommand{\Response}{R}
 \newcommand{\EResponse}{ER}
 
 
 % Notation for realisations
+\newcommand{\key}{\text{k}}
 \newcommand{\db}{db}
 \newcommand{\edb}{edb}
 \newcommand{\kwset}{W}
@@ -36,12 +37,13 @@
 \newcommand{\efile}{ef}
 \newcommand{\query}{q}
 \newcommand{\equery}{eq}
-\newcommand{\qState}{qst}
+\newcommand{\cState}{cst}
 \newcommand{\response}{r}
 \newcommand{\eResponse}{er}
 
 
 % Notation for functions
+\newcommand{\Initialisation}{\text{Init}}
 \newcommand{\QueryFunction}{\text{Query}}
 \newcommand{\EncQ}{\text{EncQ}}
 \newcommand{\EQueryFunction}{\text{EQuery}}
@@ -54,6 +56,14 @@
 \newcommand{\channel}{\mathcal{C}}
 \newcommand{\channelm}{\mathcal{C}_{\leakm}}
 
+
+% Notation for g-leakage and security notions
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\Y}{\mathcal{Y}}
+\newcommand{\Z}{\mathcal{Z}}
+\newcommand{\W}{\mathcal{W}}
+
+
 \newcommand{\perm}{P}
 \newcommand{\dcm}{DC}
 \newcommand{\ccm}{CC}
@@ -65,6 +75,7 @@
 \newtheorem{definition}{Definition}
 \newtheorem{theorem}[definition]{Theorem}
 \newtheorem{proposition}[definition]{Proposition}
+\newtheorem{corollary}[definition]{Corollary}
 
 
 
@@ -90,13 +101,14 @@
 \input{Security_Notions}
 
 
+\begin{comment}
 \section{Constructions}
 \input{Constructions}
 
 
 \section{Security Analysis}
 \input{Security_Analysis}
-
+\end{comment}
 
 
 
