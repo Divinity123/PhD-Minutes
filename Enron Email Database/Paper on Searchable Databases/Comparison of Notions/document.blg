@@ -1,0 +1,10 @@
+This is BibTeX, Version 0.99dThe top-level auxiliary file: document.aux
+The style file: unsrt.bst
+I couldn't open database file additional_citations.bib
+---line 9 of file document.aux
+ : \bibdata{abbrev0,crypto,additional_citations
+ :                                             }
+I'm skipping whatever remains of this command
+Database file #1: abbrev0.bib
+Database file #2: crypto.bib
+(There was 1 error message)

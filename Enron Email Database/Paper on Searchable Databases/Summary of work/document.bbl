@@ -12,6 +12,14 @@ Eu-Jin Goh.
 \newblock Cryptology ePrint Archive, Report 2003/216, 2003.
 \newblock \url{http://eprint.iacr.org/2003/216}.
 
+\bibitem{ACNS:ChaMit05}
+Yan-Cheng Chang and Michael Mitzenmacher.
+\newblock Privacy preserving keyword searches on remote encrypted data.
+\newblock In John Ioannidis, Angelos Keromytis, and Moti Yung, editors, {\em
+  ACNS 05: 3rd International Conference on Applied Cryptography and Network
+  Security}, volume 3531 of {\em Lecture Notes in Computer Science}, pages
+  442--455, New York, NY, USA, June~7--10, 2005. Springer, Heidelberg, Germany.
+
 \bibitem{CCS:CGKO06}
 Reza Curtmola, Juan~A. Garay, Seny Kamara, and Rafail Ostrovsky.
 \newblock Searchable symmetric encryption: improved definitions and efficient
@@ -29,32 +37,36 @@ Melissa Chase and Seny Kamara.
   pages 577--594, Singapore, December~5--9, 2010. Springer, Heidelberg,
   Germany.
 
-\bibitem{C:CJJKRS13}
-David Cash, Stanislaw Jarecki, Charanjit~S. Jutla, Hugo Krawczyk,
-  Marcel-Catalin Rosu, and Michael Steiner.
-\newblock Highly-scalable searchable symmetric encryption with support for
-  {Boolean} queries.
-\newblock In Ran Canetti and Juan~A. Garay, editors, {\em Advances in
-  Cryptology -- {CRYPTO}~2013, Part~I}, volume 8042 of {\em Lecture Notes in
-  Computer Science}, pages 353--373, Santa Barbara, CA, USA, August~18--22,
-  2013. Springer, Heidelberg, Germany.
+\bibitem{EPRINT:KamPapRoe12}
+Seny Kamara, Charalampos Papamanthou, and Tom Roeder.
+\newblock Dynamic searchable symmetric encryption.
+\newblock Cryptology ePrint Archive, Report 2012/530, 2012.
+\newblock \url{http://eprint.iacr.org/2012/530}.
 
-\bibitem{NDSS:StePapShi14}
-Emil Stefanov, Charalampos Papamanthou, and Elaine Shi.
-\newblock Practical dynamic searchable encryption with small leakage.
+\bibitem{FC:KamPap13}
+Seny Kamara and Charalampos Papamanthou.
+\newblock Parallel and dynamic searchable symmetric encryption.
+\newblock In Ahmad-Reza Sadeghi, editor, {\em FC 2013: 17th International
+  Conference on Financial Cryptography and Data Security}, volume 7859 of {\em
+  Lecture Notes in Computer Science}, pages 258--274, Okinawa, Japan,
+  April~1--5, 2013. Springer, Heidelberg, Germany.
+
+\bibitem{NDSS:CJJJKR14}
+David Cash, Joseph Jaeger, Stanislaw Jarecki, Charanjit~S. Jutla, Hugo
+  Krawczyk, Marcel-Catalin Rosu, and Michael Steiner.
+\newblock Dynamic searchable encryption in very-large databases: Data
+  structures and implementation.
 \newblock In {\em {ISOC} Network and Distributed System Security Symposium --
   {NDSS}~2014}, San Diego, CA, USA, February~23--26, 2014. The Internet
   Society.
 
-\bibitem{ESORICS:FJKNRS15}
-Sky Faber, Stanislaw Jarecki, Hugo Krawczyk, Quan Nguyen, Marcel-Catalin Rosu,
-  and Michael Steiner.
-\newblock Rich queries on encrypted data: Beyond exact matches.
-\newblock In G{\"u}nther Pernul, Peter Y.~A. Ryan, and Edgar~R. Weippl,
-  editors, {\em ESORICS~2015: 20th European Symposium on Research in Computer
-  Security, Part~II}, volume 9327 of {\em Lecture Notes in Computer Science},
-  pages 123--145, Vienna, Austria, September~21--25, 2015. Springer,
-  Heidelberg, Germany.
+\bibitem{FC:KurOht12}
+Kaoru Kurosawa and Yasuhiro Ohtaki.
+\newblock {UC}-secure searchable symmetric encryption.
+\newblock In Angelos~D. Keromytis, editor, {\em FC 2012: 16th International
+  Conference on Financial Cryptography and Data Security}, volume 7397 of {\em
+  Lecture Notes in Computer Science}, pages 285--298, Kralendijk, Bonaire,
+  February~27~--~March~2, 2012. Springer, Heidelberg, Germany.
 
 \bibitem{CCS:NavKamWri15}
 Muhammad Naveed, Seny Kamara, and Charles~V. Wright.

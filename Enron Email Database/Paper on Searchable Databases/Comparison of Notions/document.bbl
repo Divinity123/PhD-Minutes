@@ -1,0 +1,40 @@
+\begin{thebibliography}{1}
+
+\bibitem{EPRINT:Goh03}
+Eu-Jin Goh.
+\newblock Secure indexes.
+\newblock Cryptology ePrint Archive, Report 2003/216, 2003.
+\newblock \url{http://eprint.iacr.org/2003/216}.
+
+\bibitem{CCS:CGKO06}
+Reza Curtmola, Juan~A. Garay, Seny Kamara, and Rafail Ostrovsky.
+\newblock Searchable symmetric encryption: improved definitions and efficient
+  constructions.
+\newblock In Ari Juels, Rebecca~N. Wright, and {Sabrina De Capitani di}
+  Vimercati, editors, {\em ACM CCS 06: 13th Conference on Computer and
+  Communications Security}, pages 79--88, Alexandria, Virginia, USA,
+  October~30~--~November~3, 2006. {ACM} Press.
+
+\bibitem{AC:ChaKam10}
+Melissa Chase and Seny Kamara.
+\newblock Structured encryption and controlled disclosure.
+\newblock In Masayuki Abe, editor, {\em Advances in Cryptology --
+  {ASIACRYPT}~2010}, volume 6477 of {\em Lecture Notes in Computer Science},
+  pages 577--594, Singapore, December~5--9, 2010. Springer, Heidelberg,
+  Germany.
+
+\bibitem{FC:KurOht12}
+Kaoru Kurosawa and Yasuhiro Ohtaki.
+\newblock {UC}-secure searchable symmetric encryption.
+\newblock In Angelos~D. Keromytis, editor, {\em FC 2012: 16th International
+  Conference on Financial Cryptography and Data Security}, volume 7397 of {\em
+  Lecture Notes in Computer Science}, pages 285--298, Kralendijk, Bonaire,
+  February~27~--~March~2, 2012. Springer, Heidelberg, Germany.
+
+\bibitem{EPRINT:KamPapRoe12}
+Seny Kamara, Charalampos Papamanthou, and Tom Roeder.
+\newblock Dynamic searchable symmetric encryption.
+\newblock Cryptology ePrint Archive, Report 2012/530, 2012.
+\newblock \url{http://eprint.iacr.org/2012/530}.
+
+\end{thebibliography}

@@ -1,9 +1,10 @@
-\subsection{Database}
-A database $\db$ consists of a set of keywords $\KWset$ and a set of files $\File$, so $\db = (\KWset, \File)$. Each file $\file \in \File$ contains some keywords specified by the user. For simplicity of notation, we denote keywords associated to a file $\kwset = \KWset(\file)$. The database supports queries via function $\QueryFunction: \DB \times \Query \rightarrow \DB \times \Response$, where $\Query$ is a set of queries on the database and $\Response$ is some response. Since we are talking about encryptions for searching, searching of keywords must be one of the supported query types. In terms of notation, we may write $\KWset(\db)$ to mean the set of keywords associated to the database $\db$, i.e. $\KWset(\db) = \Pi_1(\db)$.
+In this section, we define syntax of searchable encrypted database and then refine it for keyword search.
 
 
-\subsection{Encrypted Database}
-An encrypted database $\edb$ consists of a set of encrypted keywords $\EKWset$, a set of encrypted files $\EFile$ and an encrypted index $\EIndex$ for encrypted queries, so $\edb = (\EKWset, \EFile, \EIndex)$. Each encrypted file $\efile \in \EFile$ contains some encrypted keywords which are encryptions of corresponds keywords for the plain files. Similar to unencrypted databases, we denote encrypted keywords associated to an encrypted file by $\ekwset = \EKWset(\efile)$. The encrypted database supports encrypted queries via function $\EQueryFunction: \EDB \times \EQuery \rightarrow \EDB \times \EResponse$. In terms of notation, we may write $\EKWset(\edb)$ to mean the set of keywords associated to the encrypted database $\edb$, i.e. $\EKWset(\edb) = \Pi_1(\edb)$.
+\subsection{Database and Encrypted Database}
+We define database $\db$ in the most general setting to be $\db \in \{0,1\}^{*}$. The database supports queries via function $\QueryFunction: \DB \times \Query \rightarrow \DB \times \Response$, where $\Query$ is a set of queries on the database and $\Response$ is some response. 
+
+Similarly, the encrypted database $\edb$ is  $\edb \in \{0,1\}^{*}$. The encrypted database supports encrypted queries via function $\EQueryFunction: \EDB \times \EQuery \rightarrow \EDB \times \EResponse$. 
 
 
 \subsection{Functions between Database and Encrypted Database}
@@ -39,20 +40,24 @@ Given key $\key$, database $\db_0$, and queries $\query_0, \dots, \query_l$, and
 	\item For $i = 0, \dots, l$, \\
 		  $(\equery_i, \cState_i') \gets \EncQ(\key, \query_i, \cState_i)$; $(\edb_{i+1}, \eResponse_i) \gets \EQueryFunction(\edb_i, \equery_i)$; $(\response_i, \cState_{i+1}) \gets \DecResponse(\key, \eResponse_i, \cState_i')$.
 \end{enumerate}
-And an imaginary procedure:
+And a procedure:
 \begin{enumerate}
 	\item For $i = 0, \dots, l$, \\
 		  $(\db_{i+1}, \response_i') \gets \QueryFunction(\db_i, \query_i)$.
 \end{enumerate}
 
-We require that for all security parameter $\secparam$, key $\key$, database $\db_0$, and sequence of queries $\query_0, \dots, \query_l \in \Query{*}$ the following conditions hold:
+We require that for all security parameter $\secparam$, key $\key$, database $\db_0$, and sequence of queries $\query_0, \dots, \query_l \in \Query^{*}$ the following conditions hold:
 \begin{enumerate}
-	\item \textbf{Correctness of encryption and execution of queries on databases:} $\db_i = \dec(\edb_i)$.
+	\item \textbf{Correctness of encryption and execution of queries on databases:} $\db_i = \dec(\edb_i, \cState_i)$.
 	
 	\item \textbf{Correctness of query responses:} $\response_i = \response_i'$.
 \end{enumerate}
 
 
+\subsection{Refinement to Keyword Search}
+A database $\db$ for keyword search consists of a set of keywords $\KWset$ and a set of files $\File$, so $\db = (\KWset, \File)$. Each file $\file \in \File$ contains some keywords specified by the user. For simplicity of notation, we denote keywords associated to a file $\kwset = \KWset(\file)$. Since we are talking about encryptions for keyword search, searching of keywords must be one of the supported query types. In terms of notation, we may write $\KWset(\db)$ to mean the set of keywords associated to the database $\db$, i.e. $\KWset(\db) = \Pi_1(\db)$.
+
+An encrypted database $\edb$ for keyword search consists of a set of encrypted keywords $\EKWset$, a set of encrypted files $\EFile$ and an encrypted index $\EIndex$ for encrypted queries, so $\edb = (\EKWset, \EFile, \EIndex)$. Each encrypted file $\efile \in \EFile$ contains some encrypted keywords which are encryptions of corresponds keywords for the plain files. Similar to unencrypted databases, we denote encrypted keywords associated to an encrypted file by $\ekwset = \EKWset(\efile)$. Encrypted keyword search must be one of the supported encrypted query types. In terms of notation, we may write $\EKWset(\edb)$ to mean the set of keywords associated to the encrypted database $\edb$, i.e. $\EKWset(\edb) = \Pi_1(\edb)$.
 
 
 \begin{comment}

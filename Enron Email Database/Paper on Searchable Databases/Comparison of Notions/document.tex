@@ -1,0 +1,59 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\setlength\parindent{0pt}
+\setlength{\parskip}{1em}
+\title{Comparison of Notions}
+
+% packages
+\usepackage{float, amsmath, amsthm, bbm, amsfonts, mathtools, url, tikz, comment}
+\usepackage [n, operators, sets, adversary, landau, probability, notions, logic, ff, mm, primitives, events, complexity, asymptotics] {cryptocode}
+
+
+\begin{document}
+\section{Semantic Security against Adaptive Chosen Keyword Attack (IND1-CKA and IND2-CKA)}
+\begin{itemize}
+	\item \textbf{Proposed in:} \cite{EPRINT:Goh03}.
+	\item \textbf{Setup:} Each document has a search index.
+	\item \textbf{Idea(IND1-CKA):} Given index of one of two documents containing equal number of keywords, the adversary should not be able to tell which document it comes from.
+	\item \textbf{Modification(IND2-CKA):} The number of keywords in the two documents can be different.
+	\item \textbf{Adversarial Power:} Obtain trapdoor of any keywords apart from those in the two documents, and query the keywords on other documents.
+	\item \textbf{Shortcomings:} The trapdoor does not need to be secure, so anyone can generate it.
+\end{itemize}
+
+
+
+\section{(Non-Adaptive Indistinguishability/Semantic Security for SSE (IND-CKA1)}
+\begin{itemize}
+	\item \textbf{Proposed in:} \cite{CCS:CGKO06}.
+	\item \textbf{Idea:} Given two histories (database with a fixed number of queries), the challenger encrypts one of the trace (database and queries) into a view, and the adversary should not be able to tell which history it comes from. There is a restriction that the trace (document identifiers, document sizes, document containing a particular keyword, and search pattern) of the two histories are identical.
+	\item \textbf{Order of quantifiers for semantic security:} For $q$ (number of queries), for all adversaries, there exists a simulator, such that all functions on the histories are indistinguishable.
+\end{itemize}
+
+
+
+\section{Adaptive Indistinguishability/Semantic Security for SSE (IND-CKA2)}
+\begin{itemize}
+	\item \textbf{Proposed in:} \cite{CCS:CGKO06}.
+	\item \textbf{Idea:} Similar to above, except that the adversary is allowed to generate queries adaptively.
+\end{itemize}
+
+
+\section{Variants of IND-CKA2}
+\begin{itemize}
+	\item \textbf{Bit adversary:} IND-CQA2 in \cite{AC:ChaKam10}.
+	\item \textbf{Stronger IND-CQA2}: They require a simulator to work for all adversaries. The final adversary is a bit adversary. First appears in \cite{FC:KurOht12}.
+	\item \textbf{Random oracle (most recent and most popular):} Instead of fixing leakage in the definition, they are defined carefully and used as query oracles. Everything else follows IND-CQA2 closely. First appears in \cite{EPRINT:KamPapRoe12}. 
+\end{itemize}
+
+
+
+
+
+
+
+
+
+% biblography
+\bibliographystyle{unsrt}
+\bibliography{abbrev0,crypto,additional_citations}{}
+\end{document}
