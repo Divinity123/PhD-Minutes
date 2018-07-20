@@ -14,20 +14,20 @@ The first step towards this goal is to consider a snapshot adversary who only ha
 
 
 
-\subsection{Security Notion for Keyword Guessing Attack}
+\subsection{Security Notion for (Passive) Keyword Guessing Attack}
 There is a multitude of ways to evaluate how well the adversary has recovered information through keyword guessing attack. We will present with one of the simplest here. Namely, the adversary wins if he recovers a correct pair of keyword and its encryption (with one guess).
 
 For simplicity, we consider snapshot attack here so the adversary is given the leakage of the scheme and there is no interaction between the encrypted database and the adversary. We may abuse $\dec(\cdot)$ to be the function that decrypts an encrypted document or a set of encrypted keywords associated to an encrypted document, and outputs the set of real keywords.
 
 \begin{definition}[Security against Keyword Guessing Attack] \label{Security against Keyword Guessing Attack}
-We define a keyword guessing attack adversary to be $\mathcal{A} = (\mathcal{A}_0, \mathcal{A}_1)$, where $\mathcal{A}_0$ is a probabilistic polynomial time (PPT) adversary which takes in the security parameter and generates a state $\state$ and a database $\db$, and $\mathcal{A}_1$ is a PPT adversary which takes in the security parameter, state $\state$ and encrypted database $\edb$, and returns a pair of keyword and encrypted keyword. The experiment can be described as follows:
+We define a keyword guessing attack adversary to be $\mathcal{A} = (\mathcal{A}_0, \mathcal{A}_1)$, where $\mathcal{A}_0$ is a probabilistic polynomial time (PPT) adversary which takes in the security parameter and generates a database $\db$ and a state $\stateA$, and $\mathcal{A}_1$ is a PPT adversary which takes in the security parameter, encrypted database $\edb$ and state $\stateA$, and returns a pair of keyword and encrypted keyword. The experiment can be described as follows:
 
 \begin{pchstack}[center]
 	\procedure{Exp$_{\adv}^{\text{Keyword-Guessing}}(n)$}{%
 		\pcln \key \sample \kgen(\secparam) \\
-		\pcln (\state, \db)  \gets \mathcal{A}_0(\secparam) \\
+		\pcln (\db, \stateA)  \gets \mathcal{A}_0(\secparam) \\
 		\pcln \edb \gets \enc(\secparam, \key, \db) \\
-		\pcln (m, c) \gets \mathcal{A}_1(\secparam, \state, \edb) \\
+		\pcln (m, c) \gets \mathcal{A}_1(\secparam, \edb, \stateA) \\
 		\pcln \pcif (m \in \KWset(\db)) \wedge (c \in \EKWset(\edb)) \wedge (\dec(c) = m) \\
 		\pcln \pcind \pcreturn 1 - f(m, \db) \\
 		\pcln \pcelse \pcreturn - f(m, \db)
@@ -45,29 +45,29 @@ We say that a scheme is secure against keyword guessing attack if $\advantage_{\
 
 Intuitively, a scheme is secure against keyword guessing attack if there is no way he can guess any plaintext-ciphertext pair with probability greater than the frequency of the plaintexts. There are other possible definitions, for instance, one can look at the probability the adversary guessing all pairs of plaintexts and ciphertexts correctly.
 
-This security notion is hard to work with because the database the adversary can generate is literally anything and the encryption scheme can generate any ciphertext. But in our game, we really do not care if keywords are `1' and `2' or `one' and `two', nor do we care how the ciphertexts look like. To simplify the problem, we want to work with idealised databases and encryption schemes which allows us to ignore information that are not relevant to our security game. Due to necessity of efficient searchability, encryption schemes for searchable encryption cannot achieve IND-CPA security, and the `insecure part' of encryption function (and query functions) are understood in terms of leakage functions. Informally speaking, leakage function associated to a scheme captures what is leaked about the unencrypted database by looking at its encryption. For example, number of documents is part of leakage for any scheme that does not pad fake documents because after enough queries, all documents will be returned at least once, unless part of the database is never going to be returned by any query, but that defeats the purpose of putting them there in the first place.
+This security notion is hard to work with because the database the adversary can generate is literally anything and the encryption scheme can generate any ciphertext. But in our game, we really do not care if keywords are `1' and `2' or `one' and `two', nor do we care how the ciphertexts look like. To simplify the problem, we want to work with idealised databases and encryption schemes which allows us to ignore information that are not relevant to our security game. Due to necessity of efficient searchability, encryption schemes for searchable encryption cannot achieve IND-CPA security, and the `insecure part' of encryption function and query functions are understood in terms of leakage functions. Informally speaking, leakage function associated to a scheme captures what is leaked about the unencrypted database by looking at its encryption. For example, number of documents is part of leakage for any scheme that does not pad fake documents because after enough queries, all documents will be returned at least once, unless part of the database is never going to be returned by any query, but that defeats the purpose of putting them there in the first place.
 
-In the next experiment, the adversary is only given the leakage associated to the mechanism applied to the generated database. We argue that by choosing the leakage carefully, the advantage for the experiment will be the same as the previous one, up to an additive negligible term. We begin by defining leakage of searchable encryption.
+In the next experiment, the adversary is only given the leakage associated to the mechanism applied to the generated database and queries challenged by the adversary. We argue that by choosing the leakage carefully, the advantage for the experiment will be the same as the previous one, up to an additive negligible term. We begin by defining leakage of searchable encryption.
 
 
 \begin{definition}[Leakage of Encryption Schemes for Searching]
-Let $\enc$ be the encryption algorithm for some searchable encryption scheme. We say $\leakm: \{0,1\}^{*} \times \Key \times \db \rightarrow \{0,1\}^{*}$ is a sufficient leakage function for the mechanism if for all adversaries $\mathcal{A}$ there exists a simulator $\mathcal{S}$ such that for any PPT distinguishers $\mathcal{D}$, the following two games are indistinguishable.
+Let $\enc$ be the encryption algorithm for some searchable encryption scheme. We say $\leakm: \{0,1\}^{*} \times \Key \times \db \times \Query^{*} \rightarrow \{0,1\}^{*}$ is a sufficient leakage function for the mechanism if for all adversaries $\mathcal{A}$ there exists a simulator $\mathcal{S}$ such that for any PPT distinguishers $\mathcal{D}$, the following two games are indistinguishable.
 	
 \begin{pchstack}[center]
 \procedure{Real$_{\mathcal{A}}(n)$}{%
 	\pcln \key \sample \kgen(\secparam) \\
-	\pcln \db  \gets \mathcal{A}(\secparam) \\
-	\pcln \edb \gets \enc(\secparam, \key, \db) \\
-	\pcln \pcreturn \edb
+	\pcln (\db, \overrightarrow{\query}, \stateA)  \gets \mathcal{A}(\secparam) \\
+	\pcln (\edb, \overrightarrow{\equery}) \gets \enc(\secparam, \key, \db, \overrightarrow{\query}) \\
+	\pcln \pcreturn (\edb, \overrightarrow{\equery}, \stateA)
 }	
 
 \pchspace
 \procedure{$\simulator_{\mathcal{A,S}}(n)$}{%
 	\pcln \key \sample \kgen(\secparam) \\
-	\pcln \db   \gets \mathcal{A}(\secparam) \\
-	\pcln \leak \gets \leakm(\secparam, \key, \db) \\
-	\pcln \edb  \gets \mathcal{S}(\secparam, \leak) \\
-	\pcln \pcreturn \edb
+	\pcln (\db, \overrightarrow{\query}, \stateA)   \gets \mathcal{A}(\secparam) \\
+	\pcln \leak \gets \leakm(\secparam, \key, \db, \overrightarrow{\query}) \\
+	\pcln (\edb, \overrightarrow{\equery})  \gets \mathcal{S}(\secparam, \leak, \stateA) \\
+	\pcln \pcreturn (\edb, \overrightarrow{\equery}, \stateA)
 }
 \end{pchstack}
 
@@ -78,14 +78,14 @@ $\leakm$ is said to be minimal if there exists a simulator $\mathcal{S}$ such th
 Now we are ready to define security against idealised keyword guessing attack.
 
 
-\begin{definition}[Security against Idealised Keyword Guessing Attack]
-We define an idealised keyword guessing attack adversary to be $\mathcal{A} = (\mathcal{A}_0, \mathcal{A}_1)$, where $\mathcal{A}_0$ is a PPT adversary which takes in the security parameter and generates a state $\state$ and a database $\db$, and $\mathcal{A}_1$ is any adversary (not necessarily polynomial time bounded) which takes in the security parameter, state $\state$ and leakage $\leak$ generated by a sufficient leakage function $\leakm$, and returns a pair of keyword and encrypted keyword. The experiment can be described as follows:
+\begin{definition}[Security against Idealised (Passive) Keyword Guessing Attack]
+We define an idealised keyword guessing attack adversary to be $\mathcal{A} = (\mathcal{A}_0, \mathcal{A}_1)$, where $\mathcal{A}_0$ is a PPT adversary which takes in the security parameter and generates  a database $\db$ and a state $\stateA$, and $\mathcal{A}_1$ is any adversary (not necessarily polynomial time bounded) which takes in the security parameter, leakage $\leak$ generated by a sufficient leakage function $\leakm$ and a state $\stateA$, and returns a pair of keyword and encrypted keyword. The experiment can be described as follows:
 \begin{pchstack}[center]
 	\procedure{Exp$_{\adv}^{\text{Keyword-Guessing-Ideal}}(n)$}{%
 		\pcln \key \sample \kgen(\secparam) \\
-		\pcln (\state, \db)  \gets \mathcal{A}_0(\secparam) \\
+		\pcln (\db, \stateA)  \gets \mathcal{A}_0(\secparam) \\
 		\pcln \leak \gets \leakm(\secparam, \key, \db) \\
-		\pcln (m, c) \gets \mathcal{A}_1(\secparam, \state, \leak) \\
+		\pcln (m, c) \gets \mathcal{A}_1(\secparam, \leak, \stateA) \\
 		\pcln \pcif (m \in \KWset(\db)) \wedge (c \in \EKWset(\edb)) \wedge (\dec(c) = m) \\
 		\pcln \pcind \pcreturn 1 - f(m, \db) \\
 		\pcln \pcelse \pcreturn - f(m, \db)
@@ -108,18 +108,18 @@ Notice that in the definition, $\mathcal{A}_1$ does not need to be PT bounded. T
 \subsection{Moving from Fixed Target Function to Generic Gain Function}
 In the two games for keyword guessing attack we defined above, the content returned by the games are fixed so proving security with respect to the games only says the scheme is secure against this specific adversary who tries to recover this specific information. This is very inflexible as a security notion for application in searchable encryption. In addition, wrong guesses in these games are completely punished in this setting in the sense that they will never show up in the advantage term, even though wrong guesses can still reveal some information. Consider the case where the adversary always tries to guess decryption of some ciphertext $c$ and he always fails because his guess is some $m$ such that $\dec(c) \neq m$. But ultimately, the goal of the adversary can be to recover some keywords in some documents. If $m$ always appears together with $\dec(c)$ in all documents, then in fact, the adversary recovers a significant amount of information about the underlying database, even though the guess itself is wrong. So we need to reward those guesses that are not completely correct but still reveals information about the database appropriately.
 
-To do so, we use idea of gain function from g-leakage paper \cite{6266165}. To put it in simple words, instead returning something from the experiment and analyse it in the advantage term, we compute the gain at the end of the experiment, and the advantage is defined to be the expectation of the result of the experiment for the best adversary. We now define the games with gain functions.
+To do so, we use idea of gain function from g-leakage paper \cite{6266165}. To put it in simple words, instead returning something from the experiment and analyse it in the advantage term, we compute the gain at the end of the experiment, and the advantage is defined to be the expectation of the result of the experiment for the best adversary. As a starting point of understanding leakages, we define the games with gain functions for non-adaptive adversaries.
 
 
-\begin{definition}[Real Game with Gain Function]
-We define a real adversary with gain function $g$ to be $\mathcal{A} = (\mathcal{A}_0, \mathcal{A}_1)$, where $\mathcal{A}_0$ is a PPT adversary which takes in the security parameter and generates a database $\db$, and $\mathcal{A}_1$ is a PPT adversary which takes in the security parameter, and encrypted database $\edb$, and returns some guess $w$ in the set of allowed guesses $\W$. The experiment can be described as follows:
+\begin{definition}[Non-adaptive Real Game with Gain Function]
+We define a real adversary with gain function $g$ to be $\mathcal{A} = (\mathcal{A}_0, \mathcal{A}_1)$, where $\mathcal{A}_0$ is a PPT adversary which takes in the security parameter and generates a database $\db$, a set of queries $\overrightarrow{\query}$ and a state $\stateA$, and $\mathcal{A}_1$ is a PPT adversary which takes in the security parameter, encrypted database $\edb$, encrypted queries $\overrightarrow{\equery}$ and state $\stateA$, and returns some guess $w$ in the set of allowed guesses $\W$. The experiment can be described as follows:
 \begin{pchstack}[center]
 \procedure{Real$_{\adv}^{\ g}(n)$}{%
 	\pcln \key \sample \kgen(\secparam) \\
-	\pcln \db  \gets \mathcal{A}_0(\secparam) \\
-	\pcln \edb \gets \enc(\secparam, \key, \db) \\
-	\pcln w \gets \mathcal{A}_1(\secparam, \edb) \\
-	\pcln \pcreturn g(w, (\db, \key), \edb)
+	\pcln (\db, \overrightarrow{\query}, \stateA)  \gets \mathcal{A}_0(\secparam) \\
+	\pcln (\edb, \overrightarrow{\equery}) \gets \enc(\secparam, \key, \db, \overrightarrow{\query}) \\
+	\pcln w \gets \mathcal{A}_1(\secparam, \edb, \overrightarrow{\query}, \stateA) \\
+	\pcln \pcreturn g(w, (\key, \db, \overrightarrow{\query}, \stateA), (\edb, \overrightarrow{\equery}, \stateA))
 }
 \end{pchstack}
 
@@ -130,15 +130,15 @@ Advantage $\advantage_{\mathcal{A},g}^{\text{Real}}(n)$ is defined to be:
 \end{definition}
 
 
-\begin{definition}[Ideal Game with Gain Function]
-We define an ideal adversary with gain function $g$ to be $\mathcal{A} = (\mathcal{A}_0, \mathcal{A}_1)$, where $\mathcal{A}_0$ is a PPT adversary which takes in the security parameter and generates a database $\db$, and $\mathcal{A}_1$ is an adversary which takes in the security parameter, and a sufficient leakage function $\leakm$, and returns some guess $w$ in the set of allowed guesses $\W$. The experiment can be described as follows:
+\begin{definition}[Non-adaptive Ideal Game with Gain Function]
+We define an ideal adversary with gain function $g$ to be $\mathcal{A} = (\mathcal{A}_0, \mathcal{A}_1)$, where $\mathcal{A}_0$ is a PPT adversary which takes in the security parameter and generates a database $\db$, and a set of queries $\overrightarrow{\query}$, and $\mathcal{A}_1$ is an adversary which takes in the security parameter, and a sufficient leakage function $\leakm$, and returns some guess $w$ in the set of allowed guesses $\W$. The experiment can be described as follows:
 \begin{pchstack}[center]
 \procedure{Ideal$_{\adv}^{\ \leakm, g}(n)$}{%
 	\pcln \key \sample \kgen(\secparam) \\
-	\pcln \db  \gets \mathcal{A}_0(\secparam) \\
-	\pcln \leak \gets \leakm(\secparam, \db) \\
-	\pcln w \gets \mathcal{A}_1(\secparam, \key, \leak) \\
-	\pcln \pcreturn g(w, (\db, \key), \leak)
+	\pcln (\db, \overrightarrow{\query}, \stateA)  \gets \mathcal{A}_0(\secparam) \\
+	\pcln \leak \gets \leakm(\secparam, \key, \db, \overrightarrow{\query}) \\
+	\pcln w \gets \mathcal{A}_1(\secparam, \leak, \stateA) \\
+	\pcln \pcreturn g(w, (\key, \db, \overrightarrow{\query}, \stateA), (\leak, \stateA))
 }
 \end{pchstack}
 	
@@ -156,36 +156,36 @@ Note that we are not putting any condition to quantify when a scheme is secure u
 \subsection{Games with Gain Function are equivalent to some Extended Posterior g-vulnerabilities}
 In this subsection, we prove that in fact, we can look at the advantage from the games or some corresponding extended posterior g-vulnerability exchangeably. To do so, we need a slight tweak to the games above.
 
-Let $\pi$ be the prior on the joint distribution of databases and keys. Then the games above is equivalent to the following.
+Let $\pi$ be the prior on the joint distribution of keys, databases, queries and states, with the restriction that probability of observing any key is independent from the rest. Then the games above is equivalent to the following.
 \begin{pchstack}[center]
 \procedure{Real$_{\adv}^{\ \pi,g}(n)$}{%
-	\pcln (\db, \key) \sample \pi \\
-	\pcln \edb \gets \enc(\secparam, \key, \db) \\
-	\pcln w \gets \mathcal{A}_1(\secparam, \edb) \\
-	\pcln \pcreturn g(w, (\db, \key), \edb)
+	\pcln (\key, \db, \overrightarrow{\query}, \stateA) \sample \pi \\
+	\pcln (\edb, \overrightarrow{\equery}) \gets \enc(\secparam, \key, \db, \overrightarrow{\query}) \\
+	\pcln w \gets \mathcal{A}_1(\secparam, \edb, \overrightarrow{\equery}, \stateA) \\
+	\pcln \pcreturn g(w, (\key, \db, \overrightarrow{\query}, \stateA), (\edb, \overrightarrow{\equery}, \stateA))
 }
 
 \pchspace
 \procedure{Ideal$_{\adv}^{\ \pi, \leakm,g}(n)$}{%
-	\pcln (\db, \key) \sample \pi \\
-	\pcln \leak \gets \leakm(\secparam, \key, \db) \\
-	\pcln w \gets \mathcal{A}_1(\secparam, \leak) \\
-	\pcln \pcreturn g(w, (\db, \key), \leak)
+	\pcln (\key, \db, \overrightarrow{\query}, \stateA) \sample \pi \\
+	\pcln \leak \gets \leakm(\secparam, \key, \db, \overrightarrow{\query}) \\
+	\pcln w \gets \mathcal{A}_1(\secparam, \leak, \stateA) \\
+	\pcln \pcreturn g(w, (\key, \db, \overrightarrow{\query}, \stateA), (\leak, \stateA))
 }
 \end{pchstack}
 
 
 \begin{theorem}[Ideal game is equivalent to an extended posterior g-vulnerability]
-	Let $\pi$ be the prior distribution of databases and keys. Let $\X = \DB \times \Key$. Let $\leakm$ be a sufficient leakage function. Let $\Y = \{\leakm(\secparam, \key, \db) \mid \key \in \Key, \db \in \DB \}$. Let $\channelm$ be the channel matrix from $\X$ to $\Y$. Let $g: \W \times \X \times \Y \rightarrow [0,1]$. Then
+	Let $\pi$ be the prior distribution of keys, databases, set of queries and state. Let $\X = \Key \times \DB \times \Query^{*} \times \{0,1\}^{*}$. Let $\leakm$ be a sufficient leakage function. Let $\Y = \{\leakm(\secparam, \key, \db, \overrightarrow{\query}) \mid \key \in \Key, \db \in \DB, \overrightarrow{\query} \in \Query^{*} \} \times \{0,1\}^{*}$. Let $\channelm$ be the channel matrix from $\X$ to $\Y$. Let $g: \W \times \X \times \Y \rightarrow [0,1]$. Then
 	\begin{equation}
 	\sup_{\pi \in \text{Dist}} \ \sup_{\mathcal{A}} \advantage_{\mathcal{A}, \pi, \leakm, g}^{\text{Ideal}}(n) = EV_g(\pi, \channelm).
 	\end{equation}
-	where $Dist$ is the set of sufficient prior for the database.
+	where $Dist$ is the set of distributions on the database.
 \end{theorem}
 
 
 \begin{proof} 
-For simplicity, we assume $Dist$ is a point distribution. So it suffices to look at the expression $\sup_{\mathcal{A}} \advantage_{\mathcal{A}, \pi, \leakm, g}^{\text{Real}}(n)$ with $\leakm$ being a sufficient leakage. Suppose $\leakm$ is indeed a sufficient leakage, then
+We fist assume $Dist$ is a fixed distribution, so $|Dist| = 1$. That corresponds to some distribution on $(\key, \db, \overrightarrow{\query}, \stateA)$. It suffices to look at the expression $\sup_{\mathcal{A}} \advantage_{\mathcal{A}, \pi, \leakm, g}^{\text{Real}}(n)$ with $\leakm$ being a sufficient leakage. Suppose $\leakm$ is indeed a sufficient leakage, then
 \begin{align}
   & \sup_{\mathcal{A}} \advantage_{\mathcal{A}, \pi, \leakm, g}^{\text{Ideal}}(n) \\
 = &	\sup_{\mathcal{A}} \expect{\text{Ideal}_{\adv}^{\ \leakm, g}(n)} \label{thm-equiv-1} \\
@@ -198,12 +198,14 @@ For simplicity, we assume $Dist$ is a point distribution. So it suffices to look
 \end{align}
 
 In the proof, equation \ref{thm-equiv-1} is just writing out the adversary explicitly. Equation \ref{thm-equiv-2} uses the fact that for any given leakage, there is a deterministic guess that maximises the conditional expectation and the best adversary overall does this for any leakage $\leak$ he sees. The next few lines of the proof are just re-writing the expectation into algebraic form and re-arranging the terms.
+
+To extend the proof to arbitrary set of distributions $Dist$, 
 \end{proof}
 
 
 We can use the theorem above to draw some immediate conclusion for the real game.
 \begin{proposition}[Real game is equivalent to an extended posterior g-vulnerability]
-	Let $\pi$ be the prior distribution of databases and keys. Let $\X = \DB \times \Key$. Let $\Y = \EDB$. Let $\channel_{\mathcal{M}}$ be the channel matrix from $\X$ to $\Y$. Let $g: \W \times \X \times \Y \rightarrow [0,1]$. Then
+	Let $\pi$ be the prior distribution of keys, databases, set of queries and state. Let $\X = \Key \times \DB \times \Query^{*} \times \{0,1\}^{*}$. Let $\Y = \EDB \times \EQuery \times \{0,1\}^{*}$. Let $\channel_{\mathcal{M}}$ be the channel matrix from $\X$ to $\Y$. Let $g: \W \times \X \times \Y \rightarrow [0,1]$. Then
 	\begin{equation}
 	\sup_{\pi \in \text{Dist}} \ \sup_{\mathcal{A}} \advantage_{\mathcal{A}, \pi, g}^{\text{Real}}(n) = EV_g(\pi, \channel_\mathcal{M}).
 	\end{equation}
@@ -212,7 +214,7 @@ We can use the theorem above to draw some immediate conclusion for the real game
 
 
 \begin{proof}
-	Let $\leakm$ in the ideal experiment be the encryption function $\enc(\cdot)$ then the idea game is exactly the real game. The result follows immediately.
+	Let $\leakm$ in the ideal experiment be the encryption function $\enc(\cdot)$ with a simulator that generates $\stateA$, then the ideal game is exactly the real game. The result follows immediately.
 \end{proof}
 
 
@@ -223,12 +225,12 @@ It would not make sense to look at the advantage in the idealised world if it ha
 
 
 \begin{theorem}
-	Let $\pi$ be the prior distribution of databases and keys. Let $\X = \DB \times \Key$. Let $\Y_{\text{Real}} = \EDB$. Let $\channel_{\mathcal{M}}$ be the channel matrix from $\X$ to $\Y_{\text{Real}}$. Let $g_{\text{Real}}: \W \times \X \times \Y_{\text{Real}} \rightarrow [0,1]$.
+	Let $\pi$ be the prior distribution of keys, databases, set of queries and state. Let $\X = \Key \times \DB \times \Query^{*} \times \{0,1\}^{*}$. Let $\Y_{\text{Real}} = \EDB \times \EQuery \times \{0,1\}^{*}$. Let $\channel_{\mathcal{M}}$ be the channel matrix from $\X$ to $\Y_{\text{Real}}$. Let $g_{\text{Real}}: \W \times \X \times \Y_{\text{Real}} \rightarrow [0,1]$.
 	
-	Let $\leakm$ be a valid leakage function and $\simulator$ an simulator associated to $\leakm$. Let $\Y_{\text{Ideal}} = \{\leakm(\secparam, \key, \db) \mid \key \in \Key, \db \in \DB \}$. Let $\channelm$ be the channel matrix from $\X$ to $\Y_{\text{Ideal}}$. Let $g_{\text{Ideal}}: \W \times \X \times \Y_{\text{Ideal}} \rightarrow [0,1]$ such that $g_{\text{Ideal}}(w, x, y) = g_{\text{Real}}(w, x, \simulator(y))$. Then
+	Let $\leakm$ be a valid leakage function and $\simulator$ an simulator associated to $\leakm$. Let $\Y_{\text{Ideal}} = \{\leakm(\secparam, \key, \db, \overrightarrow{\query}) \mid \key \in \Key, \db \in \DB, \overrightarrow{\query} \in \Query^{*} \}$. Let $\channelm$ be the channel matrix from $\X$ to $\Y_{\text{Ideal}}$. Let $g_{\text{Ideal}}: \W \times \X \times \Y_{\text{Ideal}} \rightarrow [0,1]$ such that $g_{\text{Ideal}}(w, x, y) = g_{\text{Real}}(w, x, \simulator(y))$. Then
 	
 	\begin{equation}
-		EV_{g_{\text{Real}}}(\pi, \channelm) \leq EV_{g_{\text{Real}}}(\pi, \channel_\mathcal{M})
+		EV_{g_{\text{Real}}}(\pi, \channelM) \leq EV_{g_{\text{Ideal}}}(\pi, \channelm)
 	\end{equation}
 	with overwhelming probability.
 \end{theorem}
@@ -239,7 +241,7 @@ It would not make sense to look at the advantage in the idealised world if it ha
 	
 	We begin by re-writing extended g-vulnerability in the idealised world in the following way:
 	\begin{align}
-	  &	EV_{g_{\text{Ideal}}}(\pi, \channel_\mathcal{M}) \\
+	  &	EV_{g_{\text{Ideal}}}(\pi, \channelM) \\
 	= & \sum_{y \in \Y_{\text{Ideal}}} \prob{y} \max_{w \in \W} \sum_{x \in \X} \prob{x \mid y} g_{\text{Ideal}}(w, x, y) \\
 	= & \sum_{y \in \Y_{\text{Ideal}}} \prob{y} \max_{w \in \W} \sum_{x \in \X} \prob{x \mid y} g_{\text{Real}}(w, x, \simulator(y)) \\
 	= & \sum_{\simulator(y) \in \simulator(\Y_{\text{Ideal}})} \sum_{y \in {\Y_{\text{Ideal}}}} \prob{\simulator(y)} \prob{y \mid \simulator(y)} \max_{w \in \W} \sum_{x \in \X} \prob{x \mid y} g_{\text{Real}}(w, x, \simulator(y)) \label{real-ideal-bound eq 1} \\
@@ -253,10 +255,10 @@ It would not make sense to look at the advantage in the idealised world if it ha
 	\begin{pchstack}[center]
 		\procedure{Simulated$_{\adv}^{\ \simulator \circ \leakm, g_{\text{Real}}}(n)$}{%
 			\pcln \key \sample \kgen(\secparam) \\
-			\pcln \db  \gets \mathcal{A}_0(\secparam) \\
-			\pcln \edb \gets \simulator(\leakm(\secparam, \key, \db)) \\
-			\pcln w \gets \mathcal{A}_1(\secparam, \edb) \\
-			\pcln \pcreturn g_{\text{Real}}(w, (\db, \key), \edb)
+			\pcln (\db, \overrightarrow{\query})  \gets \mathcal{A}_0(\secparam) \\
+			\pcln (\edb, \overrightarrow{\equery}, \stateA) \gets \simulator(\leakm(\secparam, \key, \db)) \\
+			\pcln w \gets \mathcal{A}_1(\secparam, \edb, \overrightarrow{\equery}, \stateA) \\
+			\pcln \pcreturn g_{\text{Real}}(w, (\key, \db, \overrightarrow{\query}), (\edb, \overrightarrow{\equery}))
 		}
 	\end{pchstack}
 	But this game is indistinguishable from the real game as $\simulator$ is a simulator that makes $\simulator \circ \leakm(\cdot)$ indistinguishable from $\enc(\cdot)$ by definition. Therefore, we conclude that

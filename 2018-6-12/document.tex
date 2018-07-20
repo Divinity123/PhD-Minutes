@@ -1,0 +1,137 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\setlength\parindent{0pt}
+\setlength{\parskip}{1em}
+
+\usepackage{amsmath, amsfonts, bbm, amsthm}
+\usepackage [n, operators, sets, adversary, landau, probability, notions, logic, ff, mm, primitives, events, complexity, asymptotics] {cryptocode}
+
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{corollary}[definition]{Corollary}
+
+\begin{document}
+In this document we are going to show that given two indistinguishable distribution ensembles $\{X_i\}_{i \in I}$ and $\{Y_i\}_{i \in I}$ and some function $g$ that maps outputs of the ensembles to some real number, it is not correct to argue that if $\{X_i\}_{i \in I}$ and $\{Y_i\}_{i \in I}$ are computationally indistinguishable then the expectations of $g(\{X_i\}_{i \in I})$ and $g(\{Y_i\}_{i \in I})$ are the same.
+
+To provide a simple counter example, let $\{X_i\}_{i \in I}$ and $\{Y_i\}_{i \in I}$ be distributions on $\{0,1\}^n$ for some natural number $n$. $\{X_i\}_{i \in I}$ takes uniform distribution on this set and $\{Y_i\}_{i \in I}$ be `almost uniform' such that:
+\begin{equation*}
+	\prob{\{Y_i\}_{i \in I} = y} =
+	\begin{cases}
+		0, & \text{if } y = 0^n\\
+		2^{-n+1}, & \text{if } y = 1^n\\
+		2^{-n}. & \text{otherwise}
+	\end{cases}
+\end{equation*}
+Clearly $\{X_i\}_{i \in I}$ and $\{Y_i\}_{i \in I}$ have identical distributions on everything except $0^n$ and $1^n$. But the probability of observing those outputs is $2^{-n+1}$, which is negligible in $n$. Therefore there is no PPT adversary who can distinguish $\{X_i\}_{i \in I}$ and $\{Y_i\}_{i \in I}$. Hence, computational indistinguishability with security parameter $1^n$.
+
+On the other hand, if we let $g: \{0,1\}^n \rightarrow \mathbb{R}$ be $g(x) = 2^n \cdot \mathbbm{1}(x = 0^n)$, then we see that $\mathbb{E}(g(\{X_i\}_{i \in I})) = 1$ whereas $\mathbb{E}(g(\{Y_i\}_{i \in I})) = 0$, so one cannot really conclude anything about expectation of functions taking computationally indistinguishable inputs. Our goal is to bound the difference in expectation for some function and two computationally indistinguishable distribution ensembles.
+
+
+
+
+\begin{lemma}
+	Let $\{X_i\}_{i \in I}$ and $\{Y_i\}_{i \in I}$ be two computationally indistinguishable distribution ensembles with security parameter $1^n$. Let $Z$ be the union of the supports of the two distribution ensembles. We write $Z$ as a disjoint union of $Z_{-}$ and $Z_{+}$ such that
+	\begin{enumerate}
+		\item $\forall z \in Z_{-}, |\prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z}| \leq 0 $,
+		\item $\forall z \in Z_{+}, \prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z} > 0$.
+	\end{enumerate}
+	Then
+	\begin{equation} \label{SOD of bad set}
+		\sum_{z \in Z_{+}} \prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z} \leq \negl
+	\end{equation}
+\end{lemma}
+
+
+\begin{proof}
+	We proceed by contradiction and show that if equation \ref{SOD of bad set} does not hold then there is an PPT adversary $D$ to distinguish $\{X_i\}_{i \in I}$ and $\{Y_i\}_{i \in I}$ with non-negligible probability. We begin by considering an arbitrary adversary $D$ and work out its advantage.
+	\begin{align}
+	  &	\text{Adv}_{D}(n) \\
+	= & \left| \prob{D(z) = 1 \mid z \sample \{X_i\}_{i \in I}} - \prob{D(z) = 1 \mid z \sample \{Y_i\}_{i \in I}} \right| \\
+	= & \left| \sum_{\bar{z} \in Z} \prob{D(z) = 1 \mid z \sample \{X_i\}_{i \in I}, z = \bar{z}} \prob{\{X_i\}_{i \in I} = \bar{z}} - \sum_{\bar{z} \in Z} \prob{D(z) = 1 \mid z \sample \{Y_i\}_{i \in I}, z = \bar{z}} \prob{\{Y_i\}_{i \in I} = \bar{z}} \right| \\
+	= & \left| \sum_{\bar{z} \in Z} \prob{D(z) = 1 \mid z \sample \{X_i\}_{i \in I}, z = \bar{z}} \prob{\{X_i\}_{i \in I} = \bar{z}} - \prob{D(z) = 1 \mid z \sample \{Y_i\}_{i \in I}, z = \bar{z}} \prob{\{Y_i\}_{i \in I} = \bar{z}} \right| \\
+	= & \left| \sum_{\bar{z} \in Z} \prob{D(\bar{z}) = 1} \left( \prob{\{X_i\}_{i \in I} = \bar{z}} -  \prob{\{Y_i\}_{i \in I} = \bar{z}} \right) \right| \label{SOD of all outcomes}
+	\end{align}
+	Since we know $\forall z \in Z_{+}, \prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z} > 0$, the part of sum for elements in $Z_{+}$ in equation \ref{SOD of all outcomes} are all non-negative. Therefore, we get
+	\begin{align}
+	  &	\text{Adv}_{D}(n) \\
+	= & \left| \sum_{\bar{z} \in Z_{+}} \prob{D(\bar{z}) = 1} \left( \prob{\{X_i\}_{i \in I} = \bar{z}} -  \prob{\{Y_i\}_{i \in I} = \bar{z}} \right) + \sum_{\bar{z} \in Z_1} \prob{D(\bar{z}) = 1} \left( \prob{\{X_i\}_{i \in I} = \bar{z}} -  \prob{\{Y_i\}_{i \in I} = \bar{z}} \right) \right| \\
+	\geq & \left| \sum_{\bar{z} \in Z_{+}} \prob{D(\bar{z}) = 1} \left( \prob{\{X_i\}_{i \in I} = \bar{z}} -  \prob{\{Y_i\}_{i \in I} = \bar{z}} \right) \right|
+	\end{align}
+	 Now we pick $D$ such that on all outcomes in $Z_1$, it returns $1$, the advantage becomes
+	 \begin{align}
+	 	 &	\text{Adv}_{D}(n) \\
+	 \geq & \left| \sum_{\bar{z} \in Z_{+}} \prob{D(\bar{z}) = 1} \left( \prob{\{X_i\}_{i \in I} = \bar{z}} -  \prob{\{Y_i\}_{i \in I} = \bar{z}} \right) \right| \\
+	 = & \left| \sum_{\bar{z} \in Z_{+}} \prob{\{X_i\}_{i \in I} = \bar{z}} -  \prob{\{Y_i\}_{i \in I} = \bar{z}} \right| \\
+	 = & \sum_{\bar{z} \in Z_{+}} \prob{\{X_i\}_{i \in I} = \bar{z}} -  \prob{\{Y_i\}_{i \in I} = \bar{z}} \label{SOD of bad set proof}
+	 \end{align}
+	 But we begin by assuming equation \ref{SOD of bad set proof} is non-negligible, so $D$ differentiates $\{X_i\}_{i \in I}$ and $\{Y_i\}_{i \in I}$ with non-negligible probability. Since all $D$ does is checking its input, the adversary is efficient. Therefore, $D$ breaks computational indistinguishability between $\{X_i\}_{i \in I}$ and $\{Y_i\}_{i \in I}$. This gives a contradiction. Therefore, equation \ref{SOD of bad set} must hold.
+\end{proof}
+
+
+\begin{corollary}
+	Let $\{X_i\}_{i \in I}$ and $\{Y_i\}_{i \in I}$ be two computationally indistinguishable distribution ensembles with security parameter $1^n$. Let $Z$ be the union of the supports of the two distribution ensembles. We write $Z$ as a disjoint union of $Z_{-}$ and $Z_{+}$ such that
+	\begin{enumerate}
+		\item $\forall z \in Z_{-}, |\prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z}| \leq 0 $,
+		\item $\forall z \in Z_{+}, \prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z} > 0$.
+	\end{enumerate}
+	Then
+	\begin{equation}
+	\sum_{z \in Z_{-}} \prob{\{Y_i\}_{i \in I} = z} - \prob{\{X_i\}_{i \in I} = z} \leq \negl
+	\end{equation}
+\end{corollary}
+
+\begin{proof}
+	The result follows immediately from the lemma above by symmetry.
+\end{proof}
+
+
+\begin{theorem}
+	Let $\{X_i\}_{i \in I}$ and $\{Y_i\}_{i \in I}$ be two computationally indistinguishable distribution ensembles with security parameter $1^n$. Let $Z$ be the union of the supports of the two distribution ensembles. We write $Z$ as a disjoint union of $Z_{-}$ and $Z_{+}$ such that
+	\begin{enumerate}
+		\item $\forall z \in Z_{-}, |\prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z}| \leq 0 $,
+		\item $\forall z \in Z_{+}, |\prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z}| > 0$.
+	\end{enumerate}
+	Then
+	\begin{equation}
+	\sum_{z \in Z} |\prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z}| \leq \negl
+	\end{equation}
+\end{theorem}
+
+\begin{proof}
+	We get this by combining the two lemmas above.
+\end{proof}
+
+
+\begin{theorem}
+	Let $\{X_i\}_{i \in I}$ and $\{Y_i\}_{i \in I}$ be two computationally indistinguishable distribution ensembles with security parameter $1^n$. Let $Z$ be the union of the supports of the two distribution ensembles. We write $Z$ as a disjoint union of $Z_{-}$ and $Z_{+}$ such that
+	\begin{enumerate}
+		\item $\forall z \in Z_{-}, |\prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z}| \leq 0 $,
+		\item $\forall z \in Z_{+}, |\prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z}| > 0$.
+	\end{enumerate}
+	Let $g: Z \rightarrow \mathbb{R}$ be a function. Define $|g| = \max_{z \in Z}\{g(z), -g(z)\}$. Then
+	\begin{equation}
+		\left| \expect{\{X_i\}_{i \in I}} - \expect{\{Y_i\}_{i \in I}} \right| \leq |g| \cdot \negl.
+	\end{equation}
+\end{theorem}
+
+\begin{proof}
+	We prove the statement by manipulating probabilities.
+	\begin{align*}
+	  &	\left| \expect{\{X_i\}_{i \in I}} - \expect{\{Y_i\}_{i \in I}} \right| \\
+	= & \left| \sum_{z \in Z} g(z) \left( \prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z} \right) \right| \\
+	= & \left| \sum_{z \in Z_{+}} g(z) \left( \prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z} \right) \right| + \left| \sum_{z \in Z_{-}} g(z) \left( \prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z} \right) \right| \\
+	\leq & |g| \sum_{z \in Z_{-}} \left| \prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z} \right| + |g| \sum_{z \in Z_{+}} \left| \prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z} \right| \\
+	= & |g| \sum_{z \in Z} |\prob{\{X_i\}_{i \in I} = z} - \prob{\{Y_i\}_{i \in I} = z}| \\
+	= & |g| \cdot \negl
+	\end{align*}
+\end{proof}
+
+
+
+
+
+
+
+\end{document}
